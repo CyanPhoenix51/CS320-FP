@@ -158,8 +158,8 @@ class Edge{
     }
 }
 
-function keyDown(e){
-    switch (e.keyCode){
+function keyDown(ev){
+    switch (ev.keyCode){
         case 69:
             //e, generate edges
             generateEdges();
@@ -184,8 +184,8 @@ function keyDown(e){
     }
 }
 
-function keyUp(e){
-    switch (e.keyCode){
+function keyUp(ev){
+    switch (ev.keyCode){
     }
 }
 
@@ -214,5 +214,21 @@ function drawVertex() {
 }
 
 function deleteSelection(){
+    //delete edges
+    for(let i=0;i<selectedEdges.length;i++){
+        //remove the edge from each of its vertices' edges
+        let vertexEdges=selectedEdges[i].vertex1.edges;
+        vertexEdges=vertexEdges.filter(edge => edge.id!==selectedEdges[i].id);
+        selectedEdges[i].vertex1.edges=vertexEdges;
+        vertexEdges=selectedEdges[i].vertex2.edges;
+        vertexEdges=vertexEdges.filter(edge => edge.id!==selectedEdges[i].id);
+        selectedEdges[i].vertex2.edges=vertexEdges;
 
+        //remove the edge from all the edges
+        edges=edges.filter(edge => edge.id!==selectedEdges[i].id);
+
+        //remove it from the html
+        selectedEdges[i].edge.parentNode.removeChild(selectedEdges[i].edge);
+    }
+    selectedEdges=[];
 }
