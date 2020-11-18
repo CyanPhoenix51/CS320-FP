@@ -4,8 +4,13 @@ const vertexRadius=25;
 const edgeWidth=5;
 
 let vertices=[];
+//DO NOT RESET this on vertex deletion
+let vertexCount=0;
 let edges=[];
+//DO NOT RESET this on vertex deletion
+let edgeCount=0;
 let selectedVertices=[];
+let selectedEdges=[];
 
 let mouseOverObj=false;
 let grabber=false;
@@ -38,7 +43,8 @@ function update(){
 }
 
 class Vertex{
-    constructor(x, y) {
+    constructor(x, y, id) {
+        this.id=id;
         this.x=x;
         this.y=y;
         this.edges=[];
@@ -55,7 +61,16 @@ class Vertex{
         //add event listeners
         this.vertex.addEventListener('mousedown', function (ev){
             //select the vertex
-            selectedVertices.push(v);
+            let notPrevSelected=true;
+            for(let i=0;i<selectedVertices.length;i++){
+                if(selectedVertices[i].id===v.id){
+                    notPrevSelected=false;
+                    break;
+                }
+            }
+            if(notPrevSelected){
+                selectedVertices.push(v);
+            }
         });
         this.vertex.addEventListener('mouseenter', function (ev){
             mouseOverObj=true;
@@ -80,9 +95,10 @@ class Vertex{
 }
 
 class Edge{
-    constructor(vertex1, vertex2) {
+    constructor(vertex1, vertex2, id) {
         this.vertex1=vertex1;
         this.vertex2=vertex2;
+        this.id=id;
         vertex1.edges.push(this);
         vertex2.edges.push(this);
 
@@ -91,6 +107,29 @@ class Edge{
         pad.appendChild(this.edge);
         this.edge.id='edge';
         this.positionEdge();
+
+        //this line is required because js is confused on what 'this' is in the event listeners
+        const e=this;
+        //add event listeners
+        this.edge.addEventListener('mousedown', function(ev){
+            //select the edge
+            let notPrevSelected=true;
+            for(let i=0;i<selectedEdges.length;i++){
+                if(selectedEdges[i].id===e.id){
+                    notPrevSelected=false;
+                    break;
+                }
+            }
+            if(notPrevSelected){
+                selectedEdges.push(e);
+            }
+        });
+        this.edge.addEventListener('mouseenter', function (ev){
+            mouseOverObj=true;
+        });
+        this.edge.addEventListener('mouseleave', function (ev){
+            mouseOverObj=false;
+        });
     }
     positionEdge(){
         //math time
@@ -136,6 +175,11 @@ function keyDown(e){
         case 17:
             //ctrl, clear selection
             selectedVertices=[];
+            selectedEdges=[];
+            break;
+        case 68:
+            //d, delete selection
+            deleteSelection();
             break;
     }
 }
@@ -156,7 +200,8 @@ function generateEdges(){
             let ji=j.toString()+i.toString();
             if(filledEdges.includes(ij) || filledEdges.includes(ji)) continue;
 
-            edges.push(new Edge(selectedVertices[i], selectedVertices[j]))
+            edges.push(new Edge(selectedVertices[i], selectedVertices[j]), edgeCount);
+            edgeCount++;
             filledEdges.push(ij);
         }
     }
@@ -164,5 +209,10 @@ function generateEdges(){
 
 function drawVertex() {
     if(mouseOverObj) return;
-    vertices.push(new Vertex((event.clientX - vertexRadius / 2), (event.clientY - vertexRadius / 2)));
+    vertices.push(new Vertex((event.clientX - vertexRadius / 2), (event.clientY - vertexRadius / 2), vertexCount));
+    vertexCount++;
+}
+
+function deleteSelection(){
+
 }
