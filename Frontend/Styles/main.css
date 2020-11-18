@@ -1,0 +1,29 @@
+body{
+	background: #999;
+}
+
+canvas{
+    background: white;
+}
+
+#vertex{
+    position: absolute;
+    background: blue;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+}
+
+#edge{
+    position: absolute;
+    background: black;
+    width: 5px;
+}
+
+#pad{
+    background: white;
+    width: 500px;
+    height: 500px;
+    border: 1px solid black;
+}
+
