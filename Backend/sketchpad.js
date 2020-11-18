@@ -21,13 +21,13 @@ document.addEventListener('mousemove',ev => mouseMoveCTX=ev);
 //33ms = 30 fps
 setInterval(update, 33);
 function update(){
+    //BUG: doesn't like it when the mouse runs over a previously drawn object
     if(grabber){
         //move any selected vertices and recalculate their edges
         for(let i=0;i<selectedVertices.length;i++){
             //first, find the deltas
             const dx=mouseMoveCTX.offsetX-mouseGrabInitPos[0];
             const dy=mouseMoveCTX.offsetY-mouseGrabInitPos[1];
-            console.log(dx);
             //apply the deltas
             selectedVertices[i].moveVertex(selectedVertices[i].x+dx, selectedVertices[i].y+dy);
         }
