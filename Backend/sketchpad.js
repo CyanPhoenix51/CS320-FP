@@ -61,16 +61,7 @@ class Vertex{
         //add event listeners
         this.vertex.addEventListener('mousedown', function (ev){
             //select the vertex
-            let notPrevSelected=true;
-            for(let i=0;i<selectedVertices.length;i++){
-                if(selectedVertices[i].id===v.id){
-                    notPrevSelected=false;
-                    break;
-                }
-            }
-            if(notPrevSelected){
-                selectedVertices.push(v);
-            }
+            select(selectedVertices, v);
         });
         this.vertex.addEventListener('mouseenter', function (ev){
             mouseOverObj=true;
@@ -112,17 +103,7 @@ class Edge{
         const e=this;
         //add event listeners
         this.edge.addEventListener('mousedown', function(ev){
-            //select the edge
-            let notPrevSelected=true;
-            for(let i=0;i<selectedEdges.length;i++){
-                if(selectedEdges[i].id===e.id){
-                    notPrevSelected=false;
-                    break;
-                }
-            }
-            if(notPrevSelected){
-                selectedEdges.push(e);
-            }
+            select(selectedEdges, e);
         });
         this.edge.addEventListener('mouseenter', function (ev){
             mouseOverObj=true;
@@ -179,13 +160,28 @@ function keyDown(ev){
             break;
         case 68:
             //d, delete selection
-            deleteSelection();
+            deleteEdges();
+            deleteVertices();
             break;
     }
 }
 
 function keyUp(ev){
     switch (ev.keyCode){
+    }
+}
+
+function select(list, element){
+    //select the edge
+    let notPrevSelected=true;
+    for(let i=0;i<list.length;i++){
+        if(list[i].id===element.id){
+            notPrevSelected=false;
+            break;
+        }
+    }
+    if(notPrevSelected){
+        list.push(element);
     }
 }
 
@@ -200,7 +196,7 @@ function generateEdges(){
             let ji=j.toString()+i.toString();
             if(filledEdges.includes(ij) || filledEdges.includes(ji)) continue;
 
-            edges.push(new Edge(selectedVertices[i], selectedVertices[j]), edgeCount);
+            edges.push(new Edge(selectedVertices[i], selectedVertices[j], edgeCount));
             edgeCount++;
             filledEdges.push(ij);
         }
@@ -213,8 +209,7 @@ function drawVertex() {
     vertexCount++;
 }
 
-function deleteSelection(){
-    //delete edges
+function deleteEdges(){
     for(let i=0;i<selectedEdges.length;i++){
         //remove the edge from each of its vertices' edges
         let vertexEdges=selectedEdges[i].vertex1.edges;
@@ -231,4 +226,22 @@ function deleteSelection(){
         selectedEdges[i].edge.parentNode.removeChild(selectedEdges[i].edge);
     }
     selectedEdges=[];
+}
+
+function deleteVertices(){
+    for(let i=0;i<selectedVertices.length;i++){
+        //first, select all edges connected to the vertex and delete them
+        for(let j=0;j<selectedVertices[i].edges.length;j++){
+            select(selectedEdges, selectedVertices[i].edges[j]);
+        }
+        //console.log(selectedEdges.length);
+        deleteEdges();
+
+        //second, delete the vertex
+        vertices=vertices.filter(vertex => vertex.id!==selectedVertices[i].id);
+
+        //remove it from the html
+        selectedVertices[i].vertex.parentNode.removeChild(selectedVertices[i].vertex);
+    }
+    selectedVertices=[];
 }
