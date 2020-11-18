@@ -53,13 +53,13 @@ function generateEdges(){
             //second, find the angle
             let theta=Math.atan2(dx, dy);
             //third, find the position
-            // let x=(x1+x2)/2;
-            // let y=(y1-y2)/2;
+            let x=(x1+x2)/2;
+            let y=(y1+y2)/2;
 
-            edge.style.transform='rotate('+theta.toString()+'rad)';
             edge.style.height=height+'px';
-            edge.style.top=y2+(vertexRadius/2)+'px';
-            edge.style.left=x2+(vertexRadius/2)-(edgeWidth/2)+'px';
+            edge.style.top=y-(height/2)+(vertexRadius/2)+'px';
+            edge.style.left=x-(edgeWidth/2)+(vertexRadius/2)+'px';
+            edge.style.transform='rotate('+theta.toString()+'rad)';
 
             filledEdges.push(ij);
         }
