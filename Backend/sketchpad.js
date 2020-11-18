@@ -2,12 +2,122 @@ const pad=document.getElementById('pad');
 
 const vertexRadius=25;
 const edgeWidth=5;
+
+let vertices=[];
+let edges=[];
 let selectedVertices=[];
+
 let mouseOverObj=false;
+let grabber=false;
+let mouseGrabInitPos=[0,0];
+let mouseMoveCTX=null;
 
 pad.addEventListener('mousedown', drawVertex);
 document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);
+//added to document so you can grab and not be over the pad. EG need to move something really far
+document.addEventListener('mousemove',ev => mouseMoveCTX=ev);
+
+//33ms = 30 fps
+setInterval(update, 33);
+function update(){
+    if(grabber){
+        //move any selected vertices and recalculate their edges
+        for(let i=0;i<selectedVertices.length;i++){
+            //first, find the deltas
+            const dx=mouseMoveCTX.offsetX-mouseGrabInitPos[0];
+            const dy=mouseMoveCTX.offsetY-mouseGrabInitPos[1];
+            console.log(dx);
+            //apply the deltas
+            selectedVertices[i].moveVertex(selectedVertices[i].x+dx, selectedVertices[i].y+dy);
+        }
+        //reset grab position
+        mouseGrabInitPos[0]=mouseMoveCTX.offsetX;
+        mouseGrabInitPos[1]=mouseMoveCTX.offsetY;
+    }
+}
+
+class Vertex{
+    constructor(x, y) {
+        this.x=x;
+        this.y=y;
+        this.edges=[];
+        //create the vertex object
+        this.vertex = document.createElement('div');
+        pad.appendChild(this.vertex);
+        this.vertex.id = 'vertex';
+        //position myself
+        this.vertex.style.top = y + 'px';
+        this.vertex.style.left = x + 'px';
+
+        //this line is required because js is confused on what 'this' is in the event listeners
+        const v=this;
+        //add event listeners
+        this.vertex.addEventListener('mousedown', function (ev){
+            //select the vertex
+            selectedVertices.push(v);
+        });
+        this.vertex.addEventListener('mouseenter', function (ev){
+            mouseOverObj=true;
+        });
+        this.vertex.addEventListener('mouseleave', function (ev){
+            mouseOverObj=false;
+        });
+    }
+
+    moveVertex(x, y){
+        this.x=x;
+        this.y=y;
+        //put myself at new position
+        this.vertex.style.top=y+'px';
+        this.vertex.style.left=x+'px';
+
+        //recalculate my edges
+        for(let i=0;i<this.edges.length;i++){
+            this.edges[i].positionEdge();
+        }
+    }
+}
+
+class Edge{
+    constructor(vertex1, vertex2) {
+        this.vertex1=vertex1;
+        this.vertex2=vertex2;
+        vertex1.edges.push(this);
+        vertex2.edges.push(this);
+
+        //create the edge
+        this.edge=document.createElement('div');
+        pad.appendChild(this.edge);
+        this.edge.id='edge';
+        this.positionEdge();
+    }
+    positionEdge(){
+        //math time
+        let x1=parseFloat(this.vertex1.vertex.style.left);
+        let x2=parseFloat(this.vertex2.vertex.style.left);
+        let y1=parseFloat(this.vertex1.vertex.style.top);
+        let y2=parseFloat(this.vertex2.vertex.style.top);
+
+        //first, find the height
+        let dx=x1-x2;
+        let dy=y2-y1;
+        let height=Math.sqrt((dx*dx)+(dy*dy));
+
+        //second, find the angle
+        let theta=Math.atan2(dx, dy);
+
+        //third, find the position
+        let x=(x1+x2)/2;
+        let y=(y1+y2)/2;
+
+        //apply the calculations
+        this.edge.style.height=height+'px';
+        this.edge.style.top=y-(height/2)+(vertexRadius/2)+'px';
+        this.edge.style.left=x-(edgeWidth/2)+(vertexRadius/2)+'px';
+        this.edge.style.transform='rotate('+theta.toString()+'rad)';
+    }
+}
 
 function keyDown(e){
     switch (e.keyCode){
@@ -15,15 +125,23 @@ function keyDown(e){
             //e, generate edges
             generateEdges();
             break;
+        case 71:
+            //g, toggle grabber
+            grabber=!grabber;
+            if(grabber){
+                mouseGrabInitPos[0]=mouseMoveCTX.offsetX;
+                mouseGrabInitPos[1]=mouseMoveCTX.offsetY;
+            }
+            break;
+        case 17:
+            //ctrl, clear selection
+            selectedVertices=[];
+            break;
     }
 }
 
 function keyUp(e){
     switch (e.keyCode){
-        case 17:
-            //ctrl, clear selection
-            selectedVertices=[];
-            break;
     }
 }
 
@@ -38,29 +156,7 @@ function generateEdges(){
             let ji=j.toString()+i.toString();
             if(filledEdges.includes(ij) || filledEdges.includes(ji)) continue;
 
-            const edge=document.createElement('div');
-            pad.appendChild(edge);
-            edge.id='edge';
-            //math time
-            let x1=parseFloat(selectedVertices[i].style.left);
-            let x2=parseFloat(selectedVertices[j].style.left);
-            let y1=parseFloat(selectedVertices[i].style.top);
-            let y2=parseFloat(selectedVertices[j].style.top);
-            //first, find the height
-            let dx=x1-x2;
-            let dy=y2-y1;
-            let height=Math.sqrt((dx*dx)+(dy*dy));
-            //second, find the angle
-            let theta=Math.atan2(dx, dy);
-            //third, find the position
-            let x=(x1+x2)/2;
-            let y=(y1+y2)/2;
-
-            edge.style.height=height+'px';
-            edge.style.top=y-(height/2)+(vertexRadius/2)+'px';
-            edge.style.left=x-(edgeWidth/2)+(vertexRadius/2)+'px';
-            edge.style.transform='rotate('+theta.toString()+'rad)';
-
+            edges.push(new Edge(selectedVertices[i], selectedVertices[j]))
             filledEdges.push(ij);
         }
     }
@@ -68,20 +164,5 @@ function generateEdges(){
 
 function drawVertex() {
     if(mouseOverObj) return;
-    const vertex = document.createElement('div');
-    pad.appendChild(vertex);
-    vertex.id = 'vertex';
-    vertex.style.top = (event.clientY - vertexRadius / 2) + 'px';
-    vertex.style.left = (event.clientX - vertexRadius / 2) + 'px';
-
-    vertex.addEventListener('mousedown', function (ev){
-        //select the vertex
-        selectedVertices.push(vertex);
-    });
-    vertex.addEventListener('mouseenter', function (ev){
-        mouseOverObj=true;
-    });
-    vertex.addEventListener('mouseleave', function (ev){
-        mouseOverObj=false;
-    });
+    vertices.push(new Vertex((event.clientX - vertexRadius / 2), (event.clientY - vertexRadius / 2)));
 }
