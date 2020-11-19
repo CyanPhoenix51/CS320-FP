@@ -304,4 +304,7 @@ function color(key){
   for(let i=0;i<selectedVertices.length;i++){
     selectedVertices[i].vertex.style.background=color;
   }
+  for(let i=0;i<selectedEdges.length;i++){
+    selectedEdges[i].edge.style.background=color;
+  }
 }
