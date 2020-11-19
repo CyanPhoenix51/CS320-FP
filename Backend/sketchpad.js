@@ -7,7 +7,7 @@ let vertices=[];
 //DO NOT RESET this on vertex deletion
 let vertexCount=0;
 let edges=[];
-//DO NOT RESET this on vertex deletion
+//DO NOT RESET this on edge deletion
 let edgeCount=0;
 let selectedVertices=[];
 let selectedEdges=[];
@@ -85,57 +85,75 @@ class Vertex{
     }
 }
 
-class Edge{
+class Edge {
     constructor(vertex1, vertex2, id) {
-        this.vertex1=vertex1;
-        this.vertex2=vertex2;
-        this.id=id;
-        vertex1.edges.push(this);
-        vertex2.edges.push(this);
+        this.vertex1 = vertex1;
+        this.vertex2 = vertex2;
+        this.id = id;
 
         //create the edge
-        this.edge=document.createElement('div');
+        this.edge = document.createElement('div');
         pad.appendChild(this.edge);
-        this.edge.id='edge';
+
+        //is it a loop?
+        this.isLoop = vertex1.id === vertex2.id;
+        if (this.isLoop) {
+            //if loop, only add myself once to the vertex
+            vertex1.edges.push(this);
+            this.edge.id = 'loop';
+        } else {
+            vertex1.edges.push(this);
+            vertex2.edges.push(this);
+            this.edge.id = 'edge';
+        }
         this.positionEdge();
 
         //this line is required because js is confused on what 'this' is in the event listeners
-        const e=this;
+        const e = this;
         //add event listeners
-        this.edge.addEventListener('mousedown', function(ev){
+        this.edge.addEventListener('mousedown', function (ev) {
             select(selectedEdges, e);
         });
-        this.edge.addEventListener('mouseenter', function (ev){
-            mouseOverObj=true;
+        this.edge.addEventListener('mouseenter', function (ev) {
+            mouseOverObj = true;
         });
-        this.edge.addEventListener('mouseleave', function (ev){
-            mouseOverObj=false;
+        this.edge.addEventListener('mouseleave', function (ev) {
+            mouseOverObj = false;
         });
     }
-    positionEdge(){
-        //math time
-        let x1=parseFloat(this.vertex1.vertex.style.left);
-        let x2=parseFloat(this.vertex2.vertex.style.left);
-        let y1=parseFloat(this.vertex1.vertex.style.top);
-        let y2=parseFloat(this.vertex2.vertex.style.top);
 
-        //first, find the height
-        let dx=x1-x2;
-        let dy=y2-y1;
-        let height=Math.sqrt((dx*dx)+(dy*dy));
+    positionEdge() {
+        if (this.isLoop) {
+            //slap it on the vertex
+            const x = this.vertex1.x - this.edge.style.width + this.vertex1.vertex.style.width;
+            const y = this.vertex1.y - this.edge.style.height + this.vertex1.vertex.style.height;
+            this.edge.style.top = y + 'px';
+            this.edge.style.left = x + 'px';
+        } else {
+            //math time
+            let x1 = parseFloat(this.vertex1.vertex.style.left);
+            let x2 = parseFloat(this.vertex2.vertex.style.left);
+            let y1 = parseFloat(this.vertex1.vertex.style.top);
+            let y2 = parseFloat(this.vertex2.vertex.style.top);
 
-        //second, find the angle
-        let theta=Math.atan2(dx, dy);
+            //first, find the height
+            let dx = x1 - x2;
+            let dy = y2 - y1;
+            let height = Math.sqrt((dx * dx) + (dy * dy));
 
-        //third, find the position
-        let x=(x1+x2)/2;
-        let y=(y1+y2)/2;
+            //second, find the angle
+            let theta = Math.atan2(dx, dy);
 
-        //apply the calculations
-        this.edge.style.height=height+'px';
-        this.edge.style.top=y-(height/2)+(vertexRadius/2)+'px';
-        this.edge.style.left=x-(edgeWidth/2)+(vertexRadius/2)+'px';
-        this.edge.style.transform='rotate('+theta.toString()+'rad)';
+            //third, find the position
+            let x = (x1 + x2) / 2;
+            let y = (y1 + y2) / 2;
+
+            //apply the calculations
+            this.edge.style.height = height + 'px';
+            this.edge.style.top = y - (height / 2) + (vertexRadius / 2) + 'px';
+            this.edge.style.left = x - (edgeWidth / 2) + (vertexRadius / 2) + 'px';
+            this.edge.style.transform = 'rotate(' + theta.toString() + 'rad)';
+        }
     }
 }
 
@@ -144,6 +162,8 @@ function keyDown(ev){
         case 69:
             //e, generate edges
             generateEdges();
+            selectedVertices=[];
+            selectedEdges=[];
             break;
         case 71:
             //g, toggle grabber
@@ -162,6 +182,10 @@ function keyDown(ev){
             //d, delete selection
             deleteEdges();
             deleteVertices();
+            break;
+        case 76:
+            //l, loop selected vertices onto themselves
+            loopVertices();
             break;
     }
 }
@@ -196,8 +220,7 @@ function generateEdges(){
             let ji=j.toString()+i.toString();
             if(filledEdges.includes(ij) || filledEdges.includes(ji)) continue;
 
-            edges.push(new Edge(selectedVertices[i], selectedVertices[j], edgeCount));
-            edgeCount++;
+            edges.push(new Edge(selectedVertices[i], selectedVertices[j], edgeCount++));
             filledEdges.push(ij);
         }
     }
@@ -242,6 +265,13 @@ function deleteVertices(){
 
         //remove it from the html
         selectedVertices[i].vertex.parentNode.removeChild(selectedVertices[i].vertex);
+    }
+    selectedVertices=[];
+}
+
+function loopVertices(){
+    for(let i=0;i<selectedVertices.length;i++){
+        edges.push(new Edge(selectedVertices[i], selectedVertices[i], edgeCount++));
     }
     selectedVertices=[];
 }
