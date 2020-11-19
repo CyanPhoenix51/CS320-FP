@@ -187,6 +187,13 @@ function keyDown(ev){
             //l, loop selected vertices onto themselves
             loopVertices();
             break;
+      case 49:
+        //colorings
+      case 50:
+      case 51:
+      case 52:
+        color(ev.keyCode);
+        break;
     }
 }
 
@@ -274,4 +281,27 @@ function loopVertices(){
         edges.push(new Edge(selectedVertices[i], selectedVertices[i], edgeCount++));
     }
     selectedVertices=[];
+}
+
+function color(key){
+  //color the selection based on the key pressed
+  //start with vertices
+  let color=null;
+  switch (key){
+    case 49:
+      color='red';
+      break;
+    case 50:
+      color='blue';
+      break;
+    case 51:
+      color='green';
+      break;
+    case 52:
+      color='orange';
+      break;
+  }
+  for(let i=0;i<selectedVertices.length;i++){
+    selectedVertices[i].vertex.style.background=color;
+  }
 }
