@@ -75,8 +75,8 @@ class Edge {
         this.vertex2 = vertex2;
         this.id = id;
         this.isSelected = false;
-        this.offsetX=0;
-        this.offsetY=0;
+        this.offsetX = 0;
+        this.offsetY = 0;
 
         //create the edge
         this.edge = document.createElement('div');
@@ -87,6 +87,8 @@ class Edge {
         if (this.isLoop) {
             //if loop, only add myself once to the vertex
             vertex1.edges.push(this);
+            this.edge.style.height = sketchPad.loopDiameter + 'px';
+            this.edge.style.width = sketchPad.loopDiameter + 'px';
             this.edge.id = 'loop';
         } else {
             vertex1.edges.push(this);
@@ -112,8 +114,8 @@ class Edge {
     positionEdge() {
         if (this.isLoop) {
             //slap it on the vertex
-            let x = this.vertex1.x - this.edge.style.width + this.vertex1.vertex.style.width;
-            let y = this.vertex1.y - this.edge.style.height + this.vertex1.vertex.style.height;
+            let x = this.vertex1.x - parseFloat(this.edge.style.width) + sketchPad.vertexDiameter/2;
+            let y = this.vertex1.y - parseFloat(this.edge.style.height) + sketchPad.vertexDiameter/2;
             if (this.isSelected) {
                 x -= sketchPad.selectBorderRadius;
                 y -= sketchPad.selectBorderRadius;
@@ -166,10 +168,11 @@ class Edge {
 }
 
 class Sketchpad {
-    constructor(vertexDiameter, edgeWidth, selectBorderRadius) {
+    constructor(vertexDiameter, edgeWidth, loopDiameter, selectBorderRadius) {
         this.vertexDiameter = vertexDiameter;
         this.edgeWidth = edgeWidth;
         this.selectBorderRadius = selectBorderRadius;
+        this.loopDiameter=loopDiameter;
         this.parallelEdgeSpacing=2*edgeWidth;
 
         this.vertices = [];
@@ -263,38 +266,65 @@ class Sketchpad {
     }
 
     calculateEdgeOffsets(parallelEdges, vertex1, vertex2) {
-        //do check for loops
-
-        let slope = (vertex2.y - vertex1.y) / (vertex2.x - vertex1.x);
-        slope = -1 / slope;
-        //check parity
-        const isOdd = parallelEdges.length % 2 === 1;
-        let distance = isOdd ? 0 : this.parallelEdgeSpacing / 2;
-        for (let i = 0; i < parallelEdges.length; i++) {
-            //calculate the offsets
-            const x = (distance / Math.sqrt(1 + (slope * slope)));
-            const y = slope * x;
-
-            //apply the offsets
-            parallelEdges[i].offsetX = x;
-            parallelEdges[i].offsetY = y;
-
-            //increment the magnitude of distance?
-            if ((isOdd && i % 2 === 0) || (!isOdd && i % 2 === 1)) {
-                //increment odd sets on even i's and even sets on odd i's
-                let val = Math.abs(distance) + this.parallelEdgeSpacing;
-                distance = distance < 0 ? -val : val;
+        //check for loops
+        if (vertex1.id === vertex2.id) {
+            let loopDiameter = this.loopDiameter;
+            for (let i = 0; i < parallelEdges.length; i++) {
+                parallelEdges[i].edge.style.height = loopDiameter+'px';
+                parallelEdges[i].edge.style.width = loopDiameter+'px';
+                loopDiameter += this.parallelEdgeSpacing;
             }
+        } else {
+            let slope = (vertex2.y - vertex1.y) / (vertex2.x - vertex1.x);
+            slope = -1 / slope;
+            //check parity
+            const isOdd = parallelEdges.length % 2 === 1;
+            let distance = isOdd ? 0 : this.parallelEdgeSpacing / 2;
+            for (let i = 0; i < parallelEdges.length; i++) {
+                //calculate the offsets
+                const x = (distance / Math.sqrt(1 + (slope * slope)));
+                const y = slope * x;
 
-            distance *= -1;
+                //apply the offsets
+                parallelEdges[i].offsetX = x;
+                parallelEdges[i].offsetY = y;
+
+                //increment the magnitude of distance?
+                if ((isOdd && i % 2 === 0) || (!isOdd && i % 2 === 1)) {
+                    //increment odd sets on even i's and even sets on odd i's
+                    let val = Math.abs(distance) + this.parallelEdgeSpacing;
+                    distance = distance < 0 ? -val : val;
+                }
+
+                distance *= -1;
+            }
         }
     }
 
-    loopVertices(){
+    loopVertices() {
         for (let i = 0; i < this.selectedVertices.length; i++) {
-            this.edges.push(new Edge(this.selectedVertices[i], this.selectedVertices[i], this.edgeCount++));
+            //check for parallel edges
+            const parallelEdges = this.parallelEdgeFinder(this.selectedVertices[i], this.selectedVertices[i]);
+
+            //make the edge
+            const edge = new Edge(this.selectedVertices[i], this.selectedVertices[i], this.edgeIDCount++);
+            this.edges.push(edge);
+
+            //recalculate for parallel edges?
+            if (parallelEdges.length > 0) {
+                parallelEdges.push(edge);
+                this.calculateEdgeOffsets(parallelEdges, this.selectedVertices[i], this.selectedVertices[i]);
+                //reposition parallel edges
+                //I guess you'll only be able to have 9000 loops smh
+                let z = 9000;
+                for (let j = 0; j < parallelEdges.length; j++) {
+                    parallelEdges[j].positionEdge();
+                    //need to stack based on z values
+                    parallelEdges[j].edge.style.zIndex = z.toString();
+                    z--;
+                }
+            }
         }
-        this.deselectAll();
     }
 
     toggleGrabber(){
@@ -399,7 +429,7 @@ class Sketchpad {
     }
 }
 
-const sketchPad=new Sketchpad(25, 5, 4);
+const sketchPad=new Sketchpad(25, 5, 50,4);
 
 pad.addEventListener('mousedown', ev => sketchPad.drawVertex(ev));
 document.addEventListener('keydown', keyDown);
@@ -454,8 +484,16 @@ function keyDown(ev) {
             break;
         case 76:
             //l, loop selected vertices onto themselves
+            //deselection takes place like this so the graph looks a little nicer on creation
+            for(let i=0;i<sketchPad.selectedEdges.length;i++){
+                sketchPad.selectedEdges[i].deselect();
+            }
+            for (let i = 0; i < sketchPad.selectedVertices.length; i++) {
+                sketchPad.selectedVertices[i].deselect();
+            }
             sketchPad.loopVertices();
-            sketchPad.deselectAll();
+            sketchPad.selectedVertices = [];
+            sketchPad.selectedEdges=[];
             break;
         case 49:
         case 50:

@@ -28,8 +28,6 @@ body{
 
 #loop{
     position: absolute;
-    height: 50px;
-    width: 50px;
     border-radius: 50%;
     border: 5px solid black;
     z-index: 1;
