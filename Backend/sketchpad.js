@@ -294,21 +294,21 @@ class Sketchpad {
         }
     }
 
-    deleteSelection(){
+    deleteSelection() {
         //select all edges attached to each vertex
-        for(let i=0;i<this.selectedVertices.length;i++){
-            for(let j=0;j<this.selectedVertices[i].edges.length;j++){
+        for (let i = 0; i < this.selectedVertices.length; i++) {
+            for (let j = 0; j < this.selectedVertices[i].edges.length; j++) {
                 this.selectElement(this.selectedEdges, this.selectedVertices[i].edges[j]);
             }
         }
 
         //delete all edges
-        for(let i=0;i<this.selectedEdges.length;i++){
+        for (let i = 0; i < this.selectedEdges.length; i++) {
             //remove the edge from each of its vertices' edges
             let vertexEdges = this.selectedEdges[i].vertex1.edges;
             vertexEdges = vertexEdges.filter(edge => edge.id !== this.selectedEdges[i].id);
             this.selectedEdges[i].vertex1.edges = vertexEdges;
-            if(!this.selectedEdges[i].isLoop) {
+            if (!this.selectedEdges[i].isLoop) {
                 vertexEdges = this.selectedEdges[i].vertex2.edges;
                 vertexEdges = vertexEdges.filter(edge => edge.id !== this.selectedEdges[i].id);
                 this.selectedEdges[i].vertex2.edges = vertexEdges;
@@ -322,14 +322,34 @@ class Sketchpad {
         }
 
         //delete all vertices
-        for(let i=0;i<this.selectedVertices.length;i++){
-            this.vertices=this.vertices.filter(vertex=>vertex.id!==this.selectedVertices[i].id);
+        for (let i = 0; i < this.selectedVertices.length; i++) {
+            this.vertices = this.vertices.filter(vertex => vertex.id !== this.selectedVertices[i].id);
             this.selectedVertices[i].vertex.parentNode.removeChild(this.selectedVertices[i].vertex);
         }
 
+
+        //need to fix parallel edges, go to each vertex and recalculate each edge
+        for (let i = 0; i < this.vertices.length; i++) {
+            for (let j = 0; j < this.vertices[i].edges.length; j++) {
+                const vertex1 = this.vertices[i];
+                const vertex2 = this.vertices[i].edges[j].vertex2;
+
+                //find any parallel edges
+                const parallelEdges = this.parallelEdgeFinder(vertex1, vertex2);
+                //recalculate?
+                if (parallelEdges.length > 0) {
+                    this.calculateEdgeOffsets(parallelEdges, vertex1, vertex2);
+                    //reposition each of the edges
+                    for (let k = 0; k < parallelEdges.length; k++) {
+                        parallelEdges[k].positionEdge();
+                    }
+                }
+            }
+        }
+
         //clear the lists
-        this.selectedEdges=[];
-        this.selectedVertices=[];
+        this.selectedEdges = [];
+        this.selectedVertices = [];
     }
 
     clearPad(){
