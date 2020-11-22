@@ -261,22 +261,21 @@ class Sketchpad {
         let distance = isOdd ? 0 : this.parallelEdgeSpacing / 2;
         for (let i = 0; i < parallelEdges.length; i++) {
             //calculate the offsets
-            console.log(distance);
-            const x = vertex1.x + (distance / Math.sqrt(1 + (slope * slope)));
-            const y = slope * (x - vertex1.x) + vertex1.y;
+            const x = (distance / Math.sqrt(1 + (slope * slope)));
+            const y = slope * x;
 
             //apply the offsets
             parallelEdges[i].offsetX = x;
             parallelEdges[i].offsetY = y;
 
             //increment the magnitude of distance?
-            if((isOdd && i%2===0) || (!isOdd && i%2===1)) {
+            if ((isOdd && i % 2 === 0) || (!isOdd && i % 2 === 1)) {
                 //increment odd sets on even i's and even sets on odd i's
                 let val = Math.abs(distance) + this.parallelEdgeSpacing;
                 distance = distance < 0 ? -val : val;
             }
 
-            distance*=-1;
+            distance *= -1;
         }
     }
 
