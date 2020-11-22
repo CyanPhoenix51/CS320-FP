@@ -59,6 +59,7 @@ class Vertex {
         this.vertex.style.top = this.y + 'px';
         this.vertex.style.left = this.x + 'px';
     }
+
     deselect(){
         this.vertex.style.border = null;
         this.y += sketchPad.selectBorderRadius;
@@ -92,7 +93,7 @@ class Edge {
             vertex2.edges.push(this);
             this.edge.id = 'edge';
         }
-        this.positionEdge(0, 0);
+        this.positionEdge();
 
         //this line is required because js is confused on what 'this' is in the event listeners
         const e = this;
@@ -145,8 +146,8 @@ class Edge {
 
             //apply the calculations
             this.edge.style.height = height + 'px';
-            this.edge.style.top = y - (height / 2) + (sketchPad.vertexRadius / 2) + 'px';
-            this.edge.style.left = x - (sketchPad.edgeWidth / 2) + (sketchPad.vertexRadius / 2) + 'px';
+            this.edge.style.top = y - (height / 2) + (sketchPad.vertexDiameter / 2) + 'px';
+            this.edge.style.left = x - (sketchPad.edgeWidth / 2) + (sketchPad.vertexDiameter / 2) + 'px';
             this.edge.style.transform = 'rotate(' + theta.toString() + 'rad)';
         }
     }
@@ -304,6 +305,32 @@ class Sketchpad {
         }
     }
 
+    color(key){
+        switch (key){
+            case 49:
+                this.colorSelection('black');
+                break;
+            case 50:
+                this.colorSelection('red');
+                break;
+            case 51:
+                this.colorSelection('blue');
+                break;
+            case 52:
+                this.colorSelection('green');
+                break;
+        }
+    }
+
+    colorSelection(color) {
+        for (let i = 0; i < this.selectedVertices.length; i++) {
+            this.selectedVertices[i].vertex.style.background = color;
+        }
+        for (let i = 0; i < this.selectedEdges.length; i++) {
+            this.selectedEdges[i].edge.style.background = color;
+        }
+    }
+
     deleteSelection() {
         //select all edges attached to each vertex
         for (let i = 0; i < this.selectedVertices.length; i++) {
@@ -430,13 +457,13 @@ function keyDown(ev) {
             sketchPad.loopVertices();
             sketchPad.deselectAll();
             break;
-        // case 49:
-        // //colorings
-        // case 50:
-        // case 51:
-        // case 52:
-        //     sketchPad.color(ev.keyCode);
-        //     break;
+        case 49:
+        case 50:
+        case 51:
+        case 52:
+            //colorings
+            sketchPad.color(ev.keyCode);
+            break;
     }
 }
 
