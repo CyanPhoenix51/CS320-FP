@@ -1,4 +1,6 @@
 const pad=document.getElementById('pad');
+const padWidth=500;
+const padLength=500;
 
 class Vertex {
     constructor(x, y, id) {
@@ -29,12 +31,20 @@ class Vertex {
         });
     }
 
-    moveVertex(x, y){
-        this.x=x;
-        this.y=y;
+    moveVertex(x, y) {
+        //Am I within the bounds of the pad?
+        //width check
+        if (x > 2*sketchPad.selectBorderRadius && x < padWidth - sketchPad.vertexDiameter / 2-2*sketchPad.selectBorderRadius) {
+            this.x = x;
+        }
+        //length check
+        if (y > 2*sketchPad.selectBorderRadius && y < padLength - sketchPad.vertexDiameter / 2-2*sketchPad.selectBorderRadius) {
+            this.y = y;
+        }
+
         //put myself at new position
-        this.vertex.style.top=y+'px';
-        this.vertex.style.left=x+'px';
+        this.vertex.style.top = this.y + 'px';
+        this.vertex.style.left = this.x + 'px';
 
         //recalculate my edges
         for (let i = 0; i < this.edges.length; i++) {
@@ -155,8 +165,8 @@ class Edge {
 }
 
 class Sketchpad {
-    constructor(vertexRadius, edgeWidth, selectBorderRadius) {
-        this.vertexRadius = vertexRadius;
+    constructor(vertexDiameter, edgeWidth, selectBorderRadius) {
+        this.vertexDiameter = vertexDiameter;
         this.edgeWidth = edgeWidth;
         this.selectBorderRadius = selectBorderRadius;
         this.parallelEdgeSpacing=2*edgeWidth;
@@ -178,7 +188,7 @@ class Sketchpad {
 
     drawVertex(ev) {
         if (!this.mouseOverObj) {
-            this.vertices.push(new Vertex(ev.clientX - this.vertexRadius / 2, ev.clientY - this.vertexRadius / 2, this.vertexIDCount++));
+            this.vertices.push(new Vertex(ev.clientX - this.vertexDiameter / 2, ev.clientY - this.vertexDiameter / 2, this.vertexIDCount++));
         }
     }
 
