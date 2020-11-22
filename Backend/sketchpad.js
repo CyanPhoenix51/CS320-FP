@@ -24,10 +24,10 @@ class Vertex {
             sketchPad.selectElement(sketchPad.selectedVertices, v);
         });
         this.vertex.addEventListener('mouseenter', function (ev) {
-            sketchPad.mouseOverObj = true;
+            sketchPad.mouseOverObj = v;
         });
         this.vertex.addEventListener('mouseleave', function (ev) {
-            sketchPad.mouseOverObj = false;
+            sketchPad.mouseOverObj = null;
         });
     }
 
@@ -104,10 +104,10 @@ class Edge {
             sketchPad.selectElement(sketchPad.selectedEdges, e);
         });
         this.edge.addEventListener('mouseenter', function (ev) {
-            sketchPad.mouseOverObj = true;
+            sketchPad.mouseOverObj = e;
         });
         this.edge.addEventListener('mouseleave', function (ev) {
-            sketchPad.mouseOverObj = false;
+            sketchPad.mouseOverObj = null;
         });
     }
 
@@ -187,7 +187,7 @@ class Sketchpad {
         this.mouseMoveCTX=null;
         this.grabber = false;
         this.mouseGrabInitPos = [0, 0];
-        this.mouseOverObj=false;
+        this.mouseOverObj=null;
     }
 
     drawVertex(ev) {
@@ -369,6 +369,26 @@ class Sketchpad {
             }
         }
 
+        //is the object mouse is over about to get deleted?
+        if(this.mouseOverObj) {
+            let objectFound = false;
+            //scan vertices
+            for (let i = 0; i < this.selectedVertices.length; i++) {
+                if (this.selectedVertices[i].id === this.mouseOverObj.id) {
+                    this.mouseOverObj = null;
+                    objectFound = true;
+                }
+            }
+            //if not found, scan edges
+            if (!objectFound) {
+                for (let i = 0; i < this.selectedEdges.length; i++) {
+                    if (this.selectedEdges[i].id===this.mouseOverObj.id) {
+                        this.mouseOverObj=null;
+                    }
+                }
+            }
+        }
+
         //delete all edges
         for (let i = 0; i < this.selectedEdges.length; i++) {
             //remove the edge from each of its vertices' edges
@@ -393,7 +413,6 @@ class Sketchpad {
             this.vertices = this.vertices.filter(vertex => vertex.id !== this.selectedVertices[i].id);
             this.selectedVertices[i].vertex.parentNode.removeChild(this.selectedVertices[i].vertex);
         }
-
 
         //need to fix parallel edges, go to each vertex and recalculate each edge
         for (let i = 0; i < this.vertices.length; i++) {
