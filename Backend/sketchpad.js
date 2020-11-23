@@ -172,27 +172,38 @@ class Sketchpad {
         this.vertexDiameter = vertexDiameter;
         this.edgeWidth = edgeWidth;
         this.selectBorderRadius = selectBorderRadius;
-        this.loopDiameter=loopDiameter;
-        this.parallelEdgeSpacing=2*edgeWidth;
+        this.loopDiameter = loopDiameter;
+        this.parallelEdgeSpacing = 2 * edgeWidth;
+
+        this.vertexEdgeCountDisplay = false;
+        this.vertexCountDisplay = document.createElement('div');
+        this.vertexCountDisplay.id = 'vertexDisplay';
+        this.vertexCountDisplay.style.visibility = 'hidden';
+        this.vertexCountDisplay.innerHTML='0';
+        pad.appendChild(this.vertexCountDisplay);
 
         this.vertices = [];
         //DO NOT RESET ON DELETION
         this.vertexIDCount = 0;
-        this.edges=[];
-        this.edgeIDCount=0;
+        //DO RESET ON DELETION
+        this.vertexCount = 0;
+        this.edges = [];
+        this.edgeIDCount = 0;
 
         this.selectedVertices = [];
         this.selectedEdges = [];
 
-        this.mouseMoveCTX=null;
+        this.mouseMoveCTX = null;
         this.grabber = false;
         this.mouseGrabInitPos = [0, 0];
-        this.mouseOverObj=null;
+        this.mouseOverObj = null;
     }
 
     drawVertex(ev) {
         if (!this.mouseOverObj) {
             this.vertices.push(new Vertex(ev.clientX - this.vertexDiameter / 2, ev.clientY - this.vertexDiameter / 2, this.vertexIDCount++));
+            this.vertexCount++;
+            this.vertexCountDisplay.innerHTML = this.vertexCount;
         }
     }
 
@@ -333,6 +344,9 @@ class Sketchpad {
             this.mouseGrabInitPos[0] =this.mouseMoveCTX.offsetX;
             this.mouseGrabInitPos[1] = this.mouseMoveCTX.offsetY;
         }
+        else{
+            this.recalculateEdges();
+        }
     }
 
     color(key){
@@ -412,9 +426,19 @@ class Sketchpad {
         for (let i = 0; i < this.selectedVertices.length; i++) {
             this.vertices = this.vertices.filter(vertex => vertex.id !== this.selectedVertices[i].id);
             this.selectedVertices[i].vertex.parentNode.removeChild(this.selectedVertices[i].vertex);
+            this.vertexCount--;
+            this.vertexCountDisplay.innerHTML=this.vertexCount;
         }
 
         //need to fix parallel edges, go to each vertex and recalculate each edge
+        this.recalculateEdges();
+
+        //clear the lists
+        this.selectedEdges = [];
+        this.selectedVertices = [];
+    }
+
+    recalculateEdges() {
         for (let i = 0; i < this.vertices.length; i++) {
             for (let j = 0; j < this.vertices[i].edges.length; j++) {
                 const vertex1 = this.vertices[i];
@@ -422,20 +446,30 @@ class Sketchpad {
 
                 //find any parallel edges
                 const parallelEdges = this.parallelEdgeFinder(vertex1, vertex2);
-                //recalculate?
+                //recalculate
                 if (parallelEdges.length > 0) {
                     this.calculateEdgeOffsets(parallelEdges, vertex1, vertex2);
                     //reposition each of the edges
                     for (let k = 0; k < parallelEdges.length; k++) {
                         parallelEdges[k].positionEdge();
                     }
+                } else {
+                    this.vertices[i].edges[j].positionEdge();
                 }
             }
         }
+    }
 
-        //clear the lists
-        this.selectedEdges = [];
-        this.selectedVertices = [];
+    toggleVertexEdgeCounts(){
+        this.vertexEdgeCountDisplay=!this.vertexEdgeCountDisplay;
+        if(this.vertexEdgeCountDisplay){
+            //turn them on
+            this.vertexCountDisplay.style.visibility='visible';
+        }
+        else{
+            //turn them off
+            this.vertexCountDisplay.style.visibility='hidden';
+        }
     }
 
     clearPad(){
@@ -448,7 +482,7 @@ class Sketchpad {
     }
 }
 
-const sketchPad=new Sketchpad(25, 5, 50,4);
+const sketchPad = new Sketchpad(25, 5, 50,4);
 
 pad.addEventListener('mousedown', ev => sketchPad.drawVertex(ev));
 document.addEventListener('keydown', keyDown);
@@ -513,6 +547,10 @@ function keyDown(ev) {
             sketchPad.loopVertices();
             sketchPad.selectedVertices = [];
             sketchPad.selectedEdges=[];
+            break;
+        case 67:
+            //c, display edge and vertex counts
+            sketchPad.toggleVertexEdgeCounts();
             break;
         case 49:
         case 50:
