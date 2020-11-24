@@ -175,12 +175,17 @@ class Sketchpad {
         this.loopDiameter = loopDiameter;
         this.parallelEdgeSpacing = 2 * edgeWidth;
 
-        this.vertexEdgeCountDisplay = false;
         this.vertexCountDisplay = document.createElement('div');
         this.vertexCountDisplay.id = 'vertexDisplay';
         this.vertexCountDisplay.style.visibility = 'hidden';
         this.vertexCountDisplay.innerHTML='0';
         pad.appendChild(this.vertexCountDisplay);
+
+        this.edgeCountDisplay=document.createElement('div');
+        this.edgeCountDisplay.id='edgeDisplay';
+        this.edgeCountDisplay.style.visibility='hidden';
+        this.edgeCountDisplay.innerHTML='0';
+        pad.appendChild(this.edgeCountDisplay);
 
         this.vertices = [];
         //DO NOT RESET ON DELETION
@@ -188,7 +193,10 @@ class Sketchpad {
         //DO RESET ON DELETION
         this.vertexCount = 0;
         this.edges = [];
+        //DO NOT RESET ON DELETION
         this.edgeIDCount = 0;
+        //DO RESET ON DELETION
+        this.edgeCount=0;
 
         this.selectedVertices = [];
         this.selectedEdges = [];
@@ -244,6 +252,8 @@ class Sketchpad {
                 const parallelEdges = this.parallelEdgeFinder(this.selectedVertices[i], this.selectedVertices[j]);
                 //make the new edge
                 const edge=new Edge(this.selectedVertices[i], this.selectedVertices[j], this.edgeIDCount++);
+                this.edgeCount++;
+                this.edgeCountDisplay.innerHTML=this.edgeCount;
                 this.edges.push(edge);
 
                 //do we have to calculate offsets?
@@ -319,6 +329,8 @@ class Sketchpad {
 
             //make the edge
             const edge = new Edge(this.selectedVertices[i], this.selectedVertices[i], this.edgeIDCount++);
+            this.edgeCount++;
+            this.edgeCountDisplay.innerHTML=this.edgeCount;
             this.edges.push(edge);
 
             //recalculate for parallel edges?
@@ -420,6 +432,9 @@ class Sketchpad {
 
             //remove it from the html
             this.selectedEdges[i].edge.parentNode.removeChild(this.selectedEdges[i].edge);
+
+            this.edgeCount--;
+            this.edgeCountDisplay.innerHTML=this.edgeCount;
         }
 
         //delete all vertices
@@ -465,10 +480,12 @@ class Sketchpad {
         if(this.vertexEdgeCountDisplay){
             //turn them on
             this.vertexCountDisplay.style.visibility='visible';
+            this.edgeCountDisplay.style.visibility='visible';
         }
         else{
             //turn them off
             this.vertexCountDisplay.style.visibility='hidden';
+            this.edgeCountDisplay.style.visibility='hidden';
         }
     }
 
