@@ -178,13 +178,13 @@ class Sketchpad {
         this.vertexCountDisplay = document.createElement('div');
         this.vertexCountDisplay.id = 'vertexDisplay';
         this.vertexCountDisplay.style.visibility = 'hidden';
-        this.vertexCountDisplay.innerHTML='0';
+        this.vertexCountDisplay.innerHTML='v = 0';
         pad.appendChild(this.vertexCountDisplay);
 
         this.edgeCountDisplay=document.createElement('div');
         this.edgeCountDisplay.id='edgeDisplay';
         this.edgeCountDisplay.style.visibility='hidden';
-        this.edgeCountDisplay.innerHTML='0';
+        this.edgeCountDisplay.innerHTML='e = 0';
         pad.appendChild(this.edgeCountDisplay);
 
         this.vertices = [];
@@ -211,7 +211,7 @@ class Sketchpad {
         if (!this.mouseOverObj) {
             this.vertices.push(new Vertex(ev.clientX - this.vertexDiameter / 2, ev.clientY - this.vertexDiameter / 2, this.vertexIDCount++));
             this.vertexCount++;
-            this.vertexCountDisplay.innerHTML = this.vertexCount;
+            this.vertexCountDisplay.innerHTML = 'v = '+this.vertexCount;
         }
     }
 
@@ -253,7 +253,7 @@ class Sketchpad {
                 //make the new edge
                 const edge=new Edge(this.selectedVertices[i], this.selectedVertices[j], this.edgeIDCount++);
                 this.edgeCount++;
-                this.edgeCountDisplay.innerHTML=this.edgeCount;
+                this.edgeCountDisplay.innerHTML='e = '+this.edgeCount;
                 this.edges.push(edge);
 
                 //do we have to calculate offsets?
@@ -330,7 +330,7 @@ class Sketchpad {
             //make the edge
             const edge = new Edge(this.selectedVertices[i], this.selectedVertices[i], this.edgeIDCount++);
             this.edgeCount++;
-            this.edgeCountDisplay.innerHTML=this.edgeCount;
+            this.edgeCountDisplay.innerHTML='e = ' + this.edgeCount;
             this.edges.push(edge);
 
             //recalculate for parallel edges?
@@ -434,7 +434,7 @@ class Sketchpad {
             this.selectedEdges[i].edge.parentNode.removeChild(this.selectedEdges[i].edge);
 
             this.edgeCount--;
-            this.edgeCountDisplay.innerHTML=this.edgeCount;
+            this.edgeCountDisplay.innerHTML='e = '+this.edgeCount;
         }
 
         //delete all vertices
@@ -442,7 +442,7 @@ class Sketchpad {
             this.vertices = this.vertices.filter(vertex => vertex.id !== this.selectedVertices[i].id);
             this.selectedVertices[i].vertex.parentNode.removeChild(this.selectedVertices[i].vertex);
             this.vertexCount--;
-            this.vertexCountDisplay.innerHTML=this.vertexCount;
+            this.vertexCountDisplay.innerHTML='v = '+this.vertexCount;
         }
 
         //need to fix parallel edges, go to each vertex and recalculate each edge
