@@ -1,0 +1,157 @@
+/* Global Font */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap"); *
+
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Background Settings */
+section {
+    position: relative;
+    widows: 100%;
+    min-height: 100vh;
+    background-image: url(bg.png);
+    background-size: cover;
+    background-position: top;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+section .main {
+    position: relative;
+    padding: 50px 50px 150px 250px;
+    box-sizing: border-box;
+}
+
+/* Welcome! Settings */
+section .main h1 {
+    color: skyblue;
+    font-size: 3em;
+    font-weight: 800;
+}
+
+/* Background of "Start Graph" button */
+section .main a {
+    color: skyblue;
+    position: relative;
+    display: inline-block;
+    padding: 20px 50px;
+    margin-top: 15px;
+    border-radius: 30px;
+    opacity: 80%;
+    background-color: #fff;
+    text-decoration: uppercase;
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+section .main a:hover {
+    color: pink;
+}
+
+/* Introduction Line */
+section .main p {
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+/* Directory Positions (Home, About, Team) */
+section .dir {
+    position: absolute;
+    top: 30px;
+    left: 110px;
+    display: flex;
+}
+
+/* Gets rid of the dots in Directory */
+section .dir li {
+    list-style: none;
+}
+
+/* Directory Settings */
+section .dir li a {
+    text-decoration: none;
+    color: #fff;
+    margin-right: 30px;
+    font-size: 1.5em;
+    font-weight: 755;
+}
+
+section .dir li a:hover {
+    color: pink;
+}
+
+/* Login box (Sign in/ups) */
+section .login {
+    height: 480px;
+    width: 600px;
+    padding: 80px 70px;
+    opacity: 90%;
+    overflow: hidden;
+    background: #fff ;
+    top: 50%;
+    left: 70%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    border-radius: 12px;
+}
+
+/* "Sign In" */
+section h2 {
+    margin: 0;
+    padding: 20px;
+    text-indent: 152px;
+    font-size: 22px;
+}
+
+section .login input {
+    width: 90%;
+    margin-bottom: 20px;
+}
+
+/* Two input bars (Enter E-mail / PW ) */
+section .login input[type="text"], input[type="password"] {
+    color: black;
+    border: none;
+    height: 40px;
+    font-size: 16px;
+    border-bottom: 1px solid skyblue;
+    background: transparent;
+    outline: none;
+}
+
+/* Login button */
+section .login input[type="submit"] {
+    border: none;
+    outline: none;
+    height: 40px;
+    background: skyblue;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 20px;
+}
+
+section .login input[type="submit"]:hover {
+    cursor: pointer;
+    background: pink;
+    color: #fff;
+}
+
+/* Forgot PW / Create Account */
+section .login a {
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 20px;
+    color: #000;
+}
+
+section .login a:hover {
+    color: pink;
+}
