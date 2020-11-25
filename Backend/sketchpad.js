@@ -166,6 +166,13 @@ class Edge {
                 this.arrow.style.top = -arrowSize - sketchPad.edgeWidth / 2 + 'px';
             }
         } else {
+            //is it an arc?
+            if (this.isArc && this.vertex1.id!==this.targetVertex.id) {
+                //switcharoo
+                const temp = this.vertex2;
+                this.vertex2 = this.vertex1;
+                this.vertex1 = temp;
+            }
             //math time
             let x1 = parseFloat(this.vertex1.vertex.style.left);
             let x2 = parseFloat(this.vertex2.vertex.style.left);
@@ -190,6 +197,11 @@ class Edge {
             }
 
             //apply the calculations
+            if(this.isArc) {
+                this.arrow.id = 'arrow_up';
+                this.arrow.style.top = height / 2 - arrowSize / 2 + 'px';
+                this.arrow.style.left = -(arrowSize / 2 + sketchPad.edgeWidth / 2) + 'px';
+            }
             this.edge.style.height = height + 'px';
             this.edge.style.top = y - (height / 2) + (sketchPad.vertexDiameter / 2) + 'px';
             this.edge.style.left = x - (sketchPad.edgeWidth / 2) + (sketchPad.vertexDiameter / 2) + 'px';
@@ -354,11 +366,28 @@ class Sketchpad {
             //make the edge an arc
             edge.makeArc(this.selectedVertices[0]);
         } else if (this.selectedVertices.length === 2) {
+            //find parallel edges
+            const parallelEdges = this.parallelEdgeFinder(this.selectedVertices[0], this.selectedVertices[1]);
+
+            //make the edge
             const edge = new Edge(this.selectedVertices[0], this.selectedVertices[1], this.edgeIDCount++);
-            edge.makeArc(this.selectedVertices[1]);
             this.edges.push(edge);
             this.edgeCount++;
             this.edgeCountDisplay.innerHTML = 'e = ' + this.edgeCount;
+
+            //do we have to calculate offsets?
+            if (parallelEdges.length > 0) {
+                //add the new edge to parallelEdges first
+                parallelEdges.push(edge);
+                this.calculateEdgeOffsets(parallelEdges, this.selectedVertices[0], this.selectedVertices[1]);
+                //new offsets, reposition edges
+                for (let k = 0; k < parallelEdges.length; k++) {
+                    parallelEdges[k].positionEdge();
+                }
+            }
+
+            //make it an arc
+            edge.makeArc(this.selectedVertices[1]);
         }
     }
 
@@ -670,7 +699,16 @@ function keyDown(ev) {
             break;
         case 65:
             //a, generate an arc
+            //deselection takes place like this so the graph looks a little nicer on creation
+            for(let i=0;i<sketchPad.selectedEdges.length;i++){
+                sketchPad.selectedEdges[i].deselect();
+            }
+            for (let i = 0; i < sketchPad.selectedVertices.length; i++) {
+                sketchPad.selectedVertices[i].deselect();
+            }
             sketchPad.generateArc();
+            sketchPad.selectedVertices = [];
+            sketchPad.selectedEdges=[];
             break;
         case 49:
         case 50:

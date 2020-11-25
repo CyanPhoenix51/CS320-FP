@@ -34,13 +34,13 @@ body{
 }
 
 #arrow_up{
-    position: absolute;
+    position: relative;
     width: 0;
     height: 0;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
 
-    border-bottom: 10px solid black;
+    border-bottom: 10px solid blue;
 }
 
 #arrow_left{
@@ -51,14 +51,5 @@ body{
     border-bottom: 10px solid transparent;
 
     border-right:10px solid blue;
-}
-
-#arrow_right{
-    width: 0;
-    height: 0;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-
-    border-left: 10px solid green;
 }
 
