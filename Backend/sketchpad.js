@@ -112,6 +112,8 @@ class Edge {
         this.isSelected = false;
         this.offsetX = 0;
         this.offsetY = 0;
+        this.isArc = false;
+        this.targetVertex = null;
 
         //create the edge
         this.edge = document.createElement('div');
@@ -195,10 +197,11 @@ class Edge {
         }
     }
 
-    makeArc(){
+    makeArc(targetVertex) {
+        this.targetVertex = targetVertex;
         this.isArc=true;
         //make myself a triangle to show direction
-        this.arrow=document.createElement('div');
+        this.arrow = document.createElement('div');
         this.edge.appendChild(this.arrow);
         this.positionEdge();
     }
@@ -325,14 +328,34 @@ class Sketchpad {
     generateArc() {
         //An arc can only be generated between 2 vertices at a time, or a loop
         if (this.selectedVertices.length === 1) {
+            //get any parallel edges
+            const parallelEdges=this.parallelEdgeFinder(this.selectedVertices[0], this.selectedVertices[0]);
+
+            //make the edge
             const edge = new Edge(this.selectedVertices[0], this.selectedVertices[0], this.edgeIDCount++);
-            edge.makeArc();
             this.edges.push(edge);
             this.edgeCount++;
             this.edgeCountDisplay.innerHTML = 'e = ' + this.edgeCount;
+
+            //recalculate for parallel edges
+            if (parallelEdges.length > 0) {
+                parallelEdges.push(edge);
+                this.calculateEdgeOffsets(parallelEdges, this.selectedVertices[0], this.selectedVertices[0]);
+                //reposition parallel edges
+                //I guess you'll only be able to have 9000 loops smh
+                let z = 9000;
+                for (let j = 0; j < parallelEdges.length; j++) {
+                    parallelEdges[j].positionEdge();
+                    //need to stack based on z values
+                    parallelEdges[j].edge.style.zIndex = z.toString();
+                    z--;
+                }
+            }
+            //make the edge an arc
+            edge.makeArc(this.selectedVertices[0]);
         } else if (this.selectedVertices.length === 2) {
             const edge = new Edge(this.selectedVertices[0], this.selectedVertices[1], this.edgeIDCount++);
-            edge.makeArc();
+            edge.makeArc(this.selectedVertices[1]);
             this.edges.push(edge);
             this.edgeCount++;
             this.edgeCountDisplay.innerHTML = 'e = ' + this.edgeCount;
