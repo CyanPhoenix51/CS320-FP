@@ -100,6 +100,11 @@ class Vertex {
         this.edges = this.edges.filter(e => e.id !== edge.id);
         this.degreeDisplay.innerHTML = this.edges.length.toString();
     }
+
+    setID(id){
+        this.id=id;
+        this.idDisplay.innerHTML=this.id.toString();
+    }
 }
 
 class Edge {
@@ -228,6 +233,11 @@ class Edge {
         this.edge.style.border = null;
         this.isSelected = false;
         this.positionEdge();
+    }
+
+    setID(id){
+        this.id=id;
+        this.idDisplay.innerHTML=this.id.toString();
     }
 }
 
@@ -402,13 +412,16 @@ class Sketchpad {
         this.selectedVertices = [];
     }
 
-    clearPad(){
+    clearPad() {
         //select all, then delete all
-        for(let i=0;i<this.vertices.length;i++){
+        for (let i = 0; i < this.vertices.length; i++) {
             this.selectElement(this.selectedVertices, this.vertices[i]);
         }
         //edges can't exist without vertices, so its ok to only select the vertices
         this.deleteSelection();
+
+        //reset id's
+        this.resetID();
     }
 
     //Manipulating
@@ -503,6 +516,17 @@ class Sketchpad {
         }
         for (let i = 0; i < this.selectedEdges.length; i++) {
             this.selectedEdges[i].edge.style.background = color;
+        }
+    }
+
+    resetID() {
+        this.vertexIDCount = 0;
+        this.edgeIDCount = 0;
+        for (let i = 0; i < this.vertices.length; i++) {
+            this.vertices[i].setID(this.vertexIDCount++);
+        }
+        for (let i = 0; i < this.edges.length; i++) {
+            this.edges[i].setID(this.edgeIDCount++);
         }
     }
 
@@ -674,6 +698,9 @@ function keyDown(ev) {
             //a, generate an arc
             sketchPad.generateArc();
             break;
+        case 82:
+            //r, reset ids
+            sketchPad.resetID();
         case 49:
         case 50:
         case 51:
