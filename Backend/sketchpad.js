@@ -1,7 +1,4 @@
 const pad = document.getElementById('pad');
-const padWidth = 500;
-const padLength = 500;
-const arrowSize = 10;
 
 class Vertex {
     constructor(x, y, id) {
@@ -18,29 +15,31 @@ class Vertex {
         this.vertex.style.top = this.y + 'px';
         this.vertex.style.left = this.x + 'px';
 
-        this.degreeDisplay=document.createElement('div');
-        this.degreeDisplay.id='degreeDisplay';
-        this.degreeDisplay.style.visibility='hidden';
-        this.degreeDisplay.innerHTML='0';
+        //Create the display objects
+        this.degreeDisplay = document.createElement('div');
+        this.degreeDisplay.id = 'degreeDisplay';
+        this.degreeDisplay.style.visibility = 'hidden';
+        this.degreeDisplay.innerHTML = '0';
         this.vertex.appendChild(this.degreeDisplay);
 
-        this.idDisplay=document.createElement('div');
-        this.idDisplay.id='idDisplay';
-        this.idDisplay.style.visibility='hidden';
-        this.idDisplay.innerHTML=id.toString();
+        this.idDisplay = document.createElement('div');
+        this.idDisplay.id = 'idDisplay';
+        this.idDisplay.style.visibility = 'hidden';
+        this.idDisplay.innerHTML = id.toString();
         this.vertex.appendChild(this.idDisplay);
 
-        //this line is required because js is confused on what 'this' is in the event listeners
+        //Add Event Listeners
         const v = this;
-        //add event listeners
-        this.vertex.addEventListener('mousedown', function (ev) {
-            //select the vertex
+        this.vertex.addEventListener('mousedown', function () {
+            //select the component
             sketchPad.selectElement(sketchPad.selectedVertices, v);
         });
-        this.vertex.addEventListener('mouseenter', function (ev) {
+        this.vertex.addEventListener('mouseenter', function () {
+            //mouse over object
             sketchPad.mouseOverObj = v;
         });
-        this.vertex.addEventListener('mouseleave', function (ev) {
+        this.vertex.addEventListener('mouseleave', function () {
+            //mouse exit object
             sketchPad.mouseOverObj = null;
         });
     }
@@ -48,11 +47,11 @@ class Vertex {
     moveVertex(x, y) {
         //Am I within the bounds of the pad?
         //width check
-        if (x > 2*sketchPad.selectBorderRadius && x < padWidth - sketchPad.vertexDiameter / 2-2*sketchPad.selectBorderRadius) {
+        if (x > 2 * sketchPad.selectBorderRadius && x < sketchPad.padWidth - sketchPad.vertexDiameter / 2 - 2 * sketchPad.selectBorderRadius) {
             this.x = x;
         }
         //length check
-        if (y > 2*sketchPad.selectBorderRadius && y < padLength - sketchPad.vertexDiameter / 2-2*sketchPad.selectBorderRadius) {
+        if (y > 2 * sketchPad.selectBorderRadius && y < sketchPad.padLength - sketchPad.vertexDiameter / 2 - 2 * sketchPad.selectBorderRadius) {
             this.y = y;
         }
 
@@ -67,7 +66,7 @@ class Vertex {
     }
 
     select() {
-        this.vertex.style.border = sketchPad.selectBorderRadius + 'px solid pink';
+        this.vertex.style.border = sketchPad.selectBorderRadius + 'px ' + sketchPad.selectionColor;
         this.y -= sketchPad.selectBorderRadius;
         this.x -= sketchPad.selectBorderRadius;
         this.vertex.style.top = this.y + 'px';
@@ -82,25 +81,24 @@ class Vertex {
         this.vertex.style.left = this.x + 'px';
     }
 
-    displayDegreeID(isOn){
-        if(isOn){
-            this.idDisplay.style.visibility='visible';
-            this.degreeDisplay.style.visibility='visible';
-        }
-        else{
-            this.idDisplay.style.visibility='hidden';
-            this.degreeDisplay.style.visibility='hidden';
+    displayDegreeID(isOn) {
+        if (isOn) {
+            this.idDisplay.style.visibility = 'visible';
+            this.degreeDisplay.style.visibility = 'visible';
+        } else {
+            this.idDisplay.style.visibility = 'hidden';
+            this.degreeDisplay.style.visibility = 'hidden';
         }
     }
 
-    addEdge(edge){
+    addEdge(edge) {
         this.edges.push(edge);
-        this.degreeDisplay.innerHTML=this.edges.length.toString();
+        this.degreeDisplay.innerHTML = this.edges.length.toString();
     }
 
-    removeEdge(edge){
+    removeEdge(edge) {
         this.edges = this.edges.filter(e => e.id !== edge.id);
-        this.degreeDisplay.innerHTML=this.edges.length.toString();
+        this.degreeDisplay.innerHTML = this.edges.length.toString();
     }
 }
 
@@ -134,16 +132,18 @@ class Edge {
         }
         this.positionEdge();
 
-        //this line is required because js is confused on what 'this' is in the event listeners
+        //Add Event Listeners
         const e = this;
-        //add event listeners
-        this.edge.addEventListener('mousedown', function (ev) {
+        this.edge.addEventListener('mousedown', function () {
+            //select the component
             sketchPad.selectElement(sketchPad.selectedEdges, e);
         });
-        this.edge.addEventListener('mouseenter', function (ev) {
+        this.edge.addEventListener('mouseenter', function () {
+            //mouse over object
             sketchPad.mouseOverObj = e;
         });
-        this.edge.addEventListener('mouseleave', function (ev) {
+        this.edge.addEventListener('mouseleave', function () {
+            //mouse exit object
             sketchPad.mouseOverObj = null;
         });
     }
@@ -162,12 +162,12 @@ class Edge {
             if (this.isArc) {
                 //position the arrow
                 this.arrow.id = 'arrow_left';
-                this.arrow.style.left = parseFloat(this.edge.style.width) / 2 - arrowSize / 2 + 'px';
-                this.arrow.style.top = -arrowSize - sketchPad.edgeWidth / 2 + 'px';
+                this.arrow.style.left = parseFloat(this.edge.style.width) / 2 - sketchPad.arrowSize / 2 + 'px';
+                this.arrow.style.top = -(sketchPad.arrowSize + sketchPad.edgeWidth / 2) + 'px';
             }
         } else {
             //is it an arc?
-            if (this.isArc && this.vertex1.id!==this.targetVertex.id) {
+            if (this.isArc && this.vertex1.id !== this.targetVertex.id) {
                 //switcharoo
                 const temp = this.vertex2;
                 this.vertex2 = this.vertex1;
@@ -197,10 +197,10 @@ class Edge {
             }
 
             //apply the calculations
-            if(this.isArc) {
+            if (this.isArc) {
                 this.arrow.id = 'arrow_up';
-                this.arrow.style.top = height / 2 - arrowSize / 2 + 'px';
-                this.arrow.style.left = -(arrowSize / 2 + sketchPad.edgeWidth / 2) + 'px';
+                this.arrow.style.top = height / 2 - sketchPad.arrowSize / 2 + 'px';
+                this.arrow.style.left = -(sketchPad.arrowSize / 2 + sketchPad.edgeWidth / 2) + 'px';
             }
             this.edge.style.height = height + 'px';
             this.edge.style.top = y - (height / 2) + (sketchPad.vertexDiameter / 2) + 'px';
@@ -211,45 +211,52 @@ class Edge {
 
     makeArc(targetVertex) {
         this.targetVertex = targetVertex;
-        this.isArc=true;
+        this.isArc = true;
         //make myself a triangle to show direction
         this.arrow = document.createElement('div');
         this.edge.appendChild(this.arrow);
         this.positionEdge();
     }
 
-    select(){
-        this.edge.style.border = sketchPad.selectBorderRadius + 'px solid pink';
+    select() {
+        this.edge.style.border = sketchPad.selectBorderRadius + 'px ' + sketchPad.selectionColor;
         this.isSelected = true;
-        this.positionEdge(0, 0);
+        this.positionEdge();
     }
 
     deselect(){
         this.edge.style.border = null;
         this.isSelected = false;
-        this.positionEdge(0, 0);
+        this.positionEdge();
     }
 }
 
 class Sketchpad {
-    constructor(vertexDiameter, edgeWidth, loopDiameter, selectBorderRadius) {
-        this.vertexDiameter = vertexDiameter;
-        this.edgeWidth = edgeWidth;
-        this.selectBorderRadius = selectBorderRadius;
-        this.loopDiameter = loopDiameter;
-        this.parallelEdgeSpacing = 2 * edgeWidth;
-        this.vertexDegreeIDShow=false;
+    constructor() {
+        //basic constants
+        this.padWidth = 500;
+        this.padLength = 500;
+        this.arrowSize = 10;
+        this.selectionColor = 'solid pink';
 
+        this.vertexDiameter = 25;
+        this.edgeWidth = 5;
+        this.selectBorderRadius = 4;
+        this.loopDiameter = 50;
+        this.parallelEdgeSpacing = 3.5 * this.edgeWidth;
+        this.vertexDegreeIDShow = false;
+
+        //create displays for vertex and edge counts
         this.vertexCountDisplay = document.createElement('div');
         this.vertexCountDisplay.id = 'vertexDisplay';
         this.vertexCountDisplay.style.visibility = 'hidden';
-        this.vertexCountDisplay.innerHTML='v = 0';
+        this.vertexCountDisplay.innerHTML = 'v = 0';
         pad.appendChild(this.vertexCountDisplay);
 
-        this.edgeCountDisplay=document.createElement('div');
-        this.edgeCountDisplay.id='edgeDisplay';
-        this.edgeCountDisplay.style.visibility='hidden';
-        this.edgeCountDisplay.innerHTML='e = 0';
+        this.edgeCountDisplay = document.createElement('div');
+        this.edgeCountDisplay.id = 'edgeDisplay';
+        this.edgeCountDisplay.style.visibility = 'hidden';
+        this.edgeCountDisplay.innerHTML = 'e = 0';
         pad.appendChild(this.edgeCountDisplay);
 
         this.vertices = [];
@@ -261,8 +268,9 @@ class Sketchpad {
         //DO NOT RESET ON DELETION
         this.edgeIDCount = 0;
         //DO RESET ON DELETION
-        this.edgeCount=0;
+        this.edgeCount = 0;
 
+        //fields to be manipulated heavily
         this.selectedVertices = [];
         this.selectedEdges = [];
 
@@ -272,37 +280,21 @@ class Sketchpad {
         this.mouseOverObj = null;
     }
 
+    //----------------COMMANDS------------------//
+    //Drawing
     drawVertex(ev) {
         if (!this.mouseOverObj) {
-            this.vertices.push(new Vertex(ev.clientX - this.vertexDiameter / 2, ev.clientY - this.vertexDiameter / 2, this.vertexIDCount++));
+            const vertex = new Vertex(ev.clientX - this.vertexDiameter / 2, ev.clientY - this.vertexDiameter / 2, this.vertexIDCount++);
+            this.vertices.push(vertex);
             this.vertexCount++;
-            this.vertexCountDisplay.innerHTML = 'v = '+this.vertexCount;
+            this.vertexCountDisplay.innerHTML = 'v = ' + this.vertexCount;
+            return vertex;
         }
-    }
-
-    selectElement(list, element) {
-        for (let i = 0; i < list.length; i++) {
-            if (list[i].id === element.id) {
-                return;
-            }
-        }
-        list.push(element);
-        element.select();
-    }
-
-    deselectAll(){
-        for (let i = 0; i < this.selectedVertices.length; i++) {
-            this.selectedVertices[i].deselect();
-        }
-        for (let i = 0; i < this.selectedEdges.length; i++) {
-            this.selectedEdges[i].deselect();
-        }
-        this.selectedVertices = [];
-        this.selectedEdges = [];
     }
 
     generateEdges() {
         if (this.selectedVertices.length < 2) return;
+        this.deselectWithoutClear();
         let filledEdges = [];
         for (let i = 0; i < this.selectedVertices.length; i++) {
             for (let j = 0; j < this.selectedVertices.length; j++) {
@@ -313,197 +305,38 @@ class Sketchpad {
                 let ji = j.toString() + i.toString();
                 if (filledEdges.includes(ij) || filledEdges.includes(ji)) continue;
 
-                //find any parallel edges that are already between these two vertices
-                const parallelEdges = this.parallelEdgeFinder(this.selectedVertices[i], this.selectedVertices[j]);
-                //make the new edge
-                const edge = new Edge(this.selectedVertices[i], this.selectedVertices[j], this.edgeIDCount++);
-                this.edgeCount++;
-                this.edgeCountDisplay.innerHTML = 'e = ' + this.edgeCount;
-                this.edges.push(edge);
-
-                //do we have to calculate offsets?
-                if (parallelEdges.length > 0) {
-                    //add the new edge to parallelEdges first
-                    parallelEdges.push(edge);
-                    this.calculateEdgeOffsets(parallelEdges, this.selectedVertices[i], this.selectedVertices[j]);
-                    //new offsets, reposition edges
-                    for (let k = 0; k < parallelEdges.length; k++) {
-                        parallelEdges[k].positionEdge();
-                    }
-                }
-
+                this.drawEdge(this.selectedVertices[i], this.selectedVertices[j]);
                 filledEdges.push(ij);
             }
         }
+        this.selectedVertices=[];
+        this.selectedEdges=[];
     }
 
     generateArc() {
         //An arc can only be generated between 2 vertices at a time, or a loop
+        if (this.selectedVertices.length !== 1 && this.selectedVertices.length !== 2) return;
+        this.deselectWithoutClear();
         if (this.selectedVertices.length === 1) {
-            //get any parallel edges
-            const parallelEdges=this.parallelEdgeFinder(this.selectedVertices[0], this.selectedVertices[0]);
-
-            //make the edge
-            const edge = new Edge(this.selectedVertices[0], this.selectedVertices[0], this.edgeIDCount++);
-            this.edges.push(edge);
-            this.edgeCount++;
-            this.edgeCountDisplay.innerHTML = 'e = ' + this.edgeCount;
-
-            //recalculate for parallel edges
-            if (parallelEdges.length > 0) {
-                parallelEdges.push(edge);
-                this.calculateEdgeOffsets(parallelEdges, this.selectedVertices[0], this.selectedVertices[0]);
-                //reposition parallel edges
-                //I guess you'll only be able to have 9000 loops smh
-                let z = 9000;
-                for (let j = 0; j < parallelEdges.length; j++) {
-                    parallelEdges[j].positionEdge();
-                    //need to stack based on z values
-                    parallelEdges[j].edge.style.zIndex = z.toString();
-                    z--;
-                }
-            }
+            const edge = this.drawEdge(this.selectedVertices[0], this.selectedVertices[0]);
             //make the edge an arc
             edge.makeArc(this.selectedVertices[0]);
         } else if (this.selectedVertices.length === 2) {
-            //find parallel edges
-            const parallelEdges = this.parallelEdgeFinder(this.selectedVertices[0], this.selectedVertices[1]);
-
-            //make the edge
-            const edge = new Edge(this.selectedVertices[0], this.selectedVertices[1], this.edgeIDCount++);
-            this.edges.push(edge);
-            this.edgeCount++;
-            this.edgeCountDisplay.innerHTML = 'e = ' + this.edgeCount;
-
-            //do we have to calculate offsets?
-            if (parallelEdges.length > 0) {
-                //add the new edge to parallelEdges first
-                parallelEdges.push(edge);
-                this.calculateEdgeOffsets(parallelEdges, this.selectedVertices[0], this.selectedVertices[1]);
-                //new offsets, reposition edges
-                for (let k = 0; k < parallelEdges.length; k++) {
-                    parallelEdges[k].positionEdge();
-                }
-            }
-
+            const edge = this.drawEdge(this.selectedVertices[0], this.selectedVertices[1]);
             //make it an arc
             edge.makeArc(this.selectedVertices[1]);
         }
-    }
-
-    parallelEdgeFinder(vertex1, vertex2) {
-        let parallelEdges = [];
-        for (let i = 0; i < vertex1.edges.length; i++) {
-            const edge = vertex1.edges[i];
-            if ((edge.vertex1.id === vertex1.id && edge.vertex2.id === vertex2.id) || (edge.vertex1.id === vertex2.id && edge.vertex2.id === vertex1.id)) {
-                parallelEdges.push(edge);
-                //standardize vertices
-                edge.vertex1 = vertex1;
-                edge.vertex2 = vertex2;
-            }
-        }
-        return parallelEdges;
-    }
-
-    calculateEdgeOffsets(parallelEdges, vertex1, vertex2) {
-        //check for loops
-        if (vertex1.id === vertex2.id) {
-            let loopDiameter = this.loopDiameter;
-            for (let i = 0; i < parallelEdges.length; i++) {
-                parallelEdges[i].edge.style.height = loopDiameter+'px';
-                parallelEdges[i].edge.style.width = loopDiameter+'px';
-                loopDiameter += this.parallelEdgeSpacing;
-            }
-        } else {
-            let slope = (vertex2.y - vertex1.y) / (vertex2.x - vertex1.x);
-            slope = -1 / slope;
-            //check parity
-            const isOdd = parallelEdges.length % 2 === 1;
-            let distance = isOdd ? 0 : this.parallelEdgeSpacing / 2;
-            for (let i = 0; i < parallelEdges.length; i++) {
-                //calculate the offsets
-                const x = (distance / Math.sqrt(1 + (slope * slope)));
-                const y = slope * x;
-
-                //apply the offsets
-                parallelEdges[i].offsetX = x;
-                parallelEdges[i].offsetY = y;
-
-                //increment the magnitude of distance?
-                if ((isOdd && i % 2 === 0) || (!isOdd && i % 2 === 1)) {
-                    //increment odd sets on even i's and even sets on odd i's
-                    let val = Math.abs(distance) + this.parallelEdgeSpacing;
-                    distance = distance < 0 ? -val : val;
-                }
-
-                distance *= -1;
-            }
-        }
+        this.selectedVertices = [];
+        this.selectedEdges = [];
     }
 
     loopVertices() {
+        this.deselectWithoutClear();
         for (let i = 0; i < this.selectedVertices.length; i++) {
-            //check for parallel edges
-            const parallelEdges = this.parallelEdgeFinder(this.selectedVertices[i], this.selectedVertices[i]);
-
-            //make the edge
-            const edge = new Edge(this.selectedVertices[i], this.selectedVertices[i], this.edgeIDCount++);
-            this.edgeCount++;
-            this.edgeCountDisplay.innerHTML='e = ' + this.edgeCount;
-            this.edges.push(edge);
-
-            //recalculate for parallel edges?
-            if (parallelEdges.length > 0) {
-                parallelEdges.push(edge);
-                this.calculateEdgeOffsets(parallelEdges, this.selectedVertices[i], this.selectedVertices[i]);
-                //reposition parallel edges
-                //I guess you'll only be able to have 9000 loops smh
-                let z = 9000;
-                for (let j = 0; j < parallelEdges.length; j++) {
-                    parallelEdges[j].positionEdge();
-                    //need to stack based on z values
-                    parallelEdges[j].edge.style.zIndex = z.toString();
-                    z--;
-                }
-            }
+            this.drawEdge(this.selectedVertices[i], this.selectedVertices[i]);
         }
-    }
-
-    toggleGrabber(){
-        this.grabber=!this.grabber;
-        if (this.grabber) {
-            this.mouseGrabInitPos[0] =this.mouseMoveCTX.offsetX;
-            this.mouseGrabInitPos[1] = this.mouseMoveCTX.offsetY;
-        }
-        else{
-            this.recalculateEdges();
-        }
-    }
-
-    color(key){
-        switch (key){
-            case 49:
-                this.colorSelection('black');
-                break;
-            case 50:
-                this.colorSelection('red');
-                break;
-            case 51:
-                this.colorSelection('blue');
-                break;
-            case 52:
-                this.colorSelection('green');
-                break;
-        }
-    }
-
-    colorSelection(color) {
-        for (let i = 0; i < this.selectedVertices.length; i++) {
-            this.selectedVertices[i].vertex.style.background = color;
-        }
-        for (let i = 0; i < this.selectedEdges.length; i++) {
-            this.selectedEdges[i].edge.style.background = color;
-        }
+        this.selectedEdges=[];
+        this.selectedVertices=[];
     }
 
     deleteSelection() {
@@ -569,6 +402,195 @@ class Sketchpad {
         this.selectedVertices = [];
     }
 
+    clearPad(){
+        //select all, then delete all
+        for(let i=0;i<this.vertices.length;i++){
+            this.selectElement(this.selectedVertices, this.vertices[i]);
+        }
+        //edges can't exist without vertices, so its ok to only select the vertices
+        this.deleteSelection();
+    }
+
+    //Manipulating
+    color(key){
+        switch (key){
+            case 49:
+                this.colorSelection('black');
+                break;
+            case 50:
+                this.colorSelection('red');
+                break;
+            case 51:
+                this.colorSelection('blue');
+                break;
+            case 52:
+                this.colorSelection('green');
+                break;
+        }
+    }
+
+    toggleGrabber() {
+        this.grabber = !this.grabber;
+        if (this.grabber) {
+            this.mouseGrabInitPos[0] = this.mouseMoveCTX.offsetX;
+            this.mouseGrabInitPos[1] = this.mouseMoveCTX.offsetY;
+        } else {
+            this.recalculateEdges();
+        }
+    }
+
+    //Selecting
+    selectElement(list, element) {
+        //don't select if already selected
+        if (element.isSelected) return;
+
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].id === element.id) {
+                return;
+            }
+        }
+        list.push(element);
+        element.select();
+    }
+
+    deselectAll() {
+        for (let i = 0; i < this.selectedVertices.length; i++) {
+            this.selectedVertices[i].deselect();
+        }
+        for (let i = 0; i < this.selectedEdges.length; i++) {
+            this.selectedEdges[i].deselect();
+        }
+        this.selectedVertices = [];
+        this.selectedEdges = [];
+    }
+
+    //Display Data
+    toggleVertexEdgeCounts() {
+        this.vertexEdgeCountDisplay = !this.vertexEdgeCountDisplay;
+        if (this.vertexEdgeCountDisplay) {
+            //turn them on
+            this.vertexCountDisplay.style.visibility = 'visible';
+            this.edgeCountDisplay.style.visibility = 'visible';
+        } else {
+            //turn them off
+            this.vertexCountDisplay.style.visibility = 'hidden';
+            this.edgeCountDisplay.style.visibility = 'hidden';
+        }
+    }
+
+    toggleVertexData() {
+        //loop through the vertices, turn on their displays
+        this.vertexDegreeIDShow = !this.vertexDegreeIDShow;
+        for (let i = 0; i < this.vertices.length; i++) {
+            this.vertices[i].displayDegreeID(this.vertexDegreeIDShow);
+        }
+    }
+
+    //---------------HELPER METHODS---------------//
+    //Quality of Life
+    deselectWithoutClear() {
+        for (let i = 0; i < sketchPad.selectedEdges.length; i++) {
+            sketchPad.selectedEdges[i].deselect();
+        }
+        for (let i = 0; i < sketchPad.selectedVertices.length; i++) {
+            sketchPad.selectedVertices[i].deselect();
+        }
+    }
+
+    colorSelection(color) {
+        for (let i = 0; i < this.selectedVertices.length; i++) {
+            this.selectedVertices[i].vertex.style.background = color;
+        }
+        for (let i = 0; i < this.selectedEdges.length; i++) {
+            this.selectedEdges[i].edge.style.background = color;
+        }
+    }
+
+    //Math Palace
+    drawEdge(vertex1, vertex2) {
+        //make the edge
+        const edge = new Edge(vertex1, vertex2, this.edgeIDCount++);
+        this.edgeCount++;
+        this.edgeCountDisplay.innerHTML = 'e = ' + this.edgeCount;
+        this.edges.push(edge);
+
+        //check for parallel edges
+        const parallelEdges = this.parallelEdgeFinder(vertex1, vertex2);
+
+        //recalculate for parallel edges?
+        if (parallelEdges.length > 1) {
+            this.calculateEdgeOffsets(parallelEdges, vertex1, vertex2);
+            //reposition parallel edges
+            //is it a loop?
+            if (vertex1.id === vertex2.id) {
+                //I guess you'll only be able to have 9000 loops smh
+                let z = 9000;
+                for (let i = 0; i < parallelEdges.length; i++) {
+                    parallelEdges[i].positionEdge();
+                    //need to stack based on z values
+                    parallelEdges[i].edge.style.zIndex = z.toString();
+                    z--;
+                }
+            } else {
+                for (let i = 0; i < parallelEdges.length; i++) {
+                    parallelEdges[i].positionEdge();
+                }
+            }
+        }
+
+        return edge;
+    }
+
+    parallelEdgeFinder(vertex1, vertex2) {
+        let parallelEdges = [];
+        for (let i = 0; i < vertex1.edges.length; i++) {
+            const edge = vertex1.edges[i];
+            if ((edge.vertex1.id === vertex1.id && edge.vertex2.id === vertex2.id) || (edge.vertex1.id === vertex2.id && edge.vertex2.id === vertex1.id)) {
+                parallelEdges.push(edge);
+                //standardize vertices
+                edge.vertex1 = vertex1;
+                edge.vertex2 = vertex2;
+            }
+        }
+        return parallelEdges;
+    }
+
+    calculateEdgeOffsets(parallelEdges, vertex1, vertex2) {
+        //check for loops
+        if (vertex1.id === vertex2.id) {
+            let loopDiameter = this.loopDiameter;
+            for (let i = 0; i < parallelEdges.length; i++) {
+                parallelEdges[i].edge.style.height = loopDiameter+'px';
+                parallelEdges[i].edge.style.width = loopDiameter+'px';
+                loopDiameter += this.parallelEdgeSpacing;
+            }
+        } else {
+            let slope = (vertex2.y - vertex1.y) / (vertex2.x - vertex1.x);
+            slope = -1 / slope;
+            //check parity
+            const isOdd = parallelEdges.length % 2 === 1;
+            let distance = isOdd ? 0 : this.parallelEdgeSpacing / 2;
+            for (let i = 0; i < parallelEdges.length; i++) {
+                //calculate the offsets
+                const x = (distance / Math.sqrt(1 + (slope * slope)));
+                const y = slope * x;
+
+                //apply the offsets
+                parallelEdges[i].offsetX = x;
+                parallelEdges[i].offsetY = y;
+
+                //increment the magnitude of distance?
+                if ((isOdd && i % 2 === 0) || (!isOdd && i % 2 === 1)) {
+                    //increment odd sets on even i's and even sets on odd i's
+                    let val = Math.abs(distance) + this.parallelEdgeSpacing;
+                    distance = distance < 0 ? -val : val;
+                }
+
+                distance *= -1;
+            }
+        }
+    }
+
     recalculateEdges() {
         for (let i = 0; i < this.vertices.length; i++) {
             for (let j = 0; j < this.vertices[i].edges.length; j++) {
@@ -590,40 +612,9 @@ class Sketchpad {
             }
         }
     }
-
-    toggleVertexEdgeCounts(){
-        this.vertexEdgeCountDisplay=!this.vertexEdgeCountDisplay;
-        if(this.vertexEdgeCountDisplay){
-            //turn them on
-            this.vertexCountDisplay.style.visibility='visible';
-            this.edgeCountDisplay.style.visibility='visible';
-        }
-        else{
-            //turn them off
-            this.vertexCountDisplay.style.visibility='hidden';
-            this.edgeCountDisplay.style.visibility='hidden';
-        }
-    }
-
-    toggleVertexData(){
-        //loop through the vertices, turn on their displays
-        this.vertexDegreeIDShow=!this.vertexDegreeIDShow;
-        for(let i=0;i<this.vertices.length;i++){
-            this.vertices[i].displayDegreeID(this.vertexDegreeIDShow);
-        }
-    }
-
-    clearPad(){
-        //select all, then delete all
-        for(let i=0;i<this.vertices.length;i++){
-            this.selectElement(this.selectedVertices, this.vertices[i]);
-        }
-        //edges can't exist without vertices, so its ok to only select the vertices
-        this.deleteSelection();
-    }
 }
 
-const sketchPad = new Sketchpad(25, 5, 50,4);
+const sketchPad = new Sketchpad();
 
 pad.addEventListener('mousedown', ev => sketchPad.drawVertex(ev));
 document.addEventListener('keydown', keyDown);
@@ -653,16 +644,7 @@ function keyDown(ev) {
     switch (ev.keyCode) {
         case 69:
             //e, generate edges
-            //deselection takes place like this so the graph looks a little nicer on creation
-            for(let i=0;i<sketchPad.selectedEdges.length;i++){
-                sketchPad.selectedEdges[i].deselect();
-            }
-            for (let i = 0; i < sketchPad.selectedVertices.length; i++) {
-                sketchPad.selectedVertices[i].deselect();
-            }
             sketchPad.generateEdges();
-            sketchPad.selectedVertices = [];
-            sketchPad.selectedEdges=[];
             break;
         case 71:
             //g, toggle grabber
@@ -678,16 +660,7 @@ function keyDown(ev) {
             break;
         case 76:
             //l, loop selected vertices onto themselves
-            //deselection takes place like this so the graph looks a little nicer on creation
-            for(let i=0;i<sketchPad.selectedEdges.length;i++){
-                sketchPad.selectedEdges[i].deselect();
-            }
-            for (let i = 0; i < sketchPad.selectedVertices.length; i++) {
-                sketchPad.selectedVertices[i].deselect();
-            }
             sketchPad.loopVertices();
-            sketchPad.selectedVertices = [];
-            sketchPad.selectedEdges=[];
             break;
         case 67:
             //c, display edge and vertex counts
@@ -699,16 +672,7 @@ function keyDown(ev) {
             break;
         case 65:
             //a, generate an arc
-            //deselection takes place like this so the graph looks a little nicer on creation
-            for(let i=0;i<sketchPad.selectedEdges.length;i++){
-                sketchPad.selectedEdges[i].deselect();
-            }
-            for (let i = 0; i < sketchPad.selectedVertices.length; i++) {
-                sketchPad.selectedVertices[i].deselect();
-            }
             sketchPad.generateArc();
-            sketchPad.selectedVertices = [];
-            sketchPad.selectedEdges=[];
             break;
         case 49:
         case 50:
