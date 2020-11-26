@@ -71,14 +71,16 @@ class Vertex {
         this.x -= sketchPad.selectBorderRadius;
         this.vertex.style.top = this.y + 'px';
         this.vertex.style.left = this.x + 'px';
+        this.isSelected = true;
     }
 
-    deselect(){
+    deselect() {
         this.vertex.style.border = null;
         this.y += sketchPad.selectBorderRadius;
         this.x += sketchPad.selectBorderRadius;
         this.vertex.style.top = this.y + 'px';
         this.vertex.style.left = this.x + 'px';
+        this.isSelected = false;
     }
 
     displayDegreeID(isOn) {
@@ -101,9 +103,9 @@ class Vertex {
         this.degreeDisplay.innerHTML = this.edges.length.toString();
     }
 
-    setID(id){
-        this.id=id;
-        this.idDisplay.innerHTML=this.id.toString();
+    setID(id) {
+        this.id = id;
+        this.idDisplay.innerHTML = this.id.toString();
     }
 }
 
@@ -183,6 +185,15 @@ class Edge {
             let x2 = parseFloat(this.vertex2.vertex.style.left);
             let y1 = parseFloat(this.vertex1.vertex.style.top);
             let y2 = parseFloat(this.vertex2.vertex.style.top);
+            //adjust positions if either vertex is selected
+            if (this.vertex1.isSelected) {
+                x1 += sketchPad.selectBorderRadius;
+                y1 += sketchPad.selectBorderRadius;
+            }
+            if (this.vertex2.isSelected) {
+                x2 += sketchPad.selectBorderRadius;
+                y2 += sketchPad.selectBorderRadius;
+            }
 
             //first, find the height
             let dx = x1 - x2;
