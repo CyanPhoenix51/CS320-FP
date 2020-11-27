@@ -248,7 +248,6 @@ class Edge {
 
     setID(id){
         this.id=id;
-        this.idDisplay.innerHTML=this.id.toString();
     }
 }
 
@@ -309,6 +308,7 @@ class Sketchpad {
             this.vertices.push(vertex);
             this.vertexCount++;
             this.vertexCountDisplay.innerHTML = 'v = ' + this.vertexCount;
+            vertex.displayDegreeID(this.vertexDegreeIDShow);
             return vertex;
         }
     }
