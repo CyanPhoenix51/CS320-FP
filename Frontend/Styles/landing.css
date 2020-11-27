@@ -11,9 +11,8 @@
 /* Background Settings */
 section {
     position: relative;
-    widows: 100%;
     min-height: 100vh;
-    background-image: url(../Pages/bg.png);
+    background-image: url(../Pictures/bg.png);
     background-size: cover;
     background-position: top;
     display: flex;
@@ -92,9 +91,10 @@ section .login {
     height: 480px;
     width: 600px;
     padding: 80px 70px;
-    opacity: 90%;
+    opacity: 85%;
     overflow: hidden;
     background: #fff ;
+    display: inline-block;
     top: 50%;
     left: 70%;
     position: fixed;
