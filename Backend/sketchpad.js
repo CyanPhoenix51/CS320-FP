@@ -222,6 +222,8 @@ class Edge {
             this.edge.style.top = y - (height / 2) + (sketchPad.vertexDiameter / 2) + 'px';
             this.edge.style.left = x - (sketchPad.edgeWidth / 2) + (sketchPad.vertexDiameter / 2) + 'px';
             this.edge.style.transform = 'rotate(' + theta.toString() + 'rad)';
+            this.x = parseFloat(this.edge.style.left);
+            this.y = parseFloat(this.edge.style.top);
         }
     }
 
@@ -330,8 +332,8 @@ class Sketchpad {
                 filledEdges.push(ij);
             }
         }
-        this.selectedVertices=[];
-        this.selectedEdges=[];
+        this.selectedVertices = [];
+        this.selectedEdges = [];
     }
 
     generateArc() {
@@ -356,8 +358,8 @@ class Sketchpad {
         for (let i = 0; i < this.selectedVertices.length; i++) {
             this.drawEdge(this.selectedVertices[i], this.selectedVertices[i]);
         }
-        this.selectedEdges=[];
-        this.selectedVertices=[];
+        this.selectedEdges = [];
+        this.selectedVertices = [];
     }
 
     deleteSelection() {
@@ -369,7 +371,7 @@ class Sketchpad {
         }
 
         //is the object mouse is over about to get deleted?
-        if(this.mouseOverObj) {
+        if (this.mouseOverObj) {
             let objectFound = false;
             //scan vertices
             for (let i = 0; i < this.selectedVertices.length; i++) {
@@ -381,8 +383,8 @@ class Sketchpad {
             //if not found, scan edges
             if (!objectFound) {
                 for (let i = 0; i < this.selectedEdges.length; i++) {
-                    if (this.selectedEdges[i].id===this.mouseOverObj.id) {
-                        this.mouseOverObj=null;
+                    if (this.selectedEdges[i].id === this.mouseOverObj.id) {
+                        this.mouseOverObj = null;
                     }
                 }
             }
@@ -404,7 +406,7 @@ class Sketchpad {
             this.selectedEdges[i].edge.parentNode.removeChild(this.selectedEdges[i].edge);
 
             this.edgeCount--;
-            this.edgeCountDisplay.innerHTML='e = '+this.edgeCount;
+            this.edgeCountDisplay.innerHTML = 'e = ' + this.edgeCount;
         }
 
         //delete all vertices
@@ -412,7 +414,7 @@ class Sketchpad {
             this.vertices = this.vertices.filter(vertex => vertex.id !== this.selectedVertices[i].id);
             this.selectedVertices[i].vertex.parentNode.removeChild(this.selectedVertices[i].vertex);
             this.vertexCount--;
-            this.vertexCountDisplay.innerHTML='v = '+this.vertexCount;
+            this.vertexCountDisplay.innerHTML = 'v = ' + this.vertexCount;
         }
 
         //need to fix parallel edges, go to each vertex and recalculate each edge
@@ -436,8 +438,8 @@ class Sketchpad {
     }
 
     //Manipulating
-    color(key){
-        switch (key){
+    color(key) {
+        switch (key) {
             case 49:
                 this.colorSelection('black');
                 break;
@@ -595,8 +597,8 @@ class Sketchpad {
         if (vertex1.id === vertex2.id) {
             let loopDiameter = this.loopDiameter;
             for (let i = 0; i < parallelEdges.length; i++) {
-                parallelEdges[i].edge.style.height = loopDiameter+'px';
-                parallelEdges[i].edge.style.width = loopDiameter+'px';
+                parallelEdges[i].edge.style.height = loopDiameter + 'px';
+                parallelEdges[i].edge.style.width = loopDiameter + 'px';
                 loopDiameter += this.parallelEdgeSpacing;
             }
         } else {
@@ -647,6 +649,21 @@ class Sketchpad {
             }
         }
     }
+
+    calculateMouseDeltas() {
+        /*
+        The grabber panic bug happens because when the mouse moves over some object it
+        changes reference to that object's coordinates for some reason. So I'm just going to say if the delta
+        is too big don't do anything while it figures everything out.
+        */
+        const maxDelta = 100;
+        let deltas = [0, 0];
+        deltas[0] = this.mouseMoveCTX.offsetX - this.mouseGrabInitPos[0];
+        deltas[1] = this.mouseMoveCTX.offsetY - this.mouseGrabInitPos[1];
+        if (Math.abs(deltas[0]) > maxDelta || Math.abs(deltas[1]) > maxDelta)
+            return [0, 0];
+        return deltas;
+    }
 }
 
 const sketchPad = new Sketchpad();
@@ -664,10 +681,9 @@ function update(){
         //move any selected vertices and recalculate their edges
         for (let i = 0; i < sketchPad.selectedVertices.length; i++) {
             //first, find the deltas
-            const dx = sketchPad.mouseMoveCTX.offsetX - sketchPad.mouseGrabInitPos[0];
-            const dy = sketchPad.mouseMoveCTX.offsetY - sketchPad.mouseGrabInitPos[1];
+            const deltas=sketchPad.calculateMouseDeltas();
             //apply the deltas
-            sketchPad.selectedVertices[i].moveVertex(sketchPad.selectedVertices[i].x + dx, sketchPad.selectedVertices[i].y + dy);
+            sketchPad.selectedVertices[i].moveVertex(sketchPad.selectedVertices[i].x + deltas[0], sketchPad.selectedVertices[i].y + deltas[1]);
         }
         //reset grab position
         sketchPad.mouseGrabInitPos[0] = sketchPad.mouseMoveCTX.offsetX;
