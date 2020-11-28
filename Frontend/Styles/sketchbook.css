@@ -12,7 +12,7 @@
 section {
     position: relative;
     min-height: 100vh;
-    background-image: url(../Pictures/bg3.jpg);
+    background-image: url(../Pictures/bg3.png);
     background-size: cover;
     background-position: top;
     display: flex;
@@ -48,7 +48,6 @@ section .buttons a {
     position: relative;
     display: inline-block;
     padding: 20px 50px;
-    margin-top: 15px;
     border-radius: 30px;
     opacity: 80%;
     background-color: #fff;
@@ -63,9 +62,23 @@ section .buttons a:hover {
 
 section .userinfo {
     position: relative;
+    flex-direction: column;
     background: rgb(255, 255, 255);
+    margin-top: 100px;
+    margin-right: 200px;
     opacity: 80%;
-    margin: 100px;
-    height: 200px;
-    width: 200px;
+    height: 400px;
+    width: 400px;
+}
+
+section .user {
+    position: relative;
+    color: skyblue;
+    margin: 150px;
+
+}
+
+section .buttons ul {
+    position: relative;
+    color: skyblue;
 }
