@@ -19,11 +19,12 @@ section {
     justify-content: space-between;
     align-items: center;
 }
-
+/* Get rid of bullet points on buttons */
 section .buttons li {
     list-style: none;
 }
 
+/* Saved Graphs Background */
 section .book {
     position: relative;
     opacity: 85%;
@@ -34,24 +35,37 @@ section .book {
     box-sizing: border-box;
 }
 
+/* Title of Saved Graphs */
 section .saved {
     position: relative;
     padding: 10px 400px;
     size: 40px;
 }
 
-section .buttons {
-    position: relative;
-    opacity: 85%;
+/* Load/Delete/Create Buttons */
+section .buttons a {
     color: skyblue;
-    background: rgb(255, 255, 255);
-    margin: 10px;
-    width: 200px;
+    position: relative;
+    display: inline-block;
+    padding: 20px 50px;
+    margin-top: 15px;
+    border-radius: 30px;
+    opacity: 80%;
+    background-color: #fff;
+    text-decoration: uppercase;
+    font-size: 1.2em;
+    font-weight: 700;
 }
 
-.divider{
-    width:30px;
-    min-height: 1px;
-    height:auto;
-    display:inline-block;
+section .buttons a:hover {
+    color: pink;
+}
+
+section .userinfo {
+    position: relative;
+    background: rgb(255, 255, 255);
+    opacity: 80%;
+    margin: 100px;
+    height: 200px;
+    width: 200px;
 }
