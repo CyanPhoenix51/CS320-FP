@@ -1,0 +1,117 @@
+/* Global Font */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap"); *
+
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Background Settings */
+section {
+    position: relative;
+    min-height: 100vh;
+    background-image: url(../Pictures/bg3.jpg);
+    background-size: cover;
+    background-position: top;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Account information box */
+section .accountInfo{
+    height: 600px;
+    width: 700px;
+    padding: 80px 70px;
+    opacity: 85%;
+    overflow: hidden;
+    background: #fff ;
+    display: inline-block;
+    top: 50%;
+    left: 70%;
+    position: fixed;
+    transform: translate(-100%, -50%);
+    box-sizing: border-box;
+    border-radius: 12px;
+}
+
+/* Spacing for the title of the box */
+section .accountInfo h1{
+    margin: 0;
+    padding: 0px;
+    text-indent: 170px;
+    font-size: 22px;
+}
+
+/* Length of the input from user */
+section .accountInfo input {
+    width: 90%;
+    margin-bottom: 40px;
+    padding: 20px 0px; 
+}
+
+/* User giving information to create an account */
+section .accountInfo input[type="text"], input[type="password"] {
+    color: black;
+    border: none;
+    height: 40px;
+    font-size: 16px;
+    border-bottom: 1px solid skyblue;
+    background: transparent;
+    outline: none;
+}
+
+
+/* Create account button */
+section .accountInfo input[type="submit"] {
+    border: none;
+    outline: none;
+    height: 40px;
+    background: skyblue;
+    color: #fff;
+    font-size: 24px;
+    border-radius: 20px;
+    padding: 5px 0px;
+}
+/*Hovering over the button turns it pink*/
+section .accountInfo input[type="submit"]:hover {
+    cursor: pointer;
+    background: pink;
+    color: #fff;
+}
+
+
+
+
+
+
+
+
+
+/* Directory Positions (Home, About) */
+section .dir {
+    position: absolute;
+    top: 30px;
+    left: 110px;
+    display: flex;
+}
+
+/* Gets rid of the dots in Directory */
+section .dir li {
+    list-style: none;
+}
+
+/* Directory Settings */
+section .dir li a {
+    text-decoration: none;
+    color: #fff;
+    margin-right: 30px;
+    font-size: 1.5em;
+    font-weight: 755;
+}
+
+section .dir li a:hover {
+    color: pink;
+}
