@@ -20,10 +20,38 @@ section {
     align-items: center;
 }
 
-section .main {
+section .buttons li {
+    list-style: none;
+}
+
+section .book {
     position: relative;
-    padding: 50px 50px 150px 250px;
+    opacity: 85%;
+    background: rgb(255, 255, 255);
+    height: 938px;
+    width: 955px;
+    padding: 50px 50px;
     box-sizing: border-box;
 }
 
-section .graph
+section .saved {
+    position: relative;
+    padding: 10px 400px;
+    size: 40px;
+}
+
+section .buttons {
+    position: relative;
+    opacity: 85%;
+    color: skyblue;
+    background: rgb(255, 255, 255);
+    margin: 10px;
+    width: 200px;
+}
+
+.divider{
+    width:30px;
+    min-height: 1px;
+    height:auto;
+    display:inline-block;
+}
