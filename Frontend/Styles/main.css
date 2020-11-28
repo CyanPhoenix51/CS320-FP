@@ -2,28 +2,54 @@ body{
 	background: #999;
 }
 
-canvas{
-    background: white;
-}
-
 #vertex{
     position: absolute;
-    background: skyblue;
+    background: blue;
     height: 25px;
     width: 25px;
     border-radius: 50%;
+    z-index: 9999;
 }
 
 #edge{
     position: absolute;
     background: black;
     width: 5px;
+    z-index: 1;
 }
 
 #pad{
     background: white;
     width: 500px;
     height: 500px;
-    border: 1px solid black;
+    border: 2px solid black;
+    z-index: 10;
+}
+
+#loop{
+    position: absolute;
+    border-radius: 50%;
+    border: 5px solid black;
+    z-index: 1;
+}
+
+#arrow_up{
+    position: relative;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+
+    border-bottom: 10px solid blue;
+}
+
+#arrow_left{
+    position: relative;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+
+    border-right:10px solid blue;
 }
 
