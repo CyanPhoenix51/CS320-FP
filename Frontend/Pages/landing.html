@@ -70,6 +70,11 @@
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
+
+  // Make references to auth and firestore. And update setting in firestore.
+  const auth = firebase.auth(); 
+  const db = firebase.firestore(); 
+  db.settings({ timestampsInSnapshots: true});
 </script>
 
 </body>
