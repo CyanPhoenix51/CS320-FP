@@ -25,7 +25,7 @@
 
             <h2>Sign In</h2>
 
-            <form>
+            <form id="signup-form">
 
                 <input type="text" id="user-email" name="" placeholder="Enter E-mail">
                 <input type="password" id="user-password" name="" placeholder="Enter Password">
@@ -76,6 +76,6 @@
   const db = firebase.firestore(); 
   db.settings({ timestampsInSnapshots: true});
 </script>
-
+<script src="../../Backend/authenticate.js"></script>
 </body>
 </html>
