@@ -251,6 +251,14 @@ class Edge {
     setID(id){
         this.id=id;
     }
+
+    toggleBridge(isBridge) {
+        if (isBridge) {
+            this.edge.style.border = sketchPad.selectBorderRadius + 'px ' + sketchPad.bridgeColor;
+        } else {
+            this.edge.style.border = null;
+        }
+    }
 }
 
 class Sketchpad {
@@ -260,6 +268,7 @@ class Sketchpad {
         this.padLength = 500;
         this.arrowSize = 10;
         this.selectionColor = 'solid pink';
+        this.bridgeColor='solid red';
 
         this.vertexDiameter = 25;
         this.edgeWidth = 5;
@@ -664,6 +673,66 @@ class Sketchpad {
             return [0, 0];
         return deltas;
     }
+
+    identifyBridges() {
+        //Currently won't work for digraphs
+        //highlight bridges in some color
+        //loop through all edges, remove them one at a time. Does the graph become disconnected? If so, it's a bridge
+        //check for disconnect via dfs
+        for (let i = 0; i < this.edges.length; i++) {
+            //remove the edge from its vertices
+            //loops can't be bridges
+            if (this.edges[i].isLoop)
+                continue;
+            const vertex1 = this.edges[i].vertex1;
+            const vertex2 = this.edges[i].vertex2;
+            vertex1.removeEdge(this.edges[i]);
+            vertex2.removeEdge(this.edges[i]);
+
+            //did the removal of this edge disconnect the two vertices?
+            const path = this.dfs(vertex1, vertex2);
+            this.edges[i].toggleBridge(path.length === 0);
+
+            //add the edge back in
+            vertex1.addEdge(this.edges[i]);
+            vertex2.addEdge(this.edges[i]);
+        }
+    }
+
+    dfs(start, finish) {
+        //returns the shortest list of vertices connecting start to finish
+        let paths = [];
+        this.dfsHelper(start, [], paths, finish);
+
+        //return the shortest path in paths
+        if (paths.length === 0) return paths;
+        let shortestPath = paths[0];
+        for (let i = 0; i < paths.length; i++) {
+            if (paths[i].length < shortestPath.length) {
+                shortestPath = paths[i];
+            }
+        }
+        return shortestPath;
+    }
+
+    dfsHelper(currentVertex, path, paths, finish){
+        path.push(currentVertex);
+        if(currentVertex.id===finish.id){
+            paths.push(path);
+            return;
+        }
+        for(let i=0;i<currentVertex.edges.length;i++){
+            if(!path.find(v=>v.id===currentVertex.edges[i].vertex1.id)){
+                //continue search on vertex1
+                this.dfsHelper(currentVertex.edges[i].vertex1, path, paths, finish);
+            }
+            else if(!path.find(v=>v.id===currentVertex.edges[i].vertex2.id)){
+                //continue search on vertex2
+                this.dfsHelper(currentVertex.edges[i].vertex2, path, paths, finish);
+            }
+            //else do nothing for this edge
+        }
+    }
 }
 
 const sketchPad = new Sketchpad();
@@ -728,6 +797,10 @@ function keyDown(ev) {
         case 82:
             //r, reset ids
             sketchPad.resetID();
+        case 66:
+            //b, identify bridges
+            sketchPad.identifyBridges();
+            break;
         case 49:
         case 50:
         case 51:
