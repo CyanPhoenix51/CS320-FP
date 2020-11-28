@@ -256,7 +256,7 @@ class Edge {
     setID(id){
         this.id=id;
     }
-
+  
     toggleBridge(isBridge) {
         this.isBridge = isBridge;
         if (isBridge) {
@@ -698,7 +698,7 @@ class Sketchpad {
             return [0, 0];
         return deltas;
     }
-
+  
     //-------------------ADVANCED FEATURES--------------//
     //Identifying Bridges
     identifyBridges() {

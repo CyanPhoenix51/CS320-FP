@@ -1,0 +1,169 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap"); *
+
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;  
+}
+
+section {
+    position: relative;
+    min-height: 100vh;
+    background-image: url(../Pictures/bg2.png);
+    background-size: cover;
+    background-position: top;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Directory Positions (Home, About, Team) */
+section .dir {
+    position: absolute;
+    top: 30px;
+    left: 110px;
+    display: flex;
+}
+
+/* Gets rid of the dots in Directory */
+section .dir li {
+    list-style: none;
+}
+
+/* Directory Settings */
+section .dir li a {
+    text-decoration: none;
+    color: #fff;
+    margin-right: 30px;
+    font-size: 1.5em;
+    font-weight: 755;
+}
+
+section .dir li a:hover {
+    color: pink;
+}
+
+/* Info box */
+section .about {
+    height: 500px;
+    width: 1000px;
+    padding: 80px 70px;
+    opacity: 83%;
+    overflow: hidden;
+    background: #fff ;
+    top: 47%;
+    left: 50%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+/* Our Purpose header */
+section h1 {
+    color: skyblue;
+    font-size: 2em;
+    font-weight: 1000;
+    margin-top: -9%;
+    margin-left: -7%;
+}
+
+/* Paragraph */
+section .about p {
+    text-decoration: none;
+    color: black;
+    font-size: 1.2em;
+    font-weight: 500;
+    margin-top: 1%;
+    margin-left: -7%;
+}
+
+/* Meme picture */
+section .meme {
+    margin-left: 34.5%;
+    margin-top: 15%;
+}
+
+/* Team box */
+section .team {
+    height: 92px;
+    width: 1000px;
+    opacity: 83%;
+    overflow: hidden;
+    background: #fff ;
+    top: 83%;
+    left: 50%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+/* Team Name */
+section .team p {
+    color: skyblue;
+    font-weight: 800;
+    margin-top: 6.5%;
+}
+
+/* Team avatars */
+section .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: absolute;
+    border: 3px solid skyblue;
+    top: 10%;
+    left: 8%
+}
+
+section .avatar2 {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: absolute;
+    border: 3px solid skyblue;
+    top: 10%;
+    left: 27%
+}
+
+section .avatar3 {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: absolute;
+    border: 3px solid skyblue;
+    top: 10%;
+    left: 46.25%
+}
+
+section .avatar4 {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: absolute;
+    border: 3px solid skyblue;
+    top: 10%;
+    left: 66%
+}
+
+section .avatar5 {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: absolute;
+    border: 3px solid skyblue;
+    top: 10%;
+    left: 85%
+}
+
+
+
+
+
+
+
+
+
+
