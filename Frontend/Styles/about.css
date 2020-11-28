@@ -49,7 +49,7 @@ section .about {
     height: 500px;
     width: 1000px;
     padding: 80px 70px;
-    opacity: 83%;
+    opacity: 87%;
     overflow: hidden;
     background: #fff ;
     top: 47%;
@@ -89,7 +89,7 @@ section .meme {
 section .team {
     height: 92px;
     width: 1000px;
-    opacity: 83%;
+    opacity: 87%;
     overflow: hidden;
     background: #fff ;
     top: 83%;
