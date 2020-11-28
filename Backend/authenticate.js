@@ -2,6 +2,17 @@
 
 const signupForm = document.querySelector('#signup-form');
 
+auth.onAuthStateChanged(user => { 
+  if (user) { 
+    console.log("user logged in: ", user);
+  } else { 
+    console.log("user is logged out");
+  }
+});
+
+
+
+
 signupForm.addEventListener('submit', (e) => { 
   e.preventDefault() 
 
