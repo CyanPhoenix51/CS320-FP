@@ -3,13 +3,13 @@
 
 const signinForm = document.querySelector('#signin-form');
 const signupForm = document.querySelector('#signup-form');
+const logout = document.querySelector('#logoutbutton');
 
 
 
 auth.onAuthStateChanged(user => { 
   if (user) { 
     console.log("user logged in: ", user);
-    window.location.replace("sketchbook.html")
   } else { 
     console.log("user is logged out");
   }
@@ -25,7 +25,7 @@ if(signinForm != null) {
 
     //Logging the User in.
     auth.signInWithEmailAndPassword(userEmail, userPassword).then(cred => { 
-      
+      window.location.replace("sketchbook.html")
       signinForm.reset(); 
     }).catch(function(error) { 
       
@@ -69,23 +69,24 @@ if (signupForm != null) {
       auth.createUserWithEmailAndPassword(userEmail, userPassword).then( cred => {  
         //Once we created the user, now we update the information about the user. 
         if(cred) { 
-          cred.updateProfile({ 
+          auth.currentUser.updateProfile({ 
             displayName: userFirstName + " " + userLastname
           }).then()
         }
+        window.location.replace("sketchbook.html")
         signupForm.reset();
         // Error Handling
       }).catch(function(error) { 
         var errorCode = error.code; 
         var errorMessage = error.message; 
 
-        if (errorcode === "auth/email-already-in-use") { 
+        if (errorCode === "auth/email-already-in-use") { 
           alert("Email is already in use!!"); 
         }
-        else if (errorcode === "auth/invalid-email") { 
+        else if (errorCode === "auth/invalid-email") { 
           alert("Email is not valid."); 
         }
-        else if (errorcode === "auth-weakpassword") { 
+        else if (errorCode === "auth-weakpassword") { 
           alert("Weak password."); 
         }
         else { 
@@ -93,10 +94,19 @@ if (signupForm != null) {
         }
         console.log(error); 
         })
-    
     }
     else { 
       alert('Passwords do not match'); 
     }
   });
+}
+
+if(logout != null) { 
+  logout.addEventListener('click', (e) => { 
+    e.preventDefault() 
+    window.location.replace("landing.html");
+    auth.signOut().then(() => { 
+      console.log('signed user out')
+    })
+  })
 }
