@@ -10,10 +10,20 @@ const logout = document.querySelector('#logoutbutton');
 auth.onAuthStateChanged(user => { 
   if (user) { 
     console.log("user logged in: ", user);
+    
   } else { 
     console.log("user is logged out");
   }
 });
+checkloggedin = function() { 
+  auth.onAuthStateChanged(user => { 
+    if (user) { 
+      return true;
+    } else { 
+      return false;
+    }
+});
+}
 
 if(signinForm != null) { 
   signinForm.addEventListener('submit', (e) => { 
@@ -101,7 +111,7 @@ if (signupForm != null) {
   });
 }
 
-if(logout != null && auth.currentUser != null) { 
+if(logout != null) { 
   logout.addEventListener('click', (e) => { 
     e.preventDefault() 
     window.location.replace("landing.html");
