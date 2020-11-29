@@ -20,10 +20,9 @@
     <div class = 'userinfo'>
       <div class = 'user'>Profile Information</div>
       <ul>
-        <li>User</li>
-        <li>Name</li>
-        <li>Email</li>
-        <li>Password</li>
+        <li id="UserID">User</li>
+        <li id="Name">Name</li>
+        <li id="Email">Email</li>
       </ul>
     </div>
   </div>
@@ -65,6 +64,18 @@
  db.settings({ timestampsInSnapshots: true});
  </script>
  <script src="../../Backend/authenticate.js"></script>
+ 
+ <script> 
+  //Display User's account Information.
+  auth.onAuthStateChanged(user => { 
+  if (user) { 
+    document.getElementById("UserID").innerHTML = "UserID: "  + user.uid;
+    document.getElementById("Name").innerHTML = "Name: "  + user.displayName;
+    document.getElementById("Email").innerHTML = "Email: "  + user.email;
+  } 
+});
+
+</script> 
 
 </body>
 </html>
