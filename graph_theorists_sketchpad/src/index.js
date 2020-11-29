@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import Sketchpad from "./Sketchpad";
 
-class Layout extends React.Component{
+class App extends React.Component{
     render() {
         return(
             <Sketchpad/>
@@ -10,4 +10,4 @@ class Layout extends React.Component{
     }
 }
 
-ReactDom.render(<Layout/>, document.getElementById('root'));
+ReactDom.render(<App/>, document.getElementById('root'));
