@@ -1,6 +1,7 @@
 // Singing up
 
-const signupForm = document.querySelector('#signup-form');
+const signinForm = document.querySelector('#signin-form');
+const singupForm = document.querySelector('#signup-form')
 
 auth.onAuthStateChanged(user => { 
   if (user) { 
@@ -11,19 +12,17 @@ auth.onAuthStateChanged(user => {
 });
 
 
-
-
-signupForm.addEventListener('submit', (e) => { 
+signinForm.addEventListener('submit', (e) => { 
   e.preventDefault() 
 
   //Getting info from the user
-  const userEmail = signupForm['user-email'].value;
-  const userPassword = signupForm['user-password'].value; 
+  const userEmail = signinForm['user-email'].value;
+  const userPassword = signinForm['user-password'].value; 
 
   //Logging the User in.
   auth.signInWithEmailAndPassword(userEmail, userPassword).then(cred => { 
     
-    signupForm.reset(); 
+    signinForm.reset(); 
   }).catch(function(error) { 
     
     var errorUserNotfoundCodeMessage = "Email is not signed up";
