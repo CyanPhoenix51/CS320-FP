@@ -9,7 +9,7 @@ const signupForm = document.querySelector('#signup-form');
 auth.onAuthStateChanged(user => { 
   if (user) { 
     console.log("user logged in: ", user);
-    alert("Welcome " + user.displayName + "!"); 
+    window.location.replace("sketchbook.html")
   } else { 
     console.log("user is logged out");
   }
