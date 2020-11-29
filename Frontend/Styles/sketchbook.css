@@ -82,3 +82,27 @@ section .buttons ul {
     position: relative;
     color: skyblue;
 }
+
+/* Logout button */
+section .logout input[type="submit"] {
+    border: none;
+    outline: none;
+    height: 40px;
+
+    position: absolute;
+    top: 30px;
+    right: 110px;
+    display: flex;
+
+    background: skyblue;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 20px;
+}
+
+/* Logout button hover*/
+section .logout input[type="submit"]:hover {
+    cursor: pointer;
+    background: pink;
+    color: #fff;
+}
