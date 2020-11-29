@@ -101,7 +101,7 @@ if (signupForm != null) {
   });
 }
 
-if(logout != null) { 
+if(logout != null && auth.currentUser.uid != null) { 
   logout.addEventListener('click', (e) => { 
     e.preventDefault() 
     window.location.replace("landing.html");
