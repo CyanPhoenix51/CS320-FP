@@ -16,10 +16,11 @@ export default class Sketch extends React.Component{
         this.vertexRadius = 25 / 2;
         this.edgeWidth = 5;
         this.selectionBorderRadius = 4;
-        this.selectionColor='solid pink';
+        this.loopRadius=25;
+        this.selectionColor = 'solid pink';
         this.canDrawVertex = true;
         this.selectedVertices = [];
-        this.selectedEdges=[];
+        this.selectedEdges = [];
     }
 
     render() {
@@ -35,7 +36,11 @@ export default class Sketch extends React.Component{
                               mouseEnterElement={this.mouseEnterElement} mouseLeaveElement={this.mouseLeaveElement}/>
                     ))}
                 </div>
+                <button id='clearPad' onClick={this.clearPad}>Clear Pad</button>
+                <button id='deleteSelection' onClick={this.deleteSelection}>Delete Selection</button>
+                <button id='deselectAll' onClick={this.deselectAll}>Deselect All</button>
                 <button id='generateEdges' onClick={this.generateEdges}>Generate Edges</button>
+                <button id='loopButton' onClick={this.loopVertices}>Loop</button>
             </div>
         );
     }
@@ -53,6 +58,52 @@ export default class Sketch extends React.Component{
         this.setState(this.state);
     }
 
+    deselectAll=()=> {
+        //deselect vertices
+        for (let i = 0; i < this.selectedVertices.length; i++) {
+            this.selectedVertices[i].isSelected = false;
+        }
+        //deselect edges
+        for (let i = 0; i < this.selectedEdges.length; i++) {
+            this.selectedEdges[i].isSelected = false;
+        }
+        this.selectedVertices = [];
+        this.selectedEdges = [];
+        this.setState(this.state);
+    }
+
+    clearPad=()=> {
+        this.state.vertices = [];
+        this.state.edges = [];
+        this.setState(this.state);
+    }
+
+    deleteSelection=()=> {
+        //add all vertex edges to selectedEdges
+        for (let i = 0; i < this.selectedVertices.length; i++) {
+            for (let j = 0; j < this.selectedVertices[i].edges.length; j++) {
+                if (!this.selectedEdges.find(edge => edge.id === this.selectedVertices[i].edges[j])) {
+                    this.selectedEdges.push(this.selectedVertices[i].edges[j]);
+                }
+            }
+        }
+
+        //delete edges
+        for (let i = 0; i < this.selectedEdges.length; i++) {
+            this.state.edges = this.state.edges.filter(edge => edge.id !== this.selectedEdges[i].id);
+        }
+
+        //delete all vertices
+        for (let i = 0; i < this.selectedVertices.length; i++) {
+            this.state.vertices = this.state.vertices.filter(vertex => vertex.id !== this.selectedVertices[i].id);
+        }
+
+        this.selectedVertices = [];
+        this.selectedEdges = [];
+
+        this.setState(this.state);
+    }
+
     //Vertex Handling
     drawVertex = (e) => {
         if(this.canDrawVertex) {
@@ -61,14 +112,14 @@ export default class Sketch extends React.Component{
                 x: e.clientX - this.vertexRadius,
                 y: e.clientY - this.vertexRadius,
                 borderRadius: this.selectionBorderRadius,
-                selectionColor: this.selectionColor
+                selectionColor: this.selectionColor,
+                edges: []
             }
 
             this.state.vertices.push(vertex);
             this.setState(this.state);
         }
     }
-
 
     //Mouse Handling
     mouseEnterElement = (isVertex, id) => {
@@ -102,13 +153,19 @@ export default class Sketch extends React.Component{
 
     drawEdge = (vertex1, vertex2) => {
         //make the edge
-        const edge={
+
+        const edge = {
             id: this.state.edgeIDCount++,
             vertex1: vertex1,
             vertex2: vertex2,
             borderRadius: this.selectionBorderRadius,
-            selectionColor: this.selectionColor
+            selectionColor: this.selectionColor,
+            isLoop: vertex1.id===vertex2.id,
+            loopRadius: this.loopRadius,
+            vertexRadius: this.vertexRadius
         }
+        vertex1.edges.push(edge);
+        vertex2.edges.push(edge);
         this.state.edges.push(edge);
 
         //position it
@@ -139,6 +196,14 @@ export default class Sketch extends React.Component{
         edge.y = y - (height / 2) + (this.vertexRadius);
         edge.x = x - (this.edgeWidth / 2) + (this.vertexRadius);
         edge.theta = theta;
+    }
+
+    loopVertices=()=> {
+        //loop through selected vertices, adding loops to each
+        for (let i = 0; i < this.selectedVertices.length; i++) {
+            this.drawEdge(this.selectedVertices[i], this.selectedVertices[i]);
+        }
+        this.deselectAll();
     }
 
 }
