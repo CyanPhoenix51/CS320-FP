@@ -7,11 +7,15 @@ import Edge from "./Edge";
 export default class Sketch extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {
-            vertices: [],
-            vertexIDCount: 0,
-            edges: [],
-            edgeIDCount: 0
+        if (this.props.loadSketch) {
+            this.state = JSON.parse(this.props.loadSketch);
+        } else {
+            this.state = {
+                vertices: [],
+                vertexIDCount: 0,
+                edges: [],
+                edgeIDCount: 0
+            }
         }
         this.vertexRadius = 25 / 2;
         this.edgeWidth = 5;
@@ -34,6 +38,8 @@ export default class Sketch extends React.Component{
     render() {
         return (
             <div id='sketchRoot'>
+                <input type='text' placeholder='Name' name='sketchName' onChange={this.renameSketch}/>
+                <button onClick={this.props.saveSketch.bind(this, JSON.stringify(this.state))}>Save Sketch</button>
                 <div id='pad' onClick={this.drawVertex}>
                     {this.state.vertices.map((vertex) => (
                         <Vertex key={vertex.id} vertex={vertex} selectElement={this.selectElement}
@@ -77,6 +83,12 @@ export default class Sketch extends React.Component{
             }
             this.setState(this.state);
         }
+    }
+
+    renameSketch=(e)=>{
+        const state=this.state;
+        state.name=e.target.value;
+        this.setState(state);
     }
 
     toggleGrabber = () =>{
