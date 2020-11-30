@@ -16,11 +16,18 @@ export default class Sketch extends React.Component{
         this.vertexRadius = 25 / 2;
         this.edgeWidth = 5;
         this.selectionBorderRadius = 4;
-        this.loopRadius=25;
+        this.loopRadius = 25;
+        this.padWidth=500;
+        this.padHeight=500;
         this.selectionColor = 'solid pink';
         this.canDrawVertex = true;
+        this.isGrabber = false;
+        this.mouseMoveInitPos = [0, 0];
         this.selectedVertices = [];
         this.selectedEdges = [];
+
+        //update at 33ms = ~30pfs
+        setInterval(this.update, 33);
     }
 
     render() {
@@ -41,8 +48,40 @@ export default class Sketch extends React.Component{
                 <button id='deselectAll' onClick={this.deselectAll}>Deselect All</button>
                 <button id='generateEdges' onClick={this.generateEdges}>Generate Edges</button>
                 <button id='loopButton' onClick={this.loopVertices}>Loop</button>
+                <button id='grabber' onClick={this.toggleGrabber}>Grabber</button>
             </div>
         );
+    }
+
+    update = () => {
+        if (this.isGrabber) {
+            const mouseMoveCTX = this.props.mouseMoveCTX();
+            if (!mouseMoveCTX) return;
+            //loop through selected vertices, reposition, reset state
+            const deltas = [mouseMoveCTX.clientX - this.mouseMoveInitPos[0], mouseMoveCTX.clientY - this.mouseMoveInitPos[1]];
+            this.mouseMoveInitPos = [mouseMoveCTX.clientX, mouseMoveCTX.clientY];
+            for (let i = 0; i < this.selectedVertices.length; i++) {
+                //move the vertex
+                const x = this.selectedVertices[i].x + deltas[0];
+                const y = this.selectedVertices[i].y + deltas[1];
+                //check bounds
+                const widthCheck = x > 2 * this.vertexRadius && x < this.padWidth - 2 * this.vertexRadius;
+                const heightCheck = y > 2 * this.vertexRadius && y < this.padHeight - 2 * this.vertexRadius;
+                if (widthCheck)
+                    this.selectedVertices[i].x = x;
+                if (heightCheck)
+                    this.selectedVertices[i].y = y;
+                //reposition its vertices
+                for (let j = 0; j < this.selectedVertices[i].edges.length; j++) {
+                    this.positionEdge(this.selectedVertices[i].edges[j]);
+                }
+            }
+            this.setState(this.state);
+        }
+    }
+
+    toggleGrabber = () =>{
+        this.isGrabber=!this.isGrabber;
     }
 
     selectElement = (isVertex, id) => {
@@ -58,7 +97,7 @@ export default class Sketch extends React.Component{
         this.setState(this.state);
     }
 
-    deselectAll=()=> {
+    deselectAll = () => {
         //deselect vertices
         for (let i = 0; i < this.selectedVertices.length; i++) {
             this.selectedVertices[i].isSelected = false;
@@ -72,13 +111,13 @@ export default class Sketch extends React.Component{
         this.setState(this.state);
     }
 
-    clearPad=()=> {
+    clearPad = () => {
         this.state.vertices = [];
         this.state.edges = [];
         this.setState(this.state);
     }
 
-    deleteSelection=()=> {
+    deleteSelection = () => {
         //add all vertex edges to selectedEdges
         for (let i = 0; i < this.selectedVertices.length; i++) {
             for (let j = 0; j < this.selectedVertices[i].edges.length; j++) {
@@ -198,7 +237,7 @@ export default class Sketch extends React.Component{
         edge.theta = theta;
     }
 
-    loopVertices=()=> {
+    loopVertices = () => {
         //loop through selected vertices, adding loops to each
         for (let i = 0; i < this.selectedVertices.length; i++) {
             this.drawEdge(this.selectedVertices[i], this.selectedVertices[i]);
