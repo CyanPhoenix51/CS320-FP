@@ -3,14 +3,17 @@ import './styles/main.css';
 
 //Each vertex that is on the pad
 export default class Vertex extends React.Component{
-    render(){
-        return(
+    render() {
+        const {id, x, y} = this.props.vertex;
+        return (
             <div id='vertex' style={
                 {
-                    top: this.props.y+'px',
-                    left: this.props.x+'px'
+                    top: y + 'px',
+                    left: x + 'px'
                 }
-            }/>
+            } onClick={this.props.selectElement.bind(this, true, id)}
+                 onMouseEnter={this.props.mouseEnterElement.bind(this, true, id)}
+                 onMouseLeave={this.props.mouseLeaveElement.bind(this, true, id)}/>
         )
     }
 }
