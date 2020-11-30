@@ -7,16 +7,17 @@ import Edge from "./Edge";
 export default class Sketch extends React.Component{
     constructor(props) {
         super(props);
-        if (this.props.loadSketch) {
-            this.state = JSON.parse(this.props.loadSketch);
-        } else {
-            this.state = {
-                vertices: [],
-                vertexIDCount: 0,
-                edges: [],
-                edgeIDCount: 0
-            }
+
+        if(this.props.loadSketch){
+            //gonna need to recreate some stuff
         }
+        this.state = {
+            vertices: [],
+            vertexIDCount: 0,
+            edges: [],
+            edgeIDCount: 0
+        }
+
         this.vertexRadius = 25 / 2;
         this.edgeWidth = 5;
         this.edgeSpacing = 1.5 * this.edgeWidth;
@@ -28,6 +29,9 @@ export default class Sketch extends React.Component{
         this.canDrawVertex = true;
         this.isGrabber = false;
         this.mouseMoveInitPos = [0, 0];
+
+        this.vertices=[];
+        this.edges=[];
         this.selectedVertices = [];
         this.selectedEdges = [];
 
@@ -39,13 +43,13 @@ export default class Sketch extends React.Component{
         return (
             <div id='sketchRoot'>
                 <input type='text' placeholder='Name' name='sketchName' onChange={this.renameSketch}/>
-                <button onClick={this.props.saveSketch.bind(this, JSON.stringify(this.state))}>Save Sketch</button>
+                <button id='saveSketch' onClick={this.props.saveSketch.bind(this, JSON.stringify(this.state))}>Save Sketch</button>
                 <div id='pad' onClick={this.drawVertex}>
-                    {this.state.vertices.map((vertex) => (
+                    {this.vertices.map((vertex) => (
                         <Vertex key={vertex.id} vertex={vertex} selectElement={this.selectElement}
                                 mouseEnterElement={this.mouseEnterElement} mouseLeaveElement={this.mouseLeaveElement}/>
                     ))}
-                    {this.state.edges.map((edge) => (
+                    {this.edges.map((edge) => (
                         <Edge key={edge.id} edge={edge} selectElement={this.selectElement}
                               mouseEnterElement={this.mouseEnterElement} mouseLeaveElement={this.mouseLeaveElement}/>
                     ))}
@@ -97,11 +101,11 @@ export default class Sketch extends React.Component{
 
     selectElement = (isVertex, id) => {
         if (isVertex) {
-            const vertex = this.state.vertices.find((vertex) => vertex.id === id);
+            const vertex = this.vertices.find((vertex) => vertex.id === id);
             vertex.isSelected = true;
             this.selectedVertices.push(vertex);
         } else {
-            const edge = this.state.edges.find((edge) => edge.id === id);
+            const edge = this.edges.find((edge) => edge.id === id);
             edge.isSelected = true;
             this.selectedEdges.push(edge);
         }
@@ -130,7 +134,7 @@ export default class Sketch extends React.Component{
     }
 
     deleteSelection = () => {
-        const state =this.state;
+        const state = this.state;
         //add all vertex edges to selectedEdges
         for (let i = 0; i < this.selectedVertices.length; i++) {
             for (let j = 0; j < this.selectedVertices[i].edges.length; j++) {
@@ -149,6 +153,7 @@ export default class Sketch extends React.Component{
         for (let i = 0; i < this.selectedVertices.length; i++) {
             state.vertices = state.vertices.filter(vertex => vertex.id !== this.selectedVertices[i].id);
         }
+        console.log(state.edges);
 
         this.selectedVertices = [];
         this.selectedEdges = [];
@@ -168,8 +173,15 @@ export default class Sketch extends React.Component{
                 selectionColor: this.selectionColor,
                 edges: []
             }
+            const stateVertex={
+                id: vertex.id,
+                x: vertex.x,
+                y: vertex.y,
+                edges: []
+            }
 
-            this.state.vertices.push(vertex);
+            this.vertices.push(vertex);
+            this.state.vertices.push(stateVertex);
             this.setState(state);
         }
     }
@@ -220,11 +232,17 @@ export default class Sketch extends React.Component{
             zIndex: 1,
             parallelEdgeIndex: 0
         }
+        const stateEdge={
+            id: edge.id,
+            vertex1: edge.vertex1.id,
+            vertex2: edge.vertex2.id
+        }
         vertex1.edges.push(edge);
         //don't add loops twice
         if(!edge.isLoop)
             vertex2.edges.push(edge);
-        state.edges.push(edge);
+        this.edges.push(edge);
+        state.edges.push(stateEdge);
         this.setState(state);
 
         //check for parallel Edges

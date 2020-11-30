@@ -7,7 +7,7 @@ class App extends React.Component{
     constructor(props) {
         super(props);
         this.state={
-            currentView: 'sketchBook',
+            currentView: 'sketchPad',
             currentSketch: null
         }
     }
