@@ -111,12 +111,14 @@ export default class Sketch extends React.Component{
     }
 
     clearPad = () => {
-        this.state.vertices = [];
-        this.state.edges = [];
-        this.setState(this.state);
+        const s = this.state;
+        s.vertices = [];
+        s.edges = [];
+        this.setState(s);
     }
 
     deleteSelection = () => {
+        const state =this.state;
         //add all vertex edges to selectedEdges
         for (let i = 0; i < this.selectedVertices.length; i++) {
             for (let j = 0; j < this.selectedVertices[i].edges.length; j++) {
@@ -128,25 +130,26 @@ export default class Sketch extends React.Component{
 
         //delete edges
         for (let i = 0; i < this.selectedEdges.length; i++) {
-            this.state.edges = this.state.edges.filter(edge => edge.id !== this.selectedEdges[i].id);
+            state.edges = state.edges.filter(edge => edge.id !== this.selectedEdges[i].id);
         }
 
         //delete all vertices
         for (let i = 0; i < this.selectedVertices.length; i++) {
-            this.state.vertices = this.state.vertices.filter(vertex => vertex.id !== this.selectedVertices[i].id);
+            state.vertices = state.vertices.filter(vertex => vertex.id !== this.selectedVertices[i].id);
         }
 
         this.selectedVertices = [];
         this.selectedEdges = [];
 
-        this.setState(this.state);
+        this.setState(state);
     }
 
     //Vertex Handling
     drawVertex = (e) => {
         if(this.canDrawVertex) {
+            const state=this.state;
             const vertex = {
-                id: this.state.vertexIDCount++,
+                id: state.vertexIDCount++,
                 x: e.clientX - this.vertexRadius,
                 y: e.clientY - this.vertexRadius,
                 borderRadius: this.selectionBorderRadius,
@@ -155,7 +158,7 @@ export default class Sketch extends React.Component{
             }
 
             this.state.vertices.push(vertex);
-            this.setState(this.state);
+            this.setState(state);
         }
     }
 
@@ -190,9 +193,10 @@ export default class Sketch extends React.Component{
     }
 
     drawEdge = (vertex1, vertex2) => {
+        const state=this.state;
         //make the edge
         const edge = {
-            id: this.state.edgeIDCount++,
+            id: state.edgeIDCount++,
             vertex1: vertex1,
             vertex2: vertex2,
             borderRadius: this.selectionBorderRadius,
@@ -208,7 +212,8 @@ export default class Sketch extends React.Component{
         //don't add loops twice
         if(!edge.isLoop)
             vertex2.edges.push(edge);
-        this.state.edges.push(edge);
+        state.edges.push(edge);
+        this.setState(state);
 
         //check for parallel Edges
         const parallelEdges=this.parallelEdgeFinder(vertex1, vertex2);
