@@ -6,12 +6,13 @@ const signupForm = document.querySelector('#signup-form');
 const logout = document.querySelector('#logoutbutton');
 
 
-
 auth.onAuthStateChanged(user => { 
   if (user) { 
     console.log("user logged in: ", user);
-    
-  } else { 
+    console.log(window.location);
+    if (window.location.pathname === "/Frontend/Pages/landing.html") { window.location.replace("sketchbook.html");}
+  }
+   else { 
     console.log("user is logged out");
   }
 });
