@@ -207,6 +207,7 @@ export default class Sketch extends React.Component{
             parallelEdgeIndex: 0
         }
         vertex1.edges.push(edge);
+        //don't add loops twice
         if(!edge.isLoop)
             vertex2.edges.push(edge);
         this.state.edges.push(edge);
@@ -221,7 +222,7 @@ export default class Sketch extends React.Component{
             for (let i = 0; i < parallelEdges.length; i++) {
                 //are they loops?
                 if (vertex1.id === vertex2.id) {
-                    parallelEdges[i].parallelEdgeIndex=i;
+                    parallelEdges[i].parallelEdgeIndex = i;
                     parallelEdges[i].zIndex = z--;
                 }
                 this.positionEdge(parallelEdges[i]);
@@ -304,12 +305,12 @@ export default class Sketch extends React.Component{
             slope = -1 / slope;
             //check parity
             const isOdd = parallelEdges.length % 2 === 1;
-            let distance = isOdd ? 0 : this.parallelEdgeSpacing / 2;
+            let distance = isOdd ? 0 : this.edgeSpacing / 2;
             for (let i = 0; i < parallelEdges.length; i++) {
                 //calculate the offsets
                 const x = (distance / Math.sqrt(1 + (slope * slope)));
                 const y = slope * x;
-
+                
                 //apply the offsets
                 parallelEdges[i].offsetX = x;
                 parallelEdges[i].offsetY = y;
@@ -317,7 +318,7 @@ export default class Sketch extends React.Component{
                 //increment the magnitude of distance?
                 if ((isOdd && i % 2 === 0) || (!isOdd && i % 2 === 1)) {
                     //increment odd sets on even i's and even sets on odd i's
-                    let val = Math.abs(distance) + this.parallelEdgeSpacing;
+                    let val = Math.abs(distance) + this.edgeSpacing;
                     distance = distance < 0 ? -val : val;
                 }
 
