@@ -72,10 +72,8 @@ export default class Sketch extends React.Component{
                     this.selectedVertices[i].x = x;
                 if (heightCheck)
                     this.selectedVertices[i].y = y;
-                //reposition its vertices
-                for (let j = 0; j < this.selectedVertices[i].edges.length; j++) {
-                    this.positionEdge(this.selectedVertices[i].edges[j]);
-                }
+                //reposition its edges
+                this.positionVertexEdges(this.selectedVertices[i]);
             }
             this.setState(this.state);
         }
@@ -270,6 +268,24 @@ export default class Sketch extends React.Component{
         }
     }
 
+    positionVertexEdges(vertex){
+        //repositions a moved vertices edges
+        //find parallel edge clusters
+        let visitedEdges=[];
+        for(let i=0;i<vertex.edges.length;i++) {
+            if (visitedEdges.find(edge => edge.id === vertex.edges[i].id))
+                continue;
+            const vertex1 = vertex.edges[i].vertex1;
+            const vertex2 = vertex.edges[i].vertex2;
+            const parallelEdges = this.parallelEdgeFinder(vertex1, vertex2);
+            this.calculateEdgeOffsets(parallelEdges, vertex1, vertex2);
+            for (let j = 0; j < parallelEdges.length; j++) {
+                visitedEdges.push(parallelEdges[j]);
+                this.positionEdge(parallelEdges[j]);
+            }
+        }
+    }
+
     loopVertices = () => {
         //loop through selected vertices, adding loops to each
         for (let i = 0; i < this.selectedVertices.length; i++) {
@@ -310,7 +326,7 @@ export default class Sketch extends React.Component{
                 //calculate the offsets
                 const x = (distance / Math.sqrt(1 + (slope * slope)));
                 const y = slope * x;
-                
+
                 //apply the offsets
                 parallelEdges[i].offsetX = x;
                 parallelEdges[i].offsetY = y;
