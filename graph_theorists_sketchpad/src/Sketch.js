@@ -15,10 +15,11 @@ export default class Sketch extends React.Component{
         }
         this.vertexRadius = 25 / 2;
         this.edgeWidth = 5;
+        this.edgeSpacing = 1.5 * this.edgeWidth;
         this.selectionBorderRadius = 4;
         this.loopRadius = 25;
-        this.padWidth=500;
-        this.padHeight=500;
+        this.padWidth = 500;
+        this.padHeight = 500;
         this.selectionColor = 'solid pink';
         this.canDrawVertex = true;
         this.isGrabber = false;
@@ -192,7 +193,6 @@ export default class Sketch extends React.Component{
 
     drawEdge = (vertex1, vertex2) => {
         //make the edge
-
         const edge = {
             id: this.state.edgeIDCount++,
             vertex1: vertex1,
@@ -201,40 +201,72 @@ export default class Sketch extends React.Component{
             selectionColor: this.selectionColor,
             isLoop: vertex1.id===vertex2.id,
             loopRadius: this.loopRadius,
-            vertexRadius: this.vertexRadius
+            offsetX: 0,
+            offsetY: 0,
+            zIndex: 1,
+            parallelEdgeIndex: 0
         }
         vertex1.edges.push(edge);
-        vertex2.edges.push(edge);
+        if(!edge.isLoop)
+            vertex2.edges.push(edge);
         this.state.edges.push(edge);
 
-        //position it
-        this.positionEdge(edge);
+        //check for parallel Edges
+        const parallelEdges=this.parallelEdgeFinder(vertex1, vertex2);
+        if(parallelEdges.length>1) {
+            //recalculate parallel Edge positions
+            this.calculateEdgeOffsets(parallelEdges, vertex1, vertex2);
+            //position all parallel edges
+            let z = 9000;
+            for (let i = 0; i < parallelEdges.length; i++) {
+                //are they loops?
+                if (vertex1.id === vertex2.id) {
+                    parallelEdges[i].parallelEdgeIndex=i;
+                    parallelEdges[i].zIndex = z--;
+                }
+                this.positionEdge(parallelEdges[i]);
+            }
+
+        }
+        else{
+            //position it
+            this.positionEdge(edge);
+        }
+
         return edge;
     }
 
     positionEdge = (edge) => {
-        //math time
-        let x1 = edge.vertex1.x;
-        let x2 = edge.vertex2.x;
-        let y1 = edge.vertex1.y;
-        let y2 = edge.vertex2.y;
+        if(edge.isLoop) {
+            let x = edge.vertex1.x + this.vertexRadius - 2 * this.edgeWidth;
+            let y = edge.vertex1.y + this.vertexRadius - 2 * this.edgeWidth;
+            edge.x = x;
+            edge.y = y;
+        }
+        else {
+            //math time
+            let x1 = edge.vertex1.x;
+            let x2 = edge.vertex2.x;
+            let y1 = edge.vertex1.y;
+            let y2 = edge.vertex2.y;
 
-        //first, find the height
-        let dx = x1 - x2;
-        let dy = y2 - y1;
-        let height = Math.sqrt((dx * dx) + (dy * dy));
+            //first, find the height
+            let dx = x1 - x2;
+            let dy = y2 - y1;
+            let height = Math.sqrt((dx * dx) + (dy * dy));
 
-        //second, find the angle
-        let theta = Math.atan2(dx, dy);
+            //second, find the angle
+            let theta = Math.atan2(dx, dy);
 
-        //third, find the position
-        let x = ((x1 + x2) / 2);// + this.offsetX;
-        let y = ((y1 + y2) / 2);// + this.offsetY;
+            //third, find the position
+            let x = ((x1 + x2) / 2) + edge.offsetX;
+            let y = ((y1 + y2) / 2) + edge.offsetY;
 
-        edge.height = height;
-        edge.y = y - (height / 2) + (this.vertexRadius);
-        edge.x = x - (this.edgeWidth / 2) + (this.vertexRadius);
-        edge.theta = theta;
+            edge.height = height;
+            edge.y = y - (height / 2) + (this.vertexRadius);
+            edge.x = x - (this.edgeWidth / 2) + (this.vertexRadius);
+            edge.theta = theta;
+        }
     }
 
     loopVertices = () => {
@@ -244,5 +276,55 @@ export default class Sketch extends React.Component{
         }
         this.deselectAll();
     }
+
+    parallelEdgeFinder(vertex1, vertex2) {
+        //returns a list of parallel edges between 2 vertices
+        let parallelEdges = [];
+        for (let i = 0; i < vertex1.edges.length; i++) {
+            const vertexA = vertex1.edges[i].vertex1;
+            const vertexB = vertex1.edges[i].vertex2;
+            if ((vertex1.id === vertexA.id && vertex2.id === vertexB.id)
+                || (vertex1.id === vertexB.id && vertex2.id === vertexA.id)) {
+                parallelEdges.push(vertex1.edges[i]);
+            }
+        }
+        return parallelEdges;
+    }
+
+    calculateEdgeOffsets(parallelEdges, vertex1, vertex2) {
+        //loop check
+        if (vertex1.id === vertex2.id) {
+            let loopRadius = this.loopRadius;
+            for (let i = 0; i < parallelEdges.length; i++) {
+                parallelEdges[i].loopRadius = loopRadius;
+                loopRadius += this.edgeSpacing;
+            }
+        } else {
+            let slope = (vertex2.y - vertex1.y) / (vertex2.x - vertex1.x);
+            slope = -1 / slope;
+            //check parity
+            const isOdd = parallelEdges.length % 2 === 1;
+            let distance = isOdd ? 0 : this.parallelEdgeSpacing / 2;
+            for (let i = 0; i < parallelEdges.length; i++) {
+                //calculate the offsets
+                const x = (distance / Math.sqrt(1 + (slope * slope)));
+                const y = slope * x;
+
+                //apply the offsets
+                parallelEdges[i].offsetX = x;
+                parallelEdges[i].offsetY = y;
+
+                //increment the magnitude of distance?
+                if ((isOdd && i % 2 === 0) || (!isOdd && i % 2 === 1)) {
+                    //increment odd sets on even i's and even sets on odd i's
+                    let val = Math.abs(distance) + this.parallelEdgeSpacing;
+                    distance = distance < 0 ? -val : val;
+                }
+
+                distance *= -1;
+            }
+        }
+    }
+
 
 }
