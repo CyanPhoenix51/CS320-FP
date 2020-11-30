@@ -78,10 +78,14 @@ export default class Sketch extends React.Component{
                 //check bounds
                 const widthCheck = x > 2 * this.vertexRadius && x < this.padWidth - 2 * this.vertexRadius;
                 const heightCheck = y > 2 * this.vertexRadius && y < this.padHeight - 2 * this.vertexRadius;
-                if (widthCheck)
+                if (widthCheck) {
                     this.selectedVertices[i].x = x;
-                if (heightCheck)
+                    this.state.vertices.find((vertex) => vertex.id === this.selectedVertices[i].id).x = x;
+                }
+                if (heightCheck) {
                     this.selectedVertices[i].y = y;
+                    this.state.vertices.find((vertex) => vertex.id === this.selectedVertices[i].id).y = y;
+                }
                 //reposition its edges
                 this.positionVertexEdges(this.selectedVertices[i]);
             }
@@ -130,6 +134,8 @@ export default class Sketch extends React.Component{
         const s = this.state;
         s.vertices = [];
         s.edges = [];
+        this.vertices = [];
+        this.edges = [];
         this.setState(s);
     }
 
@@ -147,13 +153,29 @@ export default class Sketch extends React.Component{
         //delete edges
         for (let i = 0; i < this.selectedEdges.length; i++) {
             state.edges = state.edges.filter(edge => edge.id !== this.selectedEdges[i].id);
+            //remove from connected vertices
+            const vertex1 = this.selectedEdges[i].vertex1;
+            const vertex2 = this.selectedEdges[i].vertex2;
+
+            vertex1.edges = vertex1.edges.filter((edge) => edge.id !== this.selectedEdges[i].id);
+            if (!this.selectedEdges[i].isLoop) {
+                vertex2.edges = vertex2.edges.filter((edge) => edge.id !== this.selectedEdges[i].id);
+            }
+
+            //remove from all edges
+            this.edges = this.edges.filter(edge => edge.id !== this.selectedEdges[i].id);
         }
 
         //delete all vertices
         for (let i = 0; i < this.selectedVertices.length; i++) {
             state.vertices = state.vertices.filter(vertex => vertex.id !== this.selectedVertices[i].id);
+            this.vertices = this.vertices.filter(vertex => vertex.id !== this.selectedVertices[i].id);
         }
-        console.log(state.edges);
+
+        //recalculate edges
+        for(let i=0;i<this.vertices.length;i++) {
+            this.positionVertexEdges(this.vertices[i]);
+        }
 
         this.selectedVertices = [];
         this.selectedEdges = [];
@@ -377,6 +399,4 @@ export default class Sketch extends React.Component{
             }
         }
     }
-
-
 }
