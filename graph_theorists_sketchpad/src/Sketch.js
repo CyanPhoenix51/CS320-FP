@@ -15,9 +15,11 @@ export default class Sketch extends React.Component{
         }
         this.vertexRadius = 25 / 2;
         this.edgeWidth = 5;
-        this.selectionBorderRadius = 10;
+        this.selectionBorderRadius = 4;
+        this.selectionColor='solid pink';
         this.canDrawVertex = true;
         this.selectedVertices = [];
+        this.selectedEdges=[];
     }
 
     render() {
@@ -28,8 +30,9 @@ export default class Sketch extends React.Component{
                         <Vertex key={vertex.id} vertex={vertex} selectElement={this.selectElement}
                                 mouseEnterElement={this.mouseEnterElement} mouseLeaveElement={this.mouseLeaveElement}/>
                     ))}
-                    {this.state.edges.map((edge)=>(
-                        <Edge key={edge.id} edge={edge}/>
+                    {this.state.edges.map((edge) => (
+                        <Edge key={edge.id} edge={edge} selectElement={this.selectElement}
+                              mouseEnterElement={this.mouseEnterElement} mouseLeaveElement={this.mouseLeaveElement}/>
                     ))}
                 </div>
                 <button id='generateEdges' onClick={this.generateEdges}>Generate Edges</button>
@@ -39,8 +42,15 @@ export default class Sketch extends React.Component{
 
     selectElement = (isVertex, id) => {
         if (isVertex) {
-            this.selectedVertices.push(this.state.vertices.find((vertex) => vertex.id === id));
+            const vertex = this.state.vertices.find((vertex) => vertex.id === id);
+            vertex.isSelected = true;
+            this.selectedVertices.push(vertex);
+        } else {
+            const edge = this.state.edges.find((edge) => edge.id === id);
+            edge.isSelected = true;
+            this.selectedEdges.push(edge);
         }
+        this.setState(this.state);
     }
 
     //Vertex Handling
@@ -50,6 +60,8 @@ export default class Sketch extends React.Component{
                 id: this.state.vertexIDCount++,
                 x: e.clientX - this.vertexRadius,
                 y: e.clientY - this.vertexRadius,
+                borderRadius: this.selectionBorderRadius,
+                selectionColor: this.selectionColor
             }
 
             this.state.vertices.push(vertex);
@@ -70,21 +82,20 @@ export default class Sketch extends React.Component{
     //Edges
     generateEdges = () => {
         if (this.selectedVertices.length < 2) return;
-        let filledEdges = [];
         for (let i = 0; i < this.selectedVertices.length; i++) {
             for (let j = 0; j < this.selectedVertices.length; j++) {
                 //don't draw loops
-                if (i === j) continue;
                 //don't wanna draw the same edge twice
-                let ij = i.toString() + j.toString();
-                let ji = j.toString() + i.toString();
-                if (filledEdges.includes(ij) || filledEdges.includes(ji)) continue;
+                if (i === j || !this.selectedVertices[i].isSelected || !this.selectedVertices[j].isSelected)
+                    continue;
 
                 this.drawEdge(this.selectedVertices[i], this.selectedVertices[j]);
-                filledEdges.push(ij);
             }
+            this.selectedVertices[i].isSelected = false;
         }
+
         this.selectedVertices = [];
+        this.selectedEdges = [];
 
         this.setState(this.state);
     }
@@ -94,7 +105,9 @@ export default class Sketch extends React.Component{
         const edge={
             id: this.state.edgeIDCount++,
             vertex1: vertex1,
-            vertex2: vertex2
+            vertex2: vertex2,
+            borderRadius: this.selectionBorderRadius,
+            selectionColor: this.selectionColor
         }
         this.state.edges.push(edge);
 
