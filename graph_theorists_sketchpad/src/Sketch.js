@@ -8,7 +8,7 @@ export default class Sketch extends React.Component{
     constructor(props) {
         super(props);
 
-        if(this.props.loadSketch){
+        if (this.props.loadSketch) {
             //gonna need to recreate some stuff
         }
         this.state = {
@@ -28,10 +28,11 @@ export default class Sketch extends React.Component{
         this.selectionColor = 'solid pink';
         this.canDrawVertex = true;
         this.isGrabber = false;
+        this.displayingCounts = false;
         this.mouseMoveInitPos = [0, 0];
 
-        this.vertices=[];
-        this.edges=[];
+        this.vertices = [];
+        this.edges = [];
         this.selectedVertices = [];
         this.selectedEdges = [];
 
@@ -43,8 +44,14 @@ export default class Sketch extends React.Component{
         return (
             <div id='sketchRoot'>
                 <input type='text' placeholder='Name' name='sketchName' onChange={this.renameSketch}/>
-                <button id='saveSketch' onClick={this.props.saveSketch.bind(this, JSON.stringify(this.state))}>Save Sketch</button>
+                <button id='saveSketch' onClick={this.props.saveSketch.bind(this, JSON.stringify(this.state))}>Save
+                    Sketch
+                </button>
                 <div id='pad' onClick={this.drawVertex}>
+                    <div id='padData' style={{visibility: this.displayingCounts ? 'visible' : 'hidden'}}>
+                        v = {this.vertices.length},
+                        e = {this.edges.length}
+                    </div>
                     {this.vertices.map((vertex) => (
                         <Vertex key={vertex.id} vertex={vertex} selectElement={this.selectElement}
                                 mouseEnterElement={this.mouseEnterElement} mouseLeaveElement={this.mouseLeaveElement}/>
@@ -61,6 +68,8 @@ export default class Sketch extends React.Component{
                 <button id='loopButton' onClick={this.loopVertices}>Loop</button>
                 <button id='grabber' onClick={this.toggleGrabber}>Grabber</button>
                 <button id='idDegree' onClick={this.toggleDisplayVertexData}>ID's</button>
+                <button id='veCounts' onClick={this.toggleCountsDisplay}>Counts
+                </button>
             </div>
         );
     }
@@ -216,6 +225,11 @@ export default class Sketch extends React.Component{
         for (let i = 0; i < this.vertices.length; i++) {
             this.vertices[i].displayVertexData = this.displayingVertexData;
         }
+        this.setState(this.state);
+    }
+
+    toggleCountsDisplay=()=> {
+        this.displayingCounts = !this.displayingCounts;
         this.setState(this.state);
     }
 
