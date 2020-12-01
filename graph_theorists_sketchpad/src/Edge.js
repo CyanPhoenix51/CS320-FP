@@ -5,12 +5,13 @@ import './styles/main.css';
 export default class Edge extends React.Component{
     render() {
         const {
-            id, x, y, height, borderRadius, selectionColor, isSelected, loopRadius, isBridge, bridgeColor
+            id, x, y, height, borderRadius, selectionColor, isSelected, loopRadius, isBridge, bridgeColor, isArc, arrowSize,
+            edgeWidth
         } = this.props.edge;
         //determine border
         let borderInput = null;
         if (isSelected)
-            borderInput = borderRadius + 'px' + selectionColor;
+            borderInput = borderRadius + 'px ' + selectionColor;
         else if (isBridge)
             borderInput = borderRadius + 'px ' + bridgeColor;
 
@@ -26,7 +27,14 @@ export default class Edge extends React.Component{
                 }}
                      onClick={this.props.selectElement.bind(this, false, id)}
                      onMouseEnter={this.props.mouseEnterElement.bind(this, false, id)}
-                     onMouseLeave={this.props.mouseLeaveElement.bind(this, false, id)}/>
+                     onMouseLeave={this.props.mouseLeaveElement.bind(this, false, id)}>
+                    {/*If it's an Arc I need an arrow*/}
+                    <div id='arrowUp' style={{
+                        visibility: isArc ? 'visible' : 'hidden',
+                        left: 2 * loopRadius - arrowSize / 2 - edgeWidth / 2 + 'px',
+                        top: loopRadius - arrowSize / 2 - edgeWidth / 2 + 'px'
+                    }}/>
+                </div>
             );
         } else {
             return (
@@ -39,7 +47,14 @@ export default class Edge extends React.Component{
                 }}
                      onClick={this.props.selectElement.bind(this, false, id)}
                      onMouseEnter={this.props.mouseEnterElement.bind(this, false, id)}
-                     onMouseLeave={this.props.mouseLeaveElement.bind(this, false, id)}/>
+                     onMouseLeave={this.props.mouseLeaveElement.bind(this, false, id)}>
+                    {/*If it's an Arc I need an arrow*/}
+                    <div id='arrowUp' style={{
+                        visibility: isArc ? 'visible' : 'hidden',
+                        top: height / 2 - arrowSize / 2 + 'px',
+                        left: -(arrowSize / 2 + edgeWidth / 2) + 'px'
+                    }}/>
+                </div>
             );
         }
     }

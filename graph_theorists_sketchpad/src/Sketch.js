@@ -20,13 +20,14 @@ export default class Sketch extends React.Component{
 
         this.vertexRadius = 25 / 2;
         this.edgeWidth = 5;
-        this.edgeSpacing = 1.5 * this.edgeWidth;
+        this.edgeSpacing = 2.25 * this.edgeWidth;
         this.selectionBorderRadius = 4;
+        this.arrowSize = 10;
         this.loopRadius = 25;
         this.padWidth = 500;
         this.padHeight = 500;
         this.selectionColor = 'solid pink';
-        this.bridgeColor='solid red';
+        this.bridgeColor = 'solid red';
         this.canDrawVertex = true;
         this.isGrabber = false;
         this.displayingCounts = false;
@@ -36,7 +37,7 @@ export default class Sketch extends React.Component{
         this.edges = [];
         this.selectedVertices = [];
         this.selectedEdges = [];
-        this.bridges=[];
+        this.bridges = [];
 
         //update at 33ms = ~30pfs
         setInterval(this.update, 33);
@@ -73,6 +74,7 @@ export default class Sketch extends React.Component{
                 <button id='veCounts' onClick={this.toggleCountsDisplay}>Counts</button>
                 <button id='resetIDs' onClick={this.resetIDs}>Reset ID's</button>
                 <button id='idBridges' onClick={this.identifyBridges}>Bridges</button>
+                <button id='generateArc' onClick={this.generateArc}>Arc</button>
             </div>
         );
     }
@@ -281,6 +283,25 @@ export default class Sketch extends React.Component{
         this.setState(this.state);
     }
 
+    generateArc=()=> {
+        //arcs can only be loops and edges
+        if (this.selectedVertices.length !== 1 && this.selectedVertices.length !== 2)
+            return;
+        let edge;
+        //loop or edge?
+        if (this.selectedVertices.length === 1) {
+            edge = this.drawEdge(this.selectedVertices[0], this.selectedVertices[0]);
+        } else {
+            edge = this.drawEdge(this.selectedVertices[0], this.selectedVertices[1]);
+            edge.targetVertex = this.selectedVertices[1];
+        }
+        edge.arrowSize = this.arrowSize;
+        edge.isArc = true;
+        this.positionEdge(edge);
+        this.setState(this.state);
+        this.deselectAll();
+    }
+
     drawEdge = (vertex1, vertex2) => {
         const state=this.state;
         //make the edge
@@ -296,7 +317,9 @@ export default class Sketch extends React.Component{
             offsetY: 0,
             zIndex: 1,
             parallelEdgeIndex: 0,
-            bridgeColor: this.bridgeColor
+            bridgeColor: this.bridgeColor,
+            edgeWidth: this.edgeWidth,
+            isArc: false
         }
         const stateEdge={
             id: edge.id,
@@ -340,10 +363,20 @@ export default class Sketch extends React.Component{
         if(edge.isLoop) {
             let x = edge.vertex1.x + this.vertexRadius - 2 * this.edgeWidth;
             let y = edge.vertex1.y + this.vertexRadius - 2 * this.edgeWidth;
+            if (edge.isSelected) {
+                x += 2*this.selectionBorderRadius;
+                y += 2*this.selectionBorderRadius;
+            }
             edge.x = x;
             edge.y = y;
         }
         else {
+            if(edge.isArc && edge.vertex1.id!==edge.targetVertex.id){
+                //switcharoo
+                const temp = edge.vertex2;
+                edge.vertex2 = edge.vertex1;
+                edge.vertex1 = temp;
+            }
             //math time
             let x1 = edge.vertex1.x;
             let x2 = edge.vertex2.x;

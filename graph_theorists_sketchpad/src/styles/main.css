@@ -33,7 +33,7 @@ body{
     z-index: 1;
 }
 
-#arrow_up{
+#arrowUp{
     position: relative;
     width: 0;
     height: 0;
@@ -43,7 +43,7 @@ body{
     border-bottom: 10px solid blue;
 }
 
-#arrow_left{
+#arrowLeft{
     position: relative;
     width: 0;
     height: 0;
