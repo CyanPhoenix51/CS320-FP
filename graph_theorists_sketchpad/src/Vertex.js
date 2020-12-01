@@ -2,9 +2,9 @@ import React from 'react';
 import './styles/main.css';
 
 //Each vertex that is on the pad
-export default class Vertex extends React.Component{
+export default class Vertex extends React.Component {
     render() {
-        const {id, x, y, isSelected, borderRadius, selectionColor} = this.props.vertex;
+        const {id, x, y, isSelected, borderRadius, selectionColor, displayVertexData} = this.props.vertex;
         return (
             <div id='vertex' style={
                 {
@@ -14,7 +14,14 @@ export default class Vertex extends React.Component{
                 }
             } onClick={this.props.selectElement.bind(this, true, id)}
                  onMouseEnter={this.props.mouseEnterElement.bind(this, true, id)}
-                 onMouseLeave={this.props.mouseLeaveElement.bind(this, true, id)}/>
+                 onMouseLeave={this.props.mouseLeaveElement.bind(this, true, id)}>
+
+                <div id='vertexData' style={{
+                    visibility: displayVertexData? 'visible': 'hidden'
+                }}>
+                    {id}, {this.props.vertex.edges.length}
+                </div>
+            </div>
         )
     }
 }

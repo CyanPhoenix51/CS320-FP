@@ -60,6 +60,7 @@ export default class Sketch extends React.Component{
                 <button id='generateEdges' onClick={this.generateEdges}>Generate Edges</button>
                 <button id='loopButton' onClick={this.loopVertices}>Loop</button>
                 <button id='grabber' onClick={this.toggleGrabber}>Grabber</button>
+                <button id='idDegree' onClick={this.toggleDisplayVertexData}>ID's</button>
             </div>
         );
     }
@@ -103,6 +104,7 @@ export default class Sketch extends React.Component{
         this.isGrabber=!this.isGrabber;
     }
 
+    //Selection and Deletion
     selectElement = (isVertex, id) => {
         if (isVertex) {
             const vertex = this.vertices.find((vertex) => vertex.id === id);
@@ -193,6 +195,7 @@ export default class Sketch extends React.Component{
                 y: e.clientY - this.vertexRadius,
                 borderRadius: this.selectionBorderRadius,
                 selectionColor: this.selectionColor,
+                displayVertexData: this.displayingVertexData,
                 edges: []
             }
             const stateVertex={
@@ -206,6 +209,14 @@ export default class Sketch extends React.Component{
             this.state.vertices.push(stateVertex);
             this.setState(state);
         }
+    }
+
+    toggleDisplayVertexData=()=> {
+        this.displayingVertexData = !this.displayingVertexData;
+        for (let i = 0; i < this.vertices.length; i++) {
+            this.vertices[i].displayVertexData = this.displayingVertexData;
+        }
+        this.setState(this.state);
     }
 
     //Mouse Handling
