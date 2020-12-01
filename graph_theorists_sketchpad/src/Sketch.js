@@ -26,6 +26,7 @@ export default class Sketch extends React.Component{
         this.padWidth = 500;
         this.padHeight = 500;
         this.selectionColor = 'solid pink';
+        this.bridgeColor='solid red';
         this.canDrawVertex = true;
         this.isGrabber = false;
         this.displayingCounts = false;
@@ -35,6 +36,7 @@ export default class Sketch extends React.Component{
         this.edges = [];
         this.selectedVertices = [];
         this.selectedEdges = [];
+        this.bridges=[];
 
         //update at 33ms = ~30pfs
         setInterval(this.update, 33);
@@ -70,6 +72,7 @@ export default class Sketch extends React.Component{
                 <button id='idDegree' onClick={this.toggleDisplayVertexData}>ID's</button>
                 <button id='veCounts' onClick={this.toggleCountsDisplay}>Counts</button>
                 <button id='resetIDs' onClick={this.resetIDs}>Reset ID's</button>
+                <button id='idBridges' onClick={this.identifyBridges}>Bridges</button>
             </div>
         );
     }
@@ -292,7 +295,8 @@ export default class Sketch extends React.Component{
             offsetX: 0,
             offsetY: 0,
             zIndex: 1,
-            parallelEdgeIndex: 0
+            parallelEdgeIndex: 0,
+            bridgeColor: this.bridgeColor
         }
         const stateEdge={
             id: edge.id,
@@ -437,6 +441,80 @@ export default class Sketch extends React.Component{
 
                 distance *= -1;
             }
+        }
+    }
+
+    //Advanced Features
+    identifyBridges=()=> {
+        //loop through edges, remove it. Can I still get from one vertex to the other? add the edge back
+        //Currently won't work for digraphs
+        this.idBridges = !this.idBridges;
+        if (!this.idBridges) {
+            //turn off bridge id
+            for (let i = 0; i < this.bridges.length; i++) {
+                this.bridges[i].isBridge = false;
+            }
+            this.bridges = [];
+        } else {
+            //highlight bridges in some color
+            //loop through all edges, remove them one at a time. Does the graph become disconnected? If so, it's a bridge
+            //check for disconnect via dfs
+            for (let i = 0; i < this.edges.length; i++) {
+                //remove the edge from its vertices
+                //loops can't be bridges
+                if (this.edges[i].isLoop)
+                    continue;
+                const vertex1 = this.edges[i].vertex1;
+                const vertex2 = this.edges[i].vertex2;
+                vertex1.edges = vertex1.edges.filter((edge) => edge.id !== this.edges[i].id);
+                vertex2.edges = vertex2.edges.filter((edge) => edge.id !== this.edges[i].id);
+
+                //did the removal of this edge disconnect the two vertices?
+                const path = this.dfs(vertex1, vertex2);
+                if (path.length === 0) {
+                    this.edges[i].isBridge = true;
+                    this.bridges.push(this.edges[i]);
+                }
+                //add the edge back in
+                vertex1.edges.push(this.edges[i]);
+                vertex2.edges.push(this.edges[i]);
+            }
+        }
+        this.setState(this.state);
+    }
+
+    dfs(start, finish) {
+        //returns the shortest list of vertices connecting start to finish
+        let paths = [];
+        this.dfsHelper(start, [], paths, finish);
+
+        //return the shortest path in paths
+        if (paths.length === 0) return paths;
+        let shortestPath = paths[0];
+        for (let i = 0; i < paths.length; i++) {
+            if (paths[i].length < shortestPath.length) {
+                shortestPath = paths[i];
+            }
+        }
+        return shortestPath;
+    }
+
+    dfsHelper(currentVertex, path, paths, finish){
+        path.push(currentVertex);
+        if(currentVertex.id===finish.id){
+            paths.push(path);
+            return;
+        }
+        for(let i=0;i<currentVertex.edges.length;i++){
+            if(!path.find(v=>v.id===currentVertex.edges[i].vertex1.id)){
+                //continue search on vertex1
+                this.dfsHelper(currentVertex.edges[i].vertex1, path, paths, finish);
+            }
+            else if(!path.find(v=>v.id===currentVertex.edges[i].vertex2.id)){
+                //continue search on vertex2
+                this.dfsHelper(currentVertex.edges[i].vertex2, path, paths, finish);
+            }
+            //else do nothing for this edge
         }
     }
 }

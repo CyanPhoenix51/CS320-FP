@@ -5,8 +5,15 @@ import './styles/main.css';
 export default class Edge extends React.Component{
     render() {
         const {
-            id, x, y, height, borderRadius, selectionColor, isSelected, loopRadius
+            id, x, y, height, borderRadius, selectionColor, isSelected, loopRadius, isBridge, bridgeColor
         } = this.props.edge;
+        //determine border
+        let borderInput = null;
+        if (isSelected)
+            borderInput = borderRadius + 'px' + selectionColor;
+        else if (isBridge)
+            borderInput = borderRadius + 'px ' + bridgeColor;
+
         if (this.props.edge.isLoop) {
             return (
                 <div id='loop' style={{
@@ -28,7 +35,7 @@ export default class Edge extends React.Component{
                     top: isSelected ? y - borderRadius + 'px' : y + 'px',
                     left: isSelected ? x - borderRadius + 'px' : x + 'px',
                     transform: 'rotate(' + this.props.edge.theta.toString() + 'rad)',
-                    border: isSelected ? borderRadius + 'px ' + selectionColor : null
+                    border: borderInput
                 }}
                      onClick={this.props.selectElement.bind(this, false, id)}
                      onMouseEnter={this.props.mouseEnterElement.bind(this, false, id)}
