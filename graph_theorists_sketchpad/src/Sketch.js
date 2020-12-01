@@ -31,6 +31,7 @@ export default class Sketch extends React.Component{
         this.canDrawVertex = true;
         this.isGrabber = false;
         this.displayingCounts = false;
+        this.isBp='false';
         this.mouseMoveInitPos = [0, 0];
 
         this.vertices = [];
@@ -52,8 +53,10 @@ export default class Sketch extends React.Component{
                 </button>
                 <div id='pad' onClick={this.drawVertex}>
                     <div id='padData' style={{visibility: this.displayingCounts ? 'visible' : 'hidden'}}>
+                        {this.determineBipartite()}
                         v = {this.vertices.length},
-                        e = {this.edges.length}
+                        e = {this.edges.length},
+                        BP = {this.isBp.toString()}
                     </div>
                     {this.vertices.map((vertex) => (
                         <Vertex key={vertex.id} vertex={vertex} selectElement={this.selectElement}
@@ -549,5 +552,64 @@ export default class Sketch extends React.Component{
             }
             //else do nothing for this edge
         }
+    }
+
+    determineBipartite = () => {
+        if (this.vertices.length === 0) {
+            this.isBp = false;
+            return;
+        }
+        //try to 2 color the sketch
+        let visitedVertices = [];
+        this.isBp = true;
+        while (visitedVertices.length !== this.vertices.length) {
+            this.bpHelper(this.vertices[0], 1, visitedVertices);
+            if (this.isBp) {
+                const unseenVertex = this.findUnseenVertex(visitedVertices);
+                this.bpHelper(unseenVertex, 1, visitedVertices);
+            } else break;
+        }
+    }
+
+    bpHelper(currentVertex, mColor, visitedVertices) {
+        if(!currentVertex) return;
+        //if it's already determined not bp, then return
+        if (this.isBp === false) {
+            return;
+        }
+        //if I've visited this vertex before, I must be trying to color it the same else bad
+        if (visitedVertices.length>0 && visitedVertices.find((vertex) => vertex.id === currentVertex.id)) {
+            if (currentVertex.mColor !== mColor) {
+                this.isBp = false;
+            }
+            return;
+        }
+
+        //color this vertex
+        currentVertex.mColor = mColor;
+        visitedVertices.push(currentVertex);
+        if (mColor === 1) mColor = 2;
+        else mColor = 1;
+
+        //recurse for all children
+        for (let i = 0; i < currentVertex.edges.length; i++) {
+            if(currentVertex.edges[i].isLoop)
+                continue;
+            const adj = this.determineAdjacentVertex(currentVertex, currentVertex.edges[i].vertex1, currentVertex.edges[i].vertex2);
+            this.bpHelper(adj, mColor, visitedVertices);
+        }
+    }
+
+    determineAdjacentVertex(currentVertex, vertex1, vertex2){
+        if(currentVertex.id===vertex1.id)
+            return vertex2;
+        else
+            return vertex1;
+    }
+
+    findUnseenVertex(visitedVertices) {
+        let unseenVertices = this.vertices.filter((vertex) => !visitedVertices.find((v) => v.id === vertex.id));
+        if (unseenVertices.length === 0) return null;
+        return unseenVertices[0];
     }
 }
