@@ -68,8 +68,8 @@ export default class Sketch extends React.Component{
                 <button id='loopButton' onClick={this.loopVertices}>Loop</button>
                 <button id='grabber' onClick={this.toggleGrabber}>Grabber</button>
                 <button id='idDegree' onClick={this.toggleDisplayVertexData}>ID's</button>
-                <button id='veCounts' onClick={this.toggleCountsDisplay}>Counts
-                </button>
+                <button id='veCounts' onClick={this.toggleCountsDisplay}>Counts</button>
+                <button id='resetIDs' onClick={this.resetIDs}>Reset ID's</button>
             </div>
         );
     }
@@ -111,6 +111,21 @@ export default class Sketch extends React.Component{
 
     toggleGrabber = () =>{
         this.isGrabber=!this.isGrabber;
+    }
+
+    resetIDs=()=> {
+        const state = this.state;
+        state.vertexIDCount = 0;
+        state.edgeIDCount = 0;
+        for (let i = 0; i < this.vertices.length; i++) {
+            this.vertices[i].id = state.vertexIDCount++;
+            state.vertices[i].id = this.vertices[i].id;
+        }
+        for (let i = 0; i < this.edges.length; i++) {
+            this.edges[i].id = state.edgeIDCount++;
+            state.edges[i].id = this.edges[i].id;
+        }
+        this.setState(state);
     }
 
     //Selection and Deletion
