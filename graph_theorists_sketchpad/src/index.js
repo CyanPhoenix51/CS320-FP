@@ -15,25 +15,30 @@ class App extends React.Component{
     render() {
         switch (this.state.currentView){
             case "sketchBook":
-                return <Sketchbook loadSketch={this.loadSketch} saveSketch={this.state.currentSketch}/>
+                return <Sketchbook loadSketch={this.loadSketch} saveSketch={this.saveSketch}/>
             case 'sketchPad':
-                return <Sketchpad loadSketch={this.state.currentSketch} saveSketch={this.saveSketch}/>
+                return <Sketchpad loadSketch={this.loadSketch} saveSketch={this.saveSketch}/>
             default:
                 return <h1>Ooga Booga</h1>
         }
     }
 
     loadSketch=(sketch)=>{
+        //change view
         const state=this.state;
         state.currentView='sketchPad';
-        state.currentSketch=sketch;
         this.setState(state);
     }
 
-    saveSketch=(sketch)=>{
-        const state=this.state;
-        state.currentView='sketchBook';
-        state.currentSketch=sketch;
+    saveSketch=(sketch)=> {
+        //change view
+        const state = this.state;
+        state.currentView = 'sketchBook';
+
+        //create a cookie for the sketch
+        const s=JSON.parse(sketch);
+        const name=s.name;
+        document.cookie=name+'='+sketch;
         this.setState(state);
     }
 }
