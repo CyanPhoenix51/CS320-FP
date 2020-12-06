@@ -26,6 +26,9 @@ export default class Sketch extends React.Component{
         this.loopRadius = 25;
         this.padWidth = 500;
         this.padHeight = 500;
+        this.windowCenter=[window.innerWidth/2, window.innerHeight/2];
+        this.padOrigin=[this.windowCenter[0]-this.padWidth/2, this.windowCenter[1]-this.padHeight/2];
+
         this.selectionColor = 'solid pink';
         this.bridgeColor = 'solid red';
         this.canDrawVertex = true;
@@ -223,8 +226,8 @@ export default class Sketch extends React.Component{
             const state=this.state;
             const vertex = {
                 id: state.vertexIDCount++,
-                x: e.clientX - this.vertexRadius,
-                y: e.clientY - this.vertexRadius,
+                x: e.clientX - this.vertexRadius-this.padOrigin[0],
+                y: e.clientY - this.vertexRadius-this.padOrigin[1],
                 borderRadius: this.selectionBorderRadius,
                 selectionColor: this.selectionColor,
                 displayVertexData: this.displayingVertexData,
