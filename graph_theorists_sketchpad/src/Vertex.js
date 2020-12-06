@@ -6,7 +6,7 @@ export default class Vertex extends React.Component {
     render() {
         const {id, x, y, isSelected, borderRadius, selectionColor, displayVertexData} = this.props.vertex;
         return (
-            <div id='vertex' style={
+            <div className='vertex' style={
                 {
                     top: isSelected ? y - borderRadius + 'px' : y + 'px',
                     left: isSelected ? x - borderRadius + 'px' : x + 'px',
@@ -16,10 +16,15 @@ export default class Vertex extends React.Component {
                  onMouseEnter={this.props.mouseEnterElement.bind(this, true, id)}
                  onMouseLeave={this.props.mouseLeaveElement.bind(this, true, id)}>
 
-                <div id='vertexData' style={{
+                <div className='vertexData' style={{
                     visibility: displayVertexData? 'visible': 'hidden'
                 }}>
-                    {id}, {this.props.vertex.edges.length}
+                    <div className='vertexID'>
+                        <p>{id}</p>
+                    </div>
+                    <div className='vertexDegree'>
+                        <p>{this.props.vertex.edges.length}</p>
+                    </div>
                 </div>
             </div>
         )

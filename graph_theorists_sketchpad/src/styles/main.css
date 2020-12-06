@@ -1,8 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap"); *
+
+{
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+section {
+    position: relative;
+    min-height: 100vh;
+    background-image: url(../Pictures/bg.png);
+    background-size: cover;
+    background-position: top;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 body{
 	background: #999;
 }
 
-#vertex{
+.vertex{
     position: absolute;
     background: blue;
     height: 25px;
@@ -11,7 +30,7 @@ body{
     z-index: 9999;
 }
 
-#vertex:hover{
+.vertex:hover{
     background: pink;
 }
 
@@ -35,11 +54,17 @@ body{
 }
 
 #pad{
-    background: white;
+    background-image: url(../Pictures/pad_bg_4.png);
     width: 750px;
     height: 500px;
     border: 2px solid black;
     z-index: 10;
+}
+
+#padData{
+    margin-left: 5px;
+    margin-top: 2px;
+    color: white;
 }
 
 #loop{
@@ -69,3 +94,14 @@ body{
     border-right:10px solid blue;
 }
 
+.vertexID{
+    margin-left: -25px;
+    font-weight: bolder;
+    color: white;
+}
+.vertexDegree{
+    margin-left: 8px;
+    margin-top: 12px;
+    font-weight: bolder;
+    color: white;
+}

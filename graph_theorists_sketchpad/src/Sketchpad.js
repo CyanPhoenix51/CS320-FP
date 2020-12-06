@@ -11,10 +11,10 @@ export default class Sketchpad extends React.Component {
 
     render() {
         return (
-            <div onMouseMove={(e) => this.mouseCTX = e}>
+            <section onMouseMove={(e) => this.mouseCTX = e}>
                 <Sketch mouseMoveCTX={this.getMouseCTX.bind(this)} saveSketch={this.props.saveSketch}
                         loadSketch={this.props.loadSketch}/>
-            </div>
+            </section>
         );
     }
 

@@ -57,9 +57,9 @@ export default class Sketch extends React.Component{
                 <div id='pad' onClick={this.drawVertex}>
                     <div id='padData' style={{visibility: this.displayingCounts ? 'visible' : 'hidden'}}>
                         {this.determineBipartite()}
-                        v = {this.vertices.length},
-                        e = {this.edges.length},
-                        BP = {this.isBp.toString()}
+                        v = {this.vertices.length}<br/>
+                        e = {this.edges.length} <br/>
+                        BP = {this.isBp.toString()} <br/>
                     </div>
                     {this.vertices.map((vertex) => (
                         <Vertex key={vertex.id} vertex={vertex} selectElement={this.selectElement}
@@ -166,6 +166,8 @@ export default class Sketch extends React.Component{
         }
         this.selectedVertices = [];
         this.selectedEdges = [];
+        if (this.isGrabber)
+            this.isGrabber = false;
         this.setState(this.state);
     }
 
