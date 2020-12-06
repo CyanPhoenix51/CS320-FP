@@ -11,6 +11,10 @@ body{
     z-index: 9999;
 }
 
+#vertex:hover{
+    background: pink;
+}
+
 #edge{
     position: absolute;
     background: black;
@@ -18,17 +22,21 @@ body{
     z-index: 1;
 }
 
+#edge:hover{
+    background: pink;
+}
+
 #sketchRoot{
     position: fixed;
     top: 50%;
     left: 50%;
-    margin-left: -250px;
+    margin-left: -375px;
     margin-top: -250px;
 }
 
 #pad{
     background: white;
-    width: 500px;
+    width: 750px;
     height: 500px;
     border: 2px solid black;
     z-index: 10;

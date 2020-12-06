@@ -24,7 +24,7 @@ export default class Sketch extends React.Component{
         this.selectionBorderRadius = 4;
         this.arrowSize = 10;
         this.loopRadius = 25;
-        this.padWidth = 500;
+        this.padWidth = 750;
         this.padHeight = 500;
         this.windowCenter=[window.innerWidth/2, window.innerHeight/2];
         this.padOrigin=[this.windowCenter[0]-this.padWidth/2, this.windowCenter[1]-this.padHeight/2];
@@ -70,17 +70,19 @@ export default class Sketch extends React.Component{
                               mouseEnterElement={this.mouseEnterElement} mouseLeaveElement={this.mouseLeaveElement}/>
                     ))}
                 </div>
-                <button id='clearPad' onClick={this.clearPad}>Clear Pad</button>
-                <button id='deleteSelection' onClick={this.deleteSelection}>Delete Selection</button>
-                <button id='deselectAll' onClick={this.deselectAll}>Deselect All</button>
-                <button id='generateEdges' onClick={this.generateEdges}>Generate Edges</button>
-                <button id='loopButton' onClick={this.loopVertices}>Loop</button>
-                <button id='grabber' onClick={this.toggleGrabber}>Grabber</button>
-                <button id='idDegree' onClick={this.toggleDisplayVertexData}>ID's</button>
-                <button id='veCounts' onClick={this.toggleCountsDisplay}>Counts</button>
-                <button id='resetIDs' onClick={this.resetIDs}>Reset ID's</button>
-                <button id='idBridges' onClick={this.identifyBridges}>Bridges</button>
-                <button id='generateArc' onClick={this.generateArc}>Arc</button>
+                <div id='sketchCommands'>
+                    <button id='clearPad' onClick={this.clearPad}>Clear Pad</button>
+                    <button id='deleteSelection' onClick={this.deleteSelection}>Delete Selection</button>
+                    <button id='deselectAll' onClick={this.deselectAll}>Deselect All</button>
+                    <button id='generateEdges' onClick={this.generateEdges}>Generate Edges</button>
+                    <button id='loopButton' onClick={this.loopVertices}>Loop</button>
+                    <button id='grabber' onClick={this.toggleGrabber}>Grabber</button>
+                    <button id='idDegree' onClick={this.toggleDisplayVertexData}>ID's</button>
+                    <button id='veCounts' onClick={this.toggleCountsDisplay}>Counts</button>
+                    <button id='resetIDs' onClick={this.resetIDs}>Reset ID's</button>
+                    <button id='idBridges' onClick={this.identifyBridges}>Bridges</button>
+                    <button id='generateArc' onClick={this.generateArc}>Arc</button>
+                </div>
             </div>
         );
     }
