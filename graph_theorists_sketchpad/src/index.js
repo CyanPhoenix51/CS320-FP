@@ -27,6 +27,7 @@ class App extends React.Component{
         //change view
         const state=this.state;
         state.currentView='sketchPad';
+        document.cookie='loadSketch='+JSON.stringify(sketch)
         this.setState(state);
     }
 

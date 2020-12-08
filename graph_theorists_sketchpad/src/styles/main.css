@@ -23,7 +23,6 @@ body{
 
 .vertex{
     position: absolute;
-    background: blue;
     height: 25px;
     width: 25px;
     border-radius: 50%;
@@ -36,7 +35,6 @@ body{
 
 #edge{
     position: absolute;
-    background: black;
     width: 5px;
     z-index: 1;
 }
@@ -58,7 +56,7 @@ body{
     width: 750px;
     height: 500px;
     border: 2px solid black;
-    z-index: 10;
+    z-index: -1;
 }
 
 #padData{

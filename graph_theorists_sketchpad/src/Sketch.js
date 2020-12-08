@@ -8,14 +8,22 @@ export default class Sketch extends React.Component{
     constructor(props) {
         super(props);
 
-        if (this.props.loadSketch) {
-            //gonna need to recreate some stuff
-        }
-        this.state = {
-            vertices: [],
-            vertexIDCount: 0,
-            edges: [],
-            edgeIDCount: 0
+        let loadSketch = this.findLoadSketchCookie();
+        console.log(loadSketch);
+        //expire the cookie
+        document.cookie='loadSketch= ;expires=Thu, 01 Jan 1970 00:00:01 GMT';
+        if (loadSketch !== '') {
+            this.loadSketch(JSON.parse(loadSketch));
+        } else {
+            this.state = {
+                vertices: [],
+                vertexIDCount: 0,
+                edges: [],
+                edgeIDCount: 0
+            }
+
+            this.vertices = [];
+            this.edges = [];
         }
 
         this.vertexRadius = 25 / 2;
@@ -26,23 +34,21 @@ export default class Sketch extends React.Component{
         this.loopRadius = 25;
         this.padWidth = 750;
         this.padHeight = 500;
-        this.windowCenter=[window.innerWidth/2, window.innerHeight/2];
-        this.padOrigin=[this.windowCenter[0]-this.padWidth/2, this.windowCenter[1]-this.padHeight/2];
+        this.windowCenter = [window.innerWidth / 2, window.innerHeight / 2];
+        this.padOrigin = [this.windowCenter[0] - this.padWidth / 2, this.windowCenter[1] - this.padHeight / 2];
 
         this.selectionColor = 'solid pink';
         this.bridgeColor = 'solid red';
         this.canDrawVertex = true;
         this.isGrabber = false;
         this.displayingCounts = false;
-        this.isBp='false';
         this.mouseMoveInitPos = [0, 0];
-
-        this.vertices = [];
-        this.edges = [];
+        this.isBp = false;
         this.selectedVertices = [];
         this.selectedEdges = [];
         this.bridges = [];
 
+        document.addEventListener('keypress', e=>this.pressKey(e));
         //update at 33ms = ~30pfs
         setInterval(this.update, 33);
     }
@@ -87,58 +93,152 @@ export default class Sketch extends React.Component{
         );
     }
 
-    update = () => {
-        if (this.isGrabber) {
-            const mouseMoveCTX = this.props.mouseMoveCTX();
-            if (!mouseMoveCTX) return;
-            //loop through selected vertices, reposition, reset state
-            const deltas = [mouseMoveCTX.clientX - this.mouseMoveInitPos[0], mouseMoveCTX.clientY - this.mouseMoveInitPos[1]];
-            this.mouseMoveInitPos = [mouseMoveCTX.clientX, mouseMoveCTX.clientY];
-            for (let i = 0; i < this.selectedVertices.length; i++) {
-                //move the vertex
-                const x = this.selectedVertices[i].x + deltas[0];
-                const y = this.selectedVertices[i].y + deltas[1];
-                //check bounds
-                const widthCheck = x > 2 * this.vertexRadius && x < this.padWidth - 2 * this.vertexRadius;
-                const heightCheck = y > 2 * this.vertexRadius && y < this.padHeight - 2 * this.vertexRadius;
-                if (widthCheck) {
-                    this.selectedVertices[i].x = x;
-                    this.state.vertices.find((vertex) => vertex.id === this.selectedVertices[i].id).x = x;
-                }
-                if (heightCheck) {
-                    this.selectedVertices[i].y = y;
-                    this.state.vertices.find((vertex) => vertex.id === this.selectedVertices[i].id).y = y;
-                }
-                //reposition its edges
-                this.positionVertexEdges(this.selectedVertices[i]);
+    findLoadSketchCookie() {
+        let sketches = decodeURIComponent(document.cookie);
+
+        sketches = sketches.split(';');
+        for (let i = 0; i < sketches.length; i++) {
+            const keyVal = sketches[i].split('=');
+            if (keyVal[0] === 'loadSketch') {
+                console.log("HERE");
+                return keyVal[1];
             }
-            this.setState(this.state);
         }
+        return '';
     }
 
-    renameSketch=(e)=>{
-        const state=this.state;
-        state.name=e.target.value;
+    loadSketch(sketch){
+        const state=sketch
+        // draw all the vertices
+        for(let i=0;i<sketch.vertices.length;i++){
+            this.drawLoadVertex(sketch.vertices[i]);
+        }
+        //draw all the edges
+        for(let i=0;i<sketch.edges.length;i++){
+            this.drawLoadEdge(sketch.edges[i]);
+        }
         this.setState(state);
     }
 
-    toggleGrabber = () =>{
-        this.isGrabber=!this.isGrabber;
+    pressKey(e) {
+      switch (e.code) {
+        case 'KeyD':
+          //delete selection
+            this.deleteSelection();
+          break;
+        case 'KeyS':
+          //deselect
+          this.deselectAll();
+          break;
+        case 'KeyE':
+          //generate edges
+          this.generateEdges();
+          break;
+        case 'KeyL':
+          this.loopVertices();
+          break;
+        case 'KeyG':
+          this.toggleGrabber();
+          break;
+        case 'KeyI':
+          this.toggleDisplayVertexData();
+          break;
+        case 'KeyC':
+          this.toggleCountsDisplay();
+          break;
+        case 'KeyR':
+          this.resetIDs();
+          break;
+        case 'KeyB':
+          this.identifyBridges();
+          break;
+        case 'KeyA':
+          this.generateArc();
+          break;
+
+        //colorings
+          case 'Digit1':
+            this.colorSelection('black');
+          break;
+        case 'Digit2':
+          this.colorSelection('red');
+          break;
+        case 'Digit3':
+          this.colorSelection('orange');
+          break;
+        case 'Digit4':
+          this.colorSelection('yellow');
+          break;
+        case 'Digit5':
+          this.colorSelection('green');
+          break;
+        case 'Digit6':
+          this.colorSelection('blue');
+          break;
+        case 'Digit7':
+          this.colorSelection('purple');
+          break;
+        case 'Digit8':
+          this.colorSelection('brown');
+          break;
+        case 'Digit9':
+          this.colorSelection('white');
+          break;
+      }
+    }
+
+    update = () => {
+      if (this.isGrabber) {
+        const mouseMoveCTX = this.props.mouseMoveCTX();
+        if (!mouseMoveCTX) return;
+        //loop through selected vertices, reposition, reset state
+        const deltas = [mouseMoveCTX.clientX - this.mouseMoveInitPos[0], mouseMoveCTX.clientY - this.mouseMoveInitPos[1]];
+        this.mouseMoveInitPos = [mouseMoveCTX.clientX, mouseMoveCTX.clientY];
+        for (let i = 0; i < this.selectedVertices.length; i++) {
+          //move the vertex
+          const x = this.selectedVertices[i].x + deltas[0];
+          const y = this.selectedVertices[i].y + deltas[1];
+          //check bounds
+          const widthCheck = x > 2 * this.vertexRadius && x < this.padWidth - 2 * this.vertexRadius;
+          const heightCheck = y > 2 * this.vertexRadius && y < this.padHeight - 2 * this.vertexRadius;
+          if (widthCheck) {
+            this.selectedVertices[i].x = x;
+            this.state.vertices.find((vertex) => vertex.id === this.selectedVertices[i].id).x = x;
+          }
+          if (heightCheck) {
+            this.selectedVertices[i].y = y;
+            this.state.vertices.find((vertex) => vertex.id === this.selectedVertices[i].id).y = y;
+          }
+          //reposition its edges
+          this.positionVertexEdges(this.selectedVertices[i]);
+        }
+        this.setState(this.state);
+      }
+    }
+
+    renameSketch=(e)=> {
+      const state = this.state;
+      state.name = e.target.value;
+      this.setState(state);
+    }
+
+    toggleGrabber = () => {
+      this.isGrabber = !this.isGrabber;
     }
 
     resetIDs=()=> {
-        const state = this.state;
-        state.vertexIDCount = 0;
-        state.edgeIDCount = 0;
-        for (let i = 0; i < this.vertices.length; i++) {
-            this.vertices[i].id = state.vertexIDCount++;
-            state.vertices[i].id = this.vertices[i].id;
-        }
-        for (let i = 0; i < this.edges.length; i++) {
-            this.edges[i].id = state.edgeIDCount++;
-            state.edges[i].id = this.edges[i].id;
-        }
-        this.setState(state);
+      const state = this.state;
+      state.vertexIDCount = 0;
+      state.edgeIDCount = 0;
+      for (let i = 0; i < this.vertices.length; i++) {
+        this.vertices[i].id = state.vertexIDCount++;
+        state.vertices[i].id = this.vertices[i].id;
+      }
+      for (let i = 0; i < this.edges.length; i++) {
+        this.edges[i].id = state.edgeIDCount++;
+        state.edges[i].id = this.edges[i].id;
+      }
+      this.setState(state);
     }
 
     //Selection and Deletion
@@ -169,6 +269,22 @@ export default class Sketch extends React.Component{
         if (this.isGrabber)
             this.isGrabber = false;
         this.setState(this.state);
+    }
+
+    colorSelection(color){
+      const state=this.state;
+      for(let i=0;i<this.selectedVertices.length;i++) {
+        this.selectedVertices[i].color = color;
+        //don't forget to find the state vertex and set its color too
+        const vertex = state.vertices.find((v) => v.id === this.selectedVertices[i].id);
+        vertex.color = color;
+      }
+      for(let i=0;i<this.selectedEdges.length;i++) {
+        this.selectedEdges[i].color = color;
+        const edge = state.edges.find((e) => e.id === this.selectedEdges[i].id);
+        edge.color = color;
+      }
+      this.setState(state);
     }
 
     clearPad = () => {
@@ -226,28 +342,43 @@ export default class Sketch extends React.Component{
 
     //Vertex Handling
     drawVertex = (e) => {
-        if(this.canDrawVertex) {
-            const state=this.state;
-            const vertex = {
-                id: state.vertexIDCount++,
-                x: e.clientX - this.vertexRadius-this.padOrigin[0],
-                y: e.clientY - this.vertexRadius-this.padOrigin[1],
-                borderRadius: this.selectionBorderRadius,
-                selectionColor: this.selectionColor,
-                displayVertexData: this.displayingVertexData,
-                edges: []
-            }
-            const stateVertex={
-                id: vertex.id,
-                x: vertex.x,
-                y: vertex.y,
-                edges: []
-            }
-
-            this.vertices.push(vertex);
-            this.state.vertices.push(stateVertex);
-            this.setState(state);
+      if (this.canDrawVertex) {
+        const state = this.state;
+        const vertex = {
+          id: state.vertexIDCount++,
+          x: e.clientX - this.vertexRadius - this.padOrigin[0],
+          y: e.clientY - this.vertexRadius - this.padOrigin[1],
+          borderRadius: this.selectionBorderRadius,
+          selectionColor: this.selectionColor,
+          displayVertexData: this.displayingVertexData,
+          edges: [],
+          color: 'blue'
         }
+        const stateVertex = {
+          id: vertex.id,
+          x: vertex.x,
+          y: vertex.y,
+          edges: [],
+          color: 'blue'
+        }
+
+        this.vertices.push(vertex);
+        this.state.vertices.push(stateVertex);
+        this.setState(state);
+      }
+    }
+
+    drawLoadVertex(v){
+        const vertex={
+            id: v.id,
+            x: v.x,
+            y: v.y,
+            borderRadius: this.selectionBorderRadius,
+            selectionColor: this.selectionColor,
+            displayVertexData: this.displayingVertexData,
+            edges: []
+        }
+        this.vertices.push(vertex);
     }
 
     toggleDisplayVertexData=()=> {
@@ -307,54 +438,51 @@ export default class Sketch extends React.Component{
         }
         edge.arrowSize = this.arrowSize;
         edge.isArc = true;
+        //find the edge in the state and make it an arc
+        const state = this.state;
+        const e = state.edges.find((ed) => ed.id === edge.id);
+        e.isArc = true;
+
         this.positionEdge(edge);
         this.setState(this.state);
         this.deselectAll();
     }
 
-    drawEdge = (vertex1, vertex2) => {
-        const state=this.state;
-        //make the edge
-        const edge = {
-            id: state.edgeIDCount++,
-            vertex1: vertex1,
-            vertex2: vertex2,
+    drawLoadEdge(e){
+        const v1=this.vertices.find((vertex)=>vertex.id===e.vertex1);
+        const v2=this.vertices.find((vertex)=>vertex.id===e.vertex2);
+        const edge={
+            id: e.id,
+            vertex1: v1,
+            vertex2: v2,
             borderRadius: this.selectionBorderRadius,
             selectionColor: this.selectionColor,
-            isLoop: vertex1.id===vertex2.id,
+            isLoop: v1.id===v2.id,
             loopRadius: this.loopRadius,
             offsetX: 0,
             offsetY: 0,
             zIndex: 1,
-            parallelEdgeIndex: 0,
             bridgeColor: this.bridgeColor,
             edgeWidth: this.edgeWidth,
-            isArc: false
+            isArc: e.isArc
         }
-        const stateEdge={
-            id: edge.id,
-            vertex1: edge.vertex1.id,
-            vertex2: edge.vertex2.id
+        v1.edges.push(edge);
+        if(!edge.isLoop){
+            v2.edges.push(edge);
         }
-        vertex1.edges.push(edge);
-        //don't add loops twice
-        if(!edge.isLoop)
-            vertex2.edges.push(edge);
         this.edges.push(edge);
-        state.edges.push(stateEdge);
-        this.setState(state);
 
+        //TODO this is a repeat segment, should be cleaned up
         //check for parallel Edges
-        const parallelEdges=this.parallelEdgeFinder(vertex1, vertex2);
+        const parallelEdges=this.parallelEdgeFinder(v1, v2);
         if(parallelEdges.length>1) {
             //recalculate parallel Edge positions
-            this.calculateEdgeOffsets(parallelEdges, vertex1, vertex2);
+            this.calculateEdgeOffsets(parallelEdges, v1, v2);
             //position all parallel edges
             let z = 9000;
             for (let i = 0; i < parallelEdges.length; i++) {
                 //are they loops?
-                if (vertex1.id === vertex2.id) {
-                    parallelEdges[i].parallelEdgeIndex = i;
+                if (v1.id === v2.id) {
                     parallelEdges[i].zIndex = z--;
                 }
                 this.positionEdge(parallelEdges[i]);
@@ -365,8 +493,62 @@ export default class Sketch extends React.Component{
             //position it
             this.positionEdge(edge);
         }
+    }
 
-        return edge;
+    drawEdge = (vertex1, vertex2) => {
+      const state = this.state;
+      //make the edge
+      const edge = {
+        id: state.edgeIDCount++,
+        vertex1: vertex1,
+        vertex2: vertex2,
+        borderRadius: this.selectionBorderRadius,
+        selectionColor: this.selectionColor,
+        isLoop: vertex1.id === vertex2.id,
+        loopRadius: this.loopRadius,
+        offsetX: 0,
+        offsetY: 0,
+        zIndex: 1,
+        bridgeColor: this.bridgeColor,
+        edgeWidth: this.edgeWidth,
+        isArc: false,
+        color: 'black'
+      }
+      const stateEdge = {
+        id: edge.id,
+        vertex1: edge.vertex1.id,
+        vertex2: edge.vertex2.id,
+        color: 'black'
+      }
+      vertex1.edges.push(edge);
+      //don't add loops twice
+      if (!edge.isLoop)
+        vertex2.edges.push(edge);
+      this.edges.push(edge);
+      state.edges.push(stateEdge);
+
+      //check for parallel Edges
+      const parallelEdges = this.parallelEdgeFinder(vertex1, vertex2);
+      if (parallelEdges.length > 1) {
+        //recalculate parallel Edge positions
+        this.calculateEdgeOffsets(parallelEdges, vertex1, vertex2);
+        //position all parallel edges
+        let z = 9000;
+        for (let i = 0; i < parallelEdges.length; i++) {
+          //are they loops?
+          if (vertex1.id === vertex2.id) {
+            parallelEdges[i].zIndex = z--;
+          }
+          this.positionEdge(parallelEdges[i]);
+        }
+
+      } else {
+        //position it
+        this.positionEdge(edge);
+      }
+
+      this.setState(state);
+      return edge;
     }
 
     positionEdge = (edge) => {

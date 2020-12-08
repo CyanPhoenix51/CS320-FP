@@ -10,19 +10,22 @@ export default class Sketchbook extends React.Component {
     }
 
     render() {
-        let sketches=document.cookie.split(';');
+        let sketches = decodeURIComponent(document.cookie);
+        sketches = sketches.split(';');
         //get rid of not needed parts
-        let x=[];
-        for(let i=0;i<sketches.length;i++){
-            let y=sketches[i].split('=');
+        let x = [];
+        for (let i = 0; i < sketches.length; i++) {
+            let y = sketches[i].split('=');
             x.push(JSON.parse(y[1]));
         }
         return (
             <div>
                 {x.map((sketch) => (
-                    <SavedSketch key={sketch.name} sketch={sketch}/>
+                    <div key={sketch.name}onClick={this.props.loadSketch.bind(this, sketch)}>
+                        <SavedSketch sketch={sketch}/>
+                    </div>
                 ))}
-                <button onClick={this.props.loadSketch}>Create Graph</button>
+                <button onClick={this.props.loadSketch.bind(this, '')}>Create Graph</button>
             </div>
 
         );
