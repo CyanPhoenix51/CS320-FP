@@ -6,51 +6,50 @@ import Edge from "./Edge";
 //The Pad where the drawing happens
 export default class Sketch extends React.Component{
     constructor(props) {
-        super(props);
+      super(props);
 
-        let loadSketch = this.findLoadSketchCookie();
-        console.log(loadSketch);
-        //expire the cookie
-        document.cookie='loadSketch= ;expires=Thu, 01 Jan 1970 00:00:01 GMT';
-        if (loadSketch !== '') {
-            this.loadSketch(JSON.parse(loadSketch));
-        } else {
-            this.state = {
-                vertices: [],
-                vertexIDCount: 0,
-                edges: [],
-                edgeIDCount: 0
-            }
+      this.vertices = [];
+      this.edges = [];
 
-            this.vertices = [];
-            this.edges = [];
+      this.vertexRadius = 25 / 2;
+      this.edgeWidth = 5;
+      this.edgeSpacing = 2.25 * this.edgeWidth;
+      this.selectionBorderRadius = 4;
+      this.arrowSize = 10;
+      this.loopRadius = 25;
+      this.padWidth = 750;
+      this.padHeight = 500;
+      this.windowCenter = [window.innerWidth / 2, window.innerHeight / 2];
+      this.padOrigin = [this.windowCenter[0] - this.padWidth / 2, this.windowCenter[1] - this.padHeight / 2];
+
+      this.selectionColor = 'solid pink';
+      this.bridgeColor = 'solid red';
+      this.canDrawVertex = true;
+      this.isGrabber = false;
+      this.displayingCounts = false;
+      this.mouseMoveInitPos = [0, 0];
+      this.isBp = false;
+      this.selectedVertices = [];
+      this.selectedEdges = [];
+      this.bridges = [];
+
+      document.addEventListener('keypress', e => this.pressKey(e));
+      //update at 33ms = ~30pfs
+      setInterval(this.update, 33);
+
+      let loadSketch = this.findLoadSketchCookie();
+      //expire the cookie
+      document.cookie = 'loadSketch= ;expires=Thu, 01 Jan 1970 00:00:01 GMT';
+      if (loadSketch !== '') {
+        this.state = this.loadSketch(JSON.parse(loadSketch));
+      } else {
+        this.state = {
+          vertices: [],
+          vertexIDCount: 0,
+          edges: [],
+          edgeIDCount: 0
         }
-
-        this.vertexRadius = 25 / 2;
-        this.edgeWidth = 5;
-        this.edgeSpacing = 2.25 * this.edgeWidth;
-        this.selectionBorderRadius = 4;
-        this.arrowSize = 10;
-        this.loopRadius = 25;
-        this.padWidth = 750;
-        this.padHeight = 500;
-        this.windowCenter = [window.innerWidth / 2, window.innerHeight / 2];
-        this.padOrigin = [this.windowCenter[0] - this.padWidth / 2, this.windowCenter[1] - this.padHeight / 2];
-
-        this.selectionColor = 'solid pink';
-        this.bridgeColor = 'solid red';
-        this.canDrawVertex = true;
-        this.isGrabber = false;
-        this.displayingCounts = false;
-        this.mouseMoveInitPos = [0, 0];
-        this.isBp = false;
-        this.selectedVertices = [];
-        this.selectedEdges = [];
-        this.bridges = [];
-
-        document.addEventListener('keypress', e=>this.pressKey(e));
-        //update at 33ms = ~30pfs
-        setInterval(this.update, 33);
+      }
     }
 
     render() {
@@ -99,25 +98,25 @@ export default class Sketch extends React.Component{
         sketches = sketches.split(';');
         for (let i = 0; i < sketches.length; i++) {
             const keyVal = sketches[i].split('=');
-            if (keyVal[0] === 'loadSketch') {
-                console.log("HERE");
+            //idk why there's a space, but there just is
+            if (keyVal[0] === ' loadSketch') {
                 return keyVal[1];
             }
         }
         return '';
     }
 
-    loadSketch(sketch){
-        const state=sketch
-        // draw all the vertices
-        for(let i=0;i<sketch.vertices.length;i++){
-            this.drawLoadVertex(sketch.vertices[i]);
-        }
-        //draw all the edges
-        for(let i=0;i<sketch.edges.length;i++){
-            this.drawLoadEdge(sketch.edges[i]);
-        }
-        this.setState(state);
+    loadSketch(sketch) {
+      const state = sketch
+      // draw all the vertices
+      for (let i = 0; i < sketch.vertices.length; i++) {
+        this.drawLoadVertex(sketch.vertices[i]);
+      }
+      //draw all the edges
+      for (let i = 0; i < sketch.edges.length; i++) {
+        this.drawLoadEdge(sketch.edges[i]);
+      }
+      return state;
     }
 
     pressKey(e) {
@@ -369,17 +368,18 @@ export default class Sketch extends React.Component{
       }
     }
 
-    drawLoadVertex(v){
-        const vertex={
-            id: v.id,
-            x: v.x,
-            y: v.y,
-            borderRadius: this.selectionBorderRadius,
-            selectionColor: this.selectionColor,
-            displayVertexData: this.displayingVertexData,
-            edges: []
-        }
-        this.vertices.push(vertex);
+    drawLoadVertex(v) {
+      const vertex = {
+        id: v.id,
+        x: v.x,
+        y: v.y,
+        borderRadius: this.selectionBorderRadius,
+        selectionColor: this.selectionColor,
+        displayVertexData: this.displayingVertexData,
+        edges: [],
+        color: v.color
+      }
+      this.vertices.push(vertex);
     }
 
     toggleDisplayVertexData=()=> {
@@ -449,51 +449,51 @@ export default class Sketch extends React.Component{
         this.deselectAll();
     }
 
-    drawLoadEdge(e){
-        const v1=this.vertices.find((vertex)=>vertex.id===e.vertex1);
-        const v2=this.vertices.find((vertex)=>vertex.id===e.vertex2);
-        const edge={
-            id: e.id,
-            vertex1: v1,
-            vertex2: v2,
-            borderRadius: this.selectionBorderRadius,
-            selectionColor: this.selectionColor,
-            isLoop: v1.id===v2.id,
-            loopRadius: this.loopRadius,
-            offsetX: 0,
-            offsetY: 0,
-            zIndex: 1,
-            bridgeColor: this.bridgeColor,
-            edgeWidth: this.edgeWidth,
-            isArc: e.isArc
-        }
-        v1.edges.push(edge);
-        if(!edge.isLoop){
-            v2.edges.push(edge);
-        }
-        this.edges.push(edge);
+    drawLoadEdge(e) {
+      const v1 = this.vertices.find((vertex) => vertex.id === e.vertex1);
+      const v2 = this.vertices.find((vertex) => vertex.id === e.vertex2);
+      const edge = {
+        id: e.id,
+        vertex1: v1,
+        vertex2: v2,
+        borderRadius: this.selectionBorderRadius,
+        selectionColor: this.selectionColor,
+        isLoop: v1.id === v2.id,
+        loopRadius: this.loopRadius,
+        offsetX: 0,
+        offsetY: 0,
+        zIndex: 1,
+        bridgeColor: this.bridgeColor,
+        edgeWidth: this.edgeWidth,
+        isArc: e.isArc,
+        color: e.color
+      }
+      v1.edges.push(edge);
+      if (!edge.isLoop) {
+        v2.edges.push(edge);
+      }
+      this.edges.push(edge);
 
-        //TODO this is a repeat segment, should be cleaned up
-        //check for parallel Edges
-        const parallelEdges=this.parallelEdgeFinder(v1, v2);
-        if(parallelEdges.length>1) {
-            //recalculate parallel Edge positions
-            this.calculateEdgeOffsets(parallelEdges, v1, v2);
-            //position all parallel edges
-            let z = 9000;
-            for (let i = 0; i < parallelEdges.length; i++) {
-                //are they loops?
-                if (v1.id === v2.id) {
-                    parallelEdges[i].zIndex = z--;
-                }
-                this.positionEdge(parallelEdges[i]);
-            }
+      //TODO this is a repeat segment, should be cleaned up
+      //check for parallel Edges
+      const parallelEdges = this.parallelEdgeFinder(v1, v2);
+      if (parallelEdges.length > 1) {
+        //recalculate parallel Edge positions
+        this.calculateEdgeOffsets(parallelEdges, v1, v2);
+        //position all parallel edges
+        let z = 9000;
+        for (let i = 0; i < parallelEdges.length; i++) {
+          //are they loops?
+          if (v1.id === v2.id) {
+            parallelEdges[i].zIndex = z--;
+          }
+          this.positionEdge(parallelEdges[i]);
+        }
 
-        }
-        else{
-            //position it
-            this.positionEdge(edge);
-        }
+      } else {
+        //position it
+        this.positionEdge(edge);
+      }
     }
 
     drawEdge = (vertex1, vertex2) => {
