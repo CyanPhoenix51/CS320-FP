@@ -224,6 +224,7 @@ export default class Sketch extends React.Component{
 
     toggleGrabber = () => {
       this.isGrabber = !this.isGrabber;
+      this.mouseMoveInitPos = [this.props.mouseMoveCTX.clientX, this.props.mouseMoveCTX.clientY];
     }
 
     resetIDs=()=> {
