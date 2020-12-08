@@ -44,6 +44,7 @@ export default class Sketch extends React.Component{
         this.state = this.loadSketch(JSON.parse(loadSketch));
       } else {
         this.state = {
+          name: 'Name',
           vertices: [],
           vertexIDCount: 0,
           edges: [],
@@ -55,7 +56,7 @@ export default class Sketch extends React.Component{
     render() {
         return (
             <div id='sketchRoot'>
-                <input type='text' placeholder='Name' name='sketchName' onChange={this.renameSketch}/>
+                <input type='text' placeholder={this.state.name} name='sketchName' onChange={this.renameSketch}/>
                 <button id='saveSketch' onClick={this.props.saveSketch.bind(this, JSON.stringify(this.state))}>Save
                     Sketch
                 </button>
