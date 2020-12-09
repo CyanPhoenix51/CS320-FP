@@ -1,0 +1,29 @@
+/* Global Font */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap"); *
+
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Background Settings */
+section {
+    position: relative;
+    min-height: 100vh;
+    background-image: url(../Pictures/bg3.jpg);
+    background-size: cover;
+    background-position: top;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+section .main {
+    position: relative;
+    padding: 50px 50px 150px 250px;
+    box-sizing: border-box;
+}
+
+section .graph
