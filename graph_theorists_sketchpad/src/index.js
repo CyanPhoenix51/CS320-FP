@@ -15,19 +15,20 @@ class App extends React.Component{
     render() {
         switch (this.state.currentView){
             case "sketchBook":
-                return <Sketchbook loadSketch={this.loadSketch} saveSketch={this.saveSketch}/>
+                return <Sketchbook loadSketch={this.loadSketch}/>
             case 'sketchPad':
-                return <Sketchpad loadSketch={this.loadSketch} saveSketch={this.saveSketch}/>
+                return <Sketchpad saveSketch={this.saveSketch}/>
             default:
                 return <h1>Ooga Booga</h1>
         }
     }
 
-    loadSketch=(sketch)=>{
-        //change view
-        const state=this.state;
-        state.currentView='sketchPad';
-        this.setState(state);
+    loadSketch=(sketch)=> {
+      //change view
+      const state = this.state;
+      state.currentView = 'sketchPad';
+      document.cookie = 'loadSketch=' + JSON.stringify(sketch);
+      this.setState(state);
     }
 
     saveSketch=(sketch)=> {

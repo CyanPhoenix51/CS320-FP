@@ -31,7 +31,12 @@ body{
 }
 
 .vertex:hover{
+    --vertex-hover: true;
     background: pink;
+}
+
+.vertex:not(:hover){
+    --vertex-hover: false;
 }
 
 .edge{

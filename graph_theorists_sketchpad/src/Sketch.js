@@ -8,16 +8,6 @@ export default class Sketch extends React.Component{
     constructor(props) {
       super(props);
 
-      if (this.props.loadSketch) {
-        //gonna need to recreate some stuff
-      }
-      this.state = {
-        vertices: [],
-        vertexIDCount: 0,
-        edges: [],
-        edgeIDCount: 0
-      }
-
       this.vertexRadius = 25 / 2;
       this.edgeWidth = 5;
       this.edgeSpacing = 2.25 * this.edgeWidth;
@@ -43,7 +33,24 @@ export default class Sketch extends React.Component{
       this.selectedEdges = [];
       this.bridges = [];
 
-      document.addEventListener('keypress', e=>this.pressKey(e))
+      const loadSketch = JSON.parse(this.findLoadSketchCookie());
+      //expire the cookie
+      document.cookie = 'loadSketch=;expires=Thu, 18 Dec 2013 12:00:00 UTC';
+      if (loadSketch) {
+        //gonna need to recreate some stuff
+        this.state = loadSketch;
+        this.loadSketch(loadSketch);
+      } else {
+        this.state = {
+          vertices: [],
+          vertexIDCount: 0,
+          edges: [],
+          edgeIDCount: 0,
+          name: ''
+        }
+      }
+
+      document.addEventListener('keypress', e => this.pressKey(e))
       //update at 33ms = ~30pfs
       setInterval(this.update, 33);
     }
@@ -53,7 +60,7 @@ export default class Sketch extends React.Component{
       this.padOrigin=[this.windowCenter[0]-this.padWidth/2, this.windowCenter[1]-this.padHeight/2];
         return (
             <div id='sketchRoot'>
-                <input type='text' placeholder='Name' name='sketchName' onChange={this.renameSketch}/>
+                <input type='text' placeholder={this.state.name} name='sketchName' onChange={this.renameSketch}/>
                 <button id='saveSketch' onClick={this.props.saveSketch.bind(this, JSON.stringify(this.state))}>Save
                     Sketch
                 </button>
@@ -183,7 +190,59 @@ export default class Sketch extends React.Component{
           this.generateArc();
           break;
           //colorings
+        case 'Digit1':
+          this.colorVertices('black');
+          break;
+        case 'Digit2':
+          this.colorVertices('white');
+          break;
+        case 'Digit3':
+          this.colorVertices('red');
+          break;
+        case 'Digit4':
+          this.colorVertices('orange');
+          break;
+        case 'Digit5':
+          this.colorVertices('yellow');
+          break;
+        case 'Digit6':
+          this.colorVertices('green');
+          break;
+        case 'Digit7':
+          this.colorVertices('blue');
+          break;
+        case 'Digit8':
+          this.colorVertices('purple');
+          break;
+        case 'Digit9':
+          this.colorVertices('brown');
+          break;
+        case 'Digit0':
+          this.colorVertices('cyan');
+          break;
+      }
+    }
 
+    findLoadSketchCookie(){
+      let sketches=decodeURIComponent(document.cookie);
+      sketches=sketches.split(';');
+      for(let i=0;i<sketches.length;i++){
+        const parts=sketches[i].split('=');
+        if(parts[0]===' loadSketch'){
+          return parts[1];
+        }
+      }
+      return 'null';
+    }
+
+    loadSketch(sketch){
+      //build all the vertices first
+      for(let i=0;i<sketch.vertices.length;i++){
+        this.drawLoadVertex(sketch.vertices[i]);
+      }
+      //build all the edges
+      for(let i=0;i<sketch.edges.length;i++){
+        this.drawLoadEdge(sketch.edges[i]);
       }
     }
 
@@ -272,28 +331,44 @@ export default class Sketch extends React.Component{
 
     //Vertex Handling
     drawVertex = (e) => {
-        if(this.canDrawVertex) {
-            const state=this.state;
-            const vertex = {
-                id: state.vertexIDCount++,
-                x: e.clientX - this.vertexRadius-this.padOrigin[0],
-                y: e.clientY - this.vertexRadius-this.padOrigin[1],
-                borderRadius: this.selectionBorderRadius,
-                selectionColor: this.selectionColor,
-                displayVertexData: this.displayingVertexData,
-                edges: []
-            }
-            const stateVertex={
-                id: vertex.id,
-                x: vertex.x,
-                y: vertex.y,
-                edges: []
-            }
-
-            this.vertices.push(vertex);
-            this.state.vertices.push(stateVertex);
-            this.setState(state);
+      if (this.canDrawVertex) {
+        const state = this.state;
+        const vertex = {
+          id: state.vertexIDCount++,
+          x: e.clientX - this.vertexRadius - this.padOrigin[0],
+          y: e.clientY - this.vertexRadius - this.padOrigin[1],
+          borderRadius: this.selectionBorderRadius,
+          selectionColor: this.selectionColor,
+          displayVertexData: this.displayingVertexData,
+          edges: [],
+          color: 'blue'
         }
+        const stateVertex = {
+          id: vertex.id,
+          x: vertex.x,
+          y: vertex.y,
+          edges: [],
+          color: 'blue'
+        }
+
+        this.vertices.push(vertex);
+        this.state.vertices.push(stateVertex);
+        this.setState(state);
+      }
+    }
+
+    drawLoadVertex(stateVertex){
+      const vertex={
+        id: stateVertex.id,
+        x: stateVertex.x,
+        y: stateVertex.y,
+        borderRadius: this.selectionBorderRadius,
+        selectionColor: this.selectionColor,
+        displayVertexData: this.displayingVertexData,
+        edges: [],
+        color: stateVertex.color
+      }
+      this.vertices.push(vertex);
     }
 
     toggleDisplayVertexData=()=> {
@@ -307,6 +382,16 @@ export default class Sketch extends React.Component{
     toggleCountsDisplay=()=> {
         this.displayingCounts = !this.displayingCounts;
         this.setState(this.state);
+    }
+
+    colorVertices(color) {
+      const state = this.state;
+      for (let i = 0; i < this.selectedVertices.length; i++) {
+        this.selectedVertices[i].color = color;
+        const vertex = state.vertices.find((v) => v.id === this.selectedVertices[i].id);
+        vertex.color = color;
+      }
+      this.setState(state);
     }
 
     //Mouse Handling
@@ -340,22 +425,27 @@ export default class Sketch extends React.Component{
     }
 
     generateArc=()=> {
-        //arcs can only be loops and edges
-        if (this.selectedVertices.length !== 1 && this.selectedVertices.length !== 2)
-            return;
-        let edge;
-        //loop or edge?
-        if (this.selectedVertices.length === 1) {
-            edge = this.drawEdge(this.selectedVertices[0], this.selectedVertices[0]);
-        } else {
-            edge = this.drawEdge(this.selectedVertices[0], this.selectedVertices[1]);
-            edge.targetVertex = this.selectedVertices[1];
-        }
-        edge.arrowSize = this.arrowSize;
-        edge.isArc = true;
-        this.positionEdge(edge);
-        this.setState(this.state);
-        this.deselectAll();
+      const state = this.state;
+      //arcs can only be loops and edges
+      if (this.selectedVertices.length !== 1 && this.selectedVertices.length !== 2)
+        return;
+      let edge;
+      //loop or edge?
+      if (this.selectedVertices.length === 1) {
+        edge = this.drawEdge(this.selectedVertices[0], this.selectedVertices[0]);
+      } else {
+        edge = this.drawEdge(this.selectedVertices[0], this.selectedVertices[1]);
+        edge.targetVertex = this.selectedVertices[1];
+      }
+      edge.arrowSize = this.arrowSize;
+      edge.isArc = true;
+      //make the stateEdge an arc too
+      const e = state.edges.find((ed) => ed.id === edge.id);
+      e.isArc = true;
+
+      this.positionEdge(edge);
+      this.setState(state);
+      this.deselectAll();
     }
 
     drawEdge = (vertex1, vertex2) => {
@@ -372,7 +462,6 @@ export default class Sketch extends React.Component{
         offsetX: 0,
         offsetY: 0,
         zIndex: 1,
-        parallelEdgeIndex: 0,
         bridgeColor: this.bridgeColor,
         edgeWidth: this.edgeWidth,
         isArc: false
@@ -399,7 +488,6 @@ export default class Sketch extends React.Component{
         for (let i = 0; i < parallelEdges.length; i++) {
           //are they loops?
           if (vertex1.id === vertex2.id) {
-            parallelEdges[i].parallelEdgeIndex = i;
             parallelEdges[i].zIndex = z--;
           }
           this.positionEdge(parallelEdges[i]);
@@ -412,6 +500,51 @@ export default class Sketch extends React.Component{
 
       this.setState(state);
       return edge;
+    }
+
+    drawLoadEdge(stateEdge){
+      const v1=this.vertices.find((v)=>v.id===stateEdge.vertex1);
+      const v2=this.vertices.find((v)=>v.id===stateEdge.vertex2);
+      const edge = {
+        id: stateEdge.id,
+        vertex1: v1,
+        vertex2: v2,
+        borderRadius: this.selectionBorderRadius,
+        selectionColor: this.selectionColor,
+        isLoop: v1.id===v2.id,
+        loopRadius: this.loopRadius,
+        offsetX: 0,
+        offsetY: 0,
+        zIndex: 1,
+        bridgeColor: this.bridgeColor,
+        edgeWidth: this.edgeWidth,
+        isArc: stateEdge.isArc
+      }
+      v1.edges.push(edge);
+      if(!edge.isLoop) {
+        v2.edges.push(edge);
+      }
+      this.edges.push(edge);
+
+      //check for parallel Edges
+      const parallelEdges = this.parallelEdgeFinder(v1, v2);
+      if (parallelEdges.length > 1) {
+        //recalculate parallel Edge positions
+        this.calculateEdgeOffsets(parallelEdges, v1, v2);
+        //position all parallel edges
+        let z = 9000;
+        for (let i = 0; i < parallelEdges.length; i++) {
+          //are they loops?
+          if (v1.id === v2.id) {
+            parallelEdges[i].zIndex = z--;
+          }
+          this.positionEdge(parallelEdges[i]);
+        }
+
+      } else {
+        //position it
+        this.positionEdge(edge);
+      }
     }
 
     positionEdge = (edge) => {
