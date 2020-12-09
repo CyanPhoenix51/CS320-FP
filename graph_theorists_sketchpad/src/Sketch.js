@@ -341,7 +341,8 @@ export default class Sketch extends React.Component{
           selectionColor: this.selectionColor,
           displayVertexData: this.displayingVertexData,
           edges: [],
-          color: 'blue'
+          color: 'blue',
+          isHovering: false
         }
         const stateVertex = {
           id: vertex.id,
@@ -366,7 +367,8 @@ export default class Sketch extends React.Component{
         selectionColor: this.selectionColor,
         displayVertexData: this.displayingVertexData,
         edges: [],
-        color: stateVertex.color
+        color: stateVertex.color,
+        isHovering: false
       }
       this.vertices.push(vertex);
     }
@@ -396,11 +398,31 @@ export default class Sketch extends React.Component{
 
     //Mouse Handling
     mouseEnterElement = (isVertex, id) => {
-        this.canDrawVertex = false;
+      this.canDrawVertex = false;
+      if (isVertex) {
+        //find the vertex tell it that it's hovering
+        const vertex = this.vertices.find((v) => v.id === id);
+        vertex.isHovering = true;
+      } else {
+        //same but for edge
+        const edge = this.edges.find((e) => e.id === id);
+        edge.isHovering = true;
+      }
+      this.setState(this.state);
     }
 
     mouseLeaveElement = (isVertex, id) => {
-        this.canDrawVertex = true;
+      this.canDrawVertex = true;
+      if (isVertex) {
+        //find the vertex tell it that it's hovering
+        const vertex = this.vertices.find((v) => v.id === id);
+        vertex.isHovering = false;
+      } else {
+        //same but for edge
+        const edge = this.edges.find((e) => e.id === id);
+        edge.isHovering = false;
+      }
+      this.setState(this.state);
     }
 
     //Edges
@@ -464,7 +486,8 @@ export default class Sketch extends React.Component{
         zIndex: 1,
         bridgeColor: this.bridgeColor,
         edgeWidth: this.edgeWidth,
-        isArc: false
+        isArc: false,
+        isHovering: false
       }
       const stateEdge = {
         id: edge.id,
@@ -518,7 +541,8 @@ export default class Sketch extends React.Component{
         zIndex: 1,
         bridgeColor: this.bridgeColor,
         edgeWidth: this.edgeWidth,
-        isArc: stateEdge.isArc
+        isArc: stateEdge.isArc,
+        isHovering: false
       }
       v1.edges.push(edge);
       if(!edge.isLoop) {
