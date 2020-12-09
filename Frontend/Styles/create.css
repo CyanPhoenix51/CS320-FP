@@ -1,3 +1,4 @@
+/* Global Font */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap"); *
 
 {
@@ -7,6 +8,7 @@
     font-family: 'Montserrat', sans-serif;  
 }
 
+/* Background Settings */
 section {
     position: relative;
     min-height: 100vh;
