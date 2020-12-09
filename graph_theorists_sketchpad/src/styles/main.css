@@ -34,14 +34,14 @@ body{
     background: pink;
 }
 
-#edge{
+.edge{
     position: absolute;
     background: black;
     width: 5px;
     z-index: 1;
 }
 
-#edge:hover{
+.edge:hover{
     background: pink;
 }
 
@@ -67,14 +67,14 @@ body{
     color: white;
 }
 
-#loop{
+.loop{
     position: absolute;
     border-radius: 50%;
     border: 5px solid black;
     z-index: 1;
 }
 
-#arrowUp{
+.arrowUp{
     position: relative;
     width: 0;
     height: 0;
@@ -82,16 +82,6 @@ body{
     border-right: 10px solid transparent;
 
     border-bottom: 10px solid blue;
-}
-
-#arrowLeft{
-    position: relative;
-    width: 0;
-    height: 0;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-
-    border-right:10px solid blue;
 }
 
 .vertexID{
