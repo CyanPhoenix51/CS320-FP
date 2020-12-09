@@ -19,90 +19,108 @@ section {
     justify-content: space-between;
     align-items: center;
 }
-/* Get rid of bullet points on buttons */
-section .buttons li {
-    list-style: none;
-}
 
 /* Saved Graphs Background */
 section .book {
     position: relative;
-    opacity: 85%;
-    background: rgb(255, 255, 255);
-    height: 938px;
-    width: 955px;
-    padding: 50px 50px;
+    opacity: 87%;
+    background: #fff;
+    height: 750px;
+    width: 775px;
     box-sizing: border-box;
+    margin-left: 210px;
+    border-radius: 12.5px;
 }
 
-/* Title of Saved Graphs */
-section .saved {
-    position: relative;
-    padding: 10px 400px;
-    size: 40px;
-}
-
-/* Load/Delete/Create Buttons */
-section .buttons a {
+section h1 {
     color: skyblue;
+    margin-left: 37.50%;
+    margin-top: 2.5%;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+/* Get rid of bullet points  */
+section .book li {
+    list-style: none;
+}
+
+/* Graph Buttons */
+section .book a {
+    color: #fff;
     position: relative;
     display: inline-block;
+    resize: both;
     padding: 20px 50px;
+    margin-top: 615px;
+    margin-left: 25px;
     border-radius: 30px;
-    opacity: 80%;
-    background-color: #fff;
+    opacity: 87%;
+    background-color: skyblue;
     text-decoration: uppercase;
     font-size: 1.2em;
-    font-weight: 700;
+    font-weight: 600;
 }
 
-section .buttons a:hover {
+section .book a:hover {
     color: pink;
 }
 
+/* User / input info box */
 section .userinfo {
     position: relative;
-    flex-direction: column;
-    background: rgb(255, 255, 255);
-    margin-top: 100px;
-    margin-right: 200px;
-    opacity: 80%;
-    height: 400px;
+    background: #fff;
+    opacity: 90%;
+    height: 500px;
     width: 400px;
+    box-sizing: border-box;
+    right: 325px;
+    border-radius: 12.5px;
 }
 
-section .user {
-    position: relative;
+section h2 {
     color: skyblue;
-    margin: 150px;
+    margin-left: 21%;
+    margin-top: 5%;
+}
+
+/* Get rid of bullet points  */
+section .userinfo li {
+    list-style: none;
+}
+
+section .userinfo .info {
+    margin-top: 5%;
+    margin-left: 7%;
+    line-height: 40px;
 
 }
 
-section .buttons ul {
+section .logout input {
+    color: #fff;
     position: relative;
-    color: skyblue;
-}
-
-/* Logout button */
-section .logout input[type="submit"] {
+    display: inline-block;
+    resize: both;
     border: none;
-    outline: none;
-    height: 40px;
-
-    position: absolute;
-    top: 30px;
-    right: 110px;
-    display: flex;
-
-    background: skyblue;
-    color: #fff;
-    font-size: 20px;
-    border-radius: 20px;
+    padding: 20px 50px;
+    margin-top: 55%;
+    margin-left: 28%;
+    border-radius: 30px;
+    background-color: skyblue;
+    text-decoration: uppercase;
+    font-size: 1.2em;
+    font-weight: 600;
 }
 
-/* Logout button hover*/
-section .logout input[type="submit"]:hover {
-    cursor: pointer;
-    background: pink;
-    color: #fff;
+section .logout input:hover {
+    color: pink;
 }
+
+
+
+
+
+
+
+
+

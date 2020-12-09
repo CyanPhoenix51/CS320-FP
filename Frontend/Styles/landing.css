@@ -62,7 +62,7 @@ section .main p {
     font-weight: 500;
 }
 
-/* Directory Positions (Home, About, Team) */
+/* Directory Positions (Home, About) */
 section .dir {
     position: absolute;
     top: 30px;
