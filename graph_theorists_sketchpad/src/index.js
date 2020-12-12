@@ -19,11 +19,11 @@ class App extends React.Component {
   render() {
     switch (this.state.currentView) {
       case "sketchBook":
-        return <Sketchbook loadSketch={this.loadSketch}/>
+        return <Sketchbook loadSketch={this.loadSketch} switchView={this.switchView}/>
       case 'sketchPad':
-        return <Sketchpad saveSketch={this.saveSketch}/>
+        return <Sketchpad saveSketch={this.saveSketch} switchView={this.switchView}/>
       case "create":
-        return <Create/>
+        return <Create switchView={this.switchView}/>
       case "landing":
         return <Landing/>
       default:
@@ -51,6 +51,15 @@ class App extends React.Component {
     const state = this.state;
     state.currentView = 'sketchBook';
 
+    this.setState(state);
+  }
+
+  switchView = (view) => {
+    //sketchBook and Pad need to go through save and load
+    if (view === 'sketchPad' || view === 'sketchBook')
+      return;
+    const state = this.state;
+    state.currentView = view;
     this.setState(state);
   }
 }
