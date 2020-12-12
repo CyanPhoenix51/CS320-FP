@@ -78,18 +78,21 @@ if (signupForm != null) {
     // Confirming the user's password. 
     if(userPassword === userConfirmPassword) { 
       auth.createUserWithEmailAndPassword(userEmail, userPassword).then( cred => { 
+        return db.collection('users').doc(cred.user.uid).set({ 
+          sketchpad: "Testing"
+        }).then((cred) => {
         //Once we created the user, now we update the information about the user. 
         if(cred) {
           auth.currentUser.updateProfile({ 
             displayName: userFirstName + " " + userLastname
-          }).then(() => { 
+          })
           window.location.replace("sketchbook.html");
           signupForm.reset();
           return db.collection('users').doc(cred.user.uid).set({ 
             sketchpad: "Testing"
-          });
           })
         }
+      })
         // Error Handling
       }).catch(function(error) { 
         var errorCode = error.code; 
