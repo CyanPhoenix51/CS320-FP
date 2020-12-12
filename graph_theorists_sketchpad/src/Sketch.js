@@ -24,6 +24,7 @@ export default class Sketch extends React.Component{
       this.canDrawVertex = true;
       this.isGrabber = false;
       this.displayingCounts = false;
+      this.canReceiveKeyboardInput = true;
       this.isBp = 'false';
       this.mouseMoveInitPos = [0, 0];
 
@@ -60,7 +61,8 @@ export default class Sketch extends React.Component{
       this.padOrigin=[this.windowCenter[0]-this.padWidth/2, this.windowCenter[1]-this.padHeight/2];
         return (
             <div id='sketchRoot'>
-                <input type='text' placeholder={this.state.name} name='sketchName' onChange={this.renameSketch}/>
+                <input type='text' placeholder={this.state.name} name='sketchName' onChange={this.renameSketch}
+                       onClick={(e)=>this.canReceiveKeyboardInput=false}/>
                 <button id='saveSketch' onClick={this.props.saveSketch.bind(this, JSON.stringify(this.state))}>Save
                     Sketch
                 </button>
@@ -152,7 +154,9 @@ export default class Sketch extends React.Component{
         this.setState(state);
     }
 
-    pressKey(e){
+    pressKey(e) {
+      if (!this.canReceiveKeyboardInput)
+        return;
       switch (e.code) {
         case 'KeyE':
           //generate edges
@@ -345,6 +349,7 @@ export default class Sketch extends React.Component{
     //Vertex Handling
     drawVertex = (e) => {
       if (this.canDrawVertex) {
+        this.canReceiveKeyboardInput = true;
         const state = this.state;
         const vertex = {
           id: state.vertexIDCount++,
