@@ -32,9 +32,10 @@ section .book {
     border-radius: 12.5px;
 }
 
+/* Saved Graphs */
 section h1 {
     color: skyblue;
-    margin-left: 37.50%;
+    margin-left: 36.25%;
     margin-top: 2.5%;
     font-size: 30px;
     font-weight: 800;
