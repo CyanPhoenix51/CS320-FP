@@ -32,9 +32,10 @@ section .book {
     border-radius: 12.5px;
 }
 
+/* Saved Graphs */
 section h1 {
     color: skyblue;
-    margin-left: 37.50%;
+    margin-left: 36.25%;
     margin-top: 2.5%;
     font-size: 30px;
     font-weight: 800;
@@ -78,6 +79,7 @@ section .userinfo {
     border-radius: 12.5px;
 }
 
+/* Profile Information */
 section h2 {
     color: skyblue;
     margin-left: 21%;
@@ -89,6 +91,7 @@ section .userinfo li {
     list-style: none;
 }
 
+/* Button Location */
 section .userinfo .info {
     margin-top: 5%;
     margin-left: 7%;
@@ -96,6 +99,7 @@ section .userinfo .info {
 
 }
 
+/* Logout Button */
 section .logout input {
     color: #fff;
     position: relative;
