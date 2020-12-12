@@ -1,37 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User's Sketchbook</title>
-  <link rel="stylesheet" type="text/css" href="../Styles/sketchbook.css">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User's Sketchbook</title>
+    <link rel="stylesheet" type="text/css" href="../Styles/sketchbook.css">
+
 </head>
 <body>
-<section>
-  <div class = 'book'>
-    <div class = 'saved'>Saved Graphs</div>
-  </div>
-  <div class = 'buttons'>
-    <li><a href= '#'>Load Graph</a></li>
-    &nbsp;
-    <li><a href='#'>Delete Graph</a></li>
-    &nbsp;
-    <li><a href='sketchpad.html'>Create Graph</a></li>
-    <div class = 'userinfo'>
-      <div class = 'user'>Profile Information</div>
-      <ul>
+
+  <section>
+
+    <!-- Displays all graphs saved from user -->
+    <div class='book'>
+  
+          <h1> Saved Graphs </h1>
+
+          <ul class="Graph Buttons">
+
+            <a href="#">Create Graph</a>
+            <a href="#">Load Graph</a>
+            <a href="#">Delete Graph</a>
+    
+          </ul>
+
+    </div>
+      
+      <!-- Displays user info -->
+    <div class='userinfo'>
+
+      <h2> Profile Information </h2>
+
+      <ul class="info">
+
         <li id="UserID">User</li>
         <li id="Name">Name</li>
-        <li id="Email">Email</li>
+        <li id="Email">E-mail</li>
+
       </ul>
+
+      <!-- Redirects the user back to the landing page-->
+      <div class="logout">
+        
+        <input type="submit" id="logoutbutton" name="" value="Logout">
+    
+      </div>
+
     </div>
-  </div>
-  <div class="logout">
-    <input type="submit" id="logoutbutton" name="" value="Logout">
 
   </div>
 
 </section>
+
  <!-- The core Firebase JS SDK is always required and must be listed first -->
  <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
 
@@ -54,6 +75,7 @@
      appId: "1:33542383223:web:db84e7c8b18cf2121b0872",
      measurementId: "G-PTLBR59D27"
  };
+
  // Initialize Firebase
  firebase.initializeApp(firebaseConfig);
  firebase.analytics();
