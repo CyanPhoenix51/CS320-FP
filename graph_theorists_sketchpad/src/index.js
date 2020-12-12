@@ -1,9 +1,12 @@
-import React from 'react';
-import ReactDom from 'react-dom';
-import Sketchpad from "./Sketchpad";
-import Sketchbook from "./Sketchbook";
+// import React from 'react';
+// import ReactDom from 'react-dom';
+import Sketchpad from './Sketchpad';
+import Sketchbook from './Sketchbook';
+
+'use-strict';
 
 const e=React.createElement;
+const domContainer = document.querySelector('#app_container');
 
 class App extends React.Component {
   constructor(props) {
@@ -17,11 +20,11 @@ class App extends React.Component {
   render() {
     switch (this.state.currentView) {
       case "sketchBook":
-        return <Sketchbook loadSketch={this.loadSketch}/>
+         return ReactDOM.render(e(Sketchbook), domContainer);
       case 'sketchPad':
-        return <Sketchpad saveSketch={this.saveSketch}/>
+         return ReactDOM.render(e(Sketchpad), domContainer);
       default:
-        return <h1>Ooga Booga</h1>
+        return React.createElement('h1', 'Ooga Booga');
     }
   }
 
@@ -49,5 +52,5 @@ class App extends React.Component {
   }
 }
 
-//const domContainer = document.querySelector('#app_container');
-ReactDom.render(e(App), document.getElementById('root'));
+ReactDOM.render(e(App), domContainer);
+// ReactDom.render(e(App), document.getElementById('root'));
