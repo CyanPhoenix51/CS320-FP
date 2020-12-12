@@ -288,6 +288,8 @@ export default class Sketch extends React.Component{
     }
 
     clearPad = () => {
+      //if the grabber is on, turn it off
+      if (this.isGrabber) this.toggleGrabber();
       const s = this.state;
       s.vertices = [];
       s.edges = [];
