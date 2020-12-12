@@ -4,14 +4,14 @@ import Sketchpad from "./Sketchpad";
 import Sketchbook from "./Sketchbook";
 import Create from "./Create.js";
 import Landing from "./Landing.js";
-
+import About from "./About.js";
 const e=React.createElement;
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentView: 'landing',
+      currentView: 'about',
       currentSketch: null
     }
   }
@@ -26,6 +26,8 @@ class App extends React.Component {
         return <Create switchView={this.switchView}/>
       case "landing":
         return <Landing/>
+      case "about":
+        return <About/>
       default:
         return <h1>Ooga Booga</h1>
     }
