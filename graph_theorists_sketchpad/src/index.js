@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import Sketchpad from "./Sketchpad";
 import Sketchbook from "./Sketchbook";
+import Create from "./Create.js";
 
 const e=React.createElement;
 
@@ -9,7 +10,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentView: 'sketchPad',
+      currentView: 'create',
       currentSketch: null
     }
   }
@@ -20,6 +21,8 @@ class App extends React.Component {
         return <Sketchbook loadSketch={this.loadSketch}/>
       case 'sketchPad':
         return <Sketchpad saveSketch={this.saveSketch}/>
+      case "create":
+        return <Create/>
       default:
         return <h1>Ooga Booga</h1>
     }
