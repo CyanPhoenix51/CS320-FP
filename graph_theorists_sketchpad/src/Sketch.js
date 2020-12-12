@@ -254,10 +254,16 @@ export default class Sketch extends React.Component{
     //Selection and Deletion
     selectElement = (isVertex, id) => {
         if (isVertex) {
+          //has it already been selected?
+          if(this.selectedVertices.find((v)=>v.id===id)){
+            return;
+          }
             const vertex = this.vertices.find((vertex) => vertex.id === id);
             vertex.isSelected = true;
             this.selectedVertices.push(vertex);
         } else {
+          if(this.selectedEdges.find((e)=>e.id===id))
+              return;
             const edge = this.edges.find((edge) => edge.id === id);
             edge.isSelected = true;
             this.selectedEdges.push(edge);
@@ -266,72 +272,72 @@ export default class Sketch extends React.Component{
     }
 
     deselectAll = () => {
-        //deselect vertices
-        for (let i = 0; i < this.selectedVertices.length; i++) {
-            this.selectedVertices[i].isSelected = false;
-        }
-        //deselect edges
-        for (let i = 0; i < this.selectedEdges.length; i++) {
-            this.selectedEdges[i].isSelected = false;
-        }
-        this.selectedVertices = [];
-        this.selectedEdges = [];
-        if (this.isGrabber)
-            this.isGrabber = false;
-        this.setState(this.state);
+      //deselect vertices
+      for (let i = 0; i < this.selectedVertices.length; i++) {
+        this.selectedVertices[i].isSelected = false;
+      }
+      //deselect edges
+      for (let i = 0; i < this.selectedEdges.length; i++) {
+        this.selectedEdges[i].isSelected = false;
+      }
+      this.selectedVertices = [];
+      this.selectedEdges = [];
+      if (this.isGrabber)
+        this.isGrabber = false;
+      this.setState(this.state);
     }
 
     clearPad = () => {
-        const s = this.state;
-        s.vertices = [];
-        s.edges = [];
-        this.vertices = [];
-        this.edges = [];
-        this.setState(s);
+      const s = this.state;
+      s.vertices = [];
+      s.edges = [];
+      this.vertices = [];
+      this.edges = [];
+      this.setState(s);
     }
 
     deleteSelection = () => {
-        const state = this.state;
-        //add all vertex edges to selectedEdges
-        for (let i = 0; i < this.selectedVertices.length; i++) {
-            for (let j = 0; j < this.selectedVertices[i].edges.length; j++) {
-                if (!this.selectedEdges.find(edge => edge.id === this.selectedVertices[i].edges[j])) {
-                    this.selectedEdges.push(this.selectedVertices[i].edges[j]);
-                }
-            }
+      const state = this.state;
+      //add all vertex edges to selectedEdges
+      for (let i = 0; i < this.selectedVertices.length; i++) {
+        for (let j = 0; j < this.selectedVertices[i].edges.length; j++) {
+          if (!this.selectedEdges.find(edge => edge.id === this.selectedVertices[i].edges[j])) {
+            this.selectedEdges.push(this.selectedVertices[i].edges[j]);
+          }
+        }
+      }
+
+      //delete edges
+      for (let i = 0; i < this.selectedEdges.length; i++) {
+        state.edges = state.edges.filter(edge => edge.id !== this.selectedEdges[i].id);
+        //remove from connected vertices
+        const vertex1 = this.selectedEdges[i].vertex1;
+        const vertex2 = this.selectedEdges[i].vertex2;
+
+        vertex1.edges = vertex1.edges.filter((edge) => edge.id !== this.selectedEdges[i].id);
+        if (!this.selectedEdges[i].isLoop) {
+          vertex2.edges = vertex2.edges.filter((edge) => edge.id !== this.selectedEdges[i].id);
         }
 
-        //delete edges
-        for (let i = 0; i < this.selectedEdges.length; i++) {
-            state.edges = state.edges.filter(edge => edge.id !== this.selectedEdges[i].id);
-            //remove from connected vertices
-            const vertex1 = this.selectedEdges[i].vertex1;
-            const vertex2 = this.selectedEdges[i].vertex2;
+        //remove from all edges
+        this.edges = this.edges.filter(edge => edge.id !== this.selectedEdges[i].id);
+      }
 
-            vertex1.edges = vertex1.edges.filter((edge) => edge.id !== this.selectedEdges[i].id);
-            if (!this.selectedEdges[i].isLoop) {
-                vertex2.edges = vertex2.edges.filter((edge) => edge.id !== this.selectedEdges[i].id);
-            }
+      //delete all vertices
+      for (let i = 0; i < this.selectedVertices.length; i++) {
+        state.vertices = state.vertices.filter(vertex => vertex.id !== this.selectedVertices[i].id);
+        this.vertices = this.vertices.filter(vertex => vertex.id !== this.selectedVertices[i].id);
+      }
 
-            //remove from all edges
-            this.edges = this.edges.filter(edge => edge.id !== this.selectedEdges[i].id);
-        }
+      //recalculate edges
+      for (let i = 0; i < this.vertices.length; i++) {
+        this.positionVertexEdges(this.vertices[i]);
+      }
 
-        //delete all vertices
-        for (let i = 0; i < this.selectedVertices.length; i++) {
-            state.vertices = state.vertices.filter(vertex => vertex.id !== this.selectedVertices[i].id);
-            this.vertices = this.vertices.filter(vertex => vertex.id !== this.selectedVertices[i].id);
-        }
+      this.selectedVertices = [];
+      this.selectedEdges = [];
 
-        //recalculate edges
-        for(let i=0;i<this.vertices.length;i++) {
-            this.positionVertexEdges(this.vertices[i]);
-        }
-
-        this.selectedVertices = [];
-        this.selectedEdges = [];
-
-        this.setState(state);
+      this.setState(state);
     }
 
     //Vertex Handling
