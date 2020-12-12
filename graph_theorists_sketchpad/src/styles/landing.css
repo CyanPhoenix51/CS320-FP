@@ -38,10 +38,12 @@ section .main a {
     color: skyblue;
     position: relative;
     display: inline-block;
+    resize: both;
+    overflow: auto;
     padding: 20px 50px;
     margin-top: 15px;
     border-radius: 30px;
-    opacity: 80%;
+    opacity: 87%;
     background-color: #fff;
     text-decoration: uppercase;
     font-size: 1.2em;
@@ -60,7 +62,7 @@ section .main p {
     font-weight: 500;
 }
 
-/* Directory Positions (Home, About, Team) */
+/* Directory Positions (Home, About) */
 section .dir {
     position: absolute;
     top: 30px;
@@ -91,7 +93,7 @@ section .login {
     height: 480px;
     width: 600px;
     padding: 80px 70px;
-    opacity: 85%;
+    opacity: 87%;
     overflow: hidden;
     background: #fff ;
     display: inline-block;
@@ -117,7 +119,7 @@ section .login input {
 }
 
 /* Two input bars (Enter E-mail / PW ) */
-section .login input[type="text"], input[type="password"] {
+section .login input[type="email"], input[type="password"] {
     color: black;
     border: none;
     height: 40px;
@@ -155,3 +157,5 @@ section .login a {
 section .login a:hover {
     color: pink;
 }
+
+

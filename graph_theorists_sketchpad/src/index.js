@@ -3,6 +3,7 @@ import ReactDom from 'react-dom';
 import Sketchpad from "./Sketchpad";
 import Sketchbook from "./Sketchbook";
 import Create from "./Create.js";
+import Landing from "./Landing.js";
 
 const e=React.createElement;
 
@@ -10,7 +11,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentView: 'create',
+      currentView: 'landing',
       currentSketch: null
     }
   }
@@ -23,6 +24,8 @@ class App extends React.Component {
         return <Sketchpad saveSketch={this.saveSketch}/>
       case "create":
         return <Create/>
+      case "landing":
+        return <Landing/>
       default:
         return <h1>Ooga Booga</h1>
     }
