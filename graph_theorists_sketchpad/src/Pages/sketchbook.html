@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User's Sketchbook</title>
+  <link rel="stylesheet" type="text/css" href="../Styles/sketchbook.css">
+</head>
+<body>
+<section>
+  <div class = 'book'>
+    <div class = 'saved'>Saved Graphs</div>
+  </div>
+  <div class = 'buttons'>
+    <li><a href= '#'>Load Graph</a></li>
+    &nbsp;
+    <li><a href='#'>Delete Graph</a></li>
+    &nbsp;
+    <li><a href='sketchpad.html'>Create Graph</a></li>
+    <div class = 'userinfo'>
+      <div class = 'user'>Profile Information</div>
+      <ul>
+        <li id="UserID">User</li>
+        <li id="Name">Name</li>
+        <li id="Email">Email</li>
+      </ul>
+    </div>
+  </div>
+  <div class="logout">
+    <input type="submit" id="logoutbutton" name="" value="Logout">
+
+  </div>
+
+</section>
+ <!-- The core Firebase JS SDK is always required and must be listed first -->
+ <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
+
+ <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+ <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-analytics.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-auth.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-firestore.js"></script>
+
+ <script>
+ // Your web app's Firebase configuration
+ // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+ var firebaseConfig = {
+     apiKey: "AIzaSyCV04cZ-pknJwp3W9Aknrz3tNgKsAmWBOA",
+     authDomain: "graph-theory-sketchbook.firebaseapp.com",
+     databaseURL: "https://graph-theory-sketchbook.firebaseio.com",
+     projectId: "graph-theory-sketchbook",
+     storageBucket: "graph-theory-sketchbook.appspot.com",
+     messagingSenderId: "33542383223",
+     appId: "1:33542383223:web:db84e7c8b18cf2121b0872",
+     measurementId: "G-PTLBR59D27"
+ };
+ // Initialize Firebase
+ firebase.initializeApp(firebaseConfig);
+ firebase.analytics();
+
+ // Make references to auth and firestore. And update setting in firestore.
+ const auth = firebase.auth(); 
+ const db = firebase.firestore(); 
+ db.settings({ timestampsInSnapshots: true});
+ </script>
+ <script src="../../Backend/authenticate.js"></script>
+ 
+ <script> 
+  //Display User's account Information.
+  auth.onAuthStateChanged(user => { 
+  if (user) { 
+    document.getElementById("UserID").innerHTML = "UserID: "  + user.uid;
+    document.getElementById("Name").innerHTML = "Name: "  + user.displayName;
+    document.getElementById("Email").innerHTML = "Email: "  + user.email;
+  } 
+});
+
+</script> 
+
+</body>
+</html>

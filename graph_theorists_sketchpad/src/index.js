@@ -3,6 +3,8 @@ import ReactDom from 'react-dom';
 import Sketchpad from "./Sketchpad";
 import Sketchbook from "./Sketchbook";
 
+const e=React.createElement;
+
 class App extends React.Component{
     constructor(props) {
         super(props);
@@ -44,4 +46,5 @@ class App extends React.Component{
     }
 }
 
-ReactDom.render(<App/>, document.getElementById('root'));
+//const domContainer = document.querySelector('#app_container');
+ReactDom.render(e(App), document.getElementById('root'));

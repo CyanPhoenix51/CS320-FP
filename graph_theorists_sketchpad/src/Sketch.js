@@ -132,8 +132,9 @@ export default class Sketch extends React.Component{
         this.setState(state);
     }
 
-    toggleGrabber = () =>{
-        this.isGrabber=!this.isGrabber;
+    toggleGrabber = () => {
+      this.isGrabber = !this.isGrabber;
+      this.mouseMoveInitPos = [this.props.mouseMoveCTX.clientX, this.props.mouseMoveCTX.clientY];
     }
 
     resetIDs=()=> {
@@ -156,6 +157,10 @@ export default class Sketch extends React.Component{
         case 'KeyE':
           //generate edges
           this.generateEdges();
+          break;
+        case 'KeyG':
+          //grabber
+          this.toggleGrabber();
           break;
         case 'KeyD':
           //delete selection
