@@ -79,6 +79,7 @@ section .userinfo {
     border-radius: 12.5px;
 }
 
+/* Profile Information */
 section h2 {
     color: skyblue;
     margin-left: 21%;
@@ -90,6 +91,7 @@ section .userinfo li {
     list-style: none;
 }
 
+/* Button Location */
 section .userinfo .info {
     margin-top: 5%;
     margin-left: 7%;
@@ -97,6 +99,7 @@ section .userinfo .info {
 
 }
 
+/* Logout Button */
 section .logout input {
     color: #fff;
     position: relative;
