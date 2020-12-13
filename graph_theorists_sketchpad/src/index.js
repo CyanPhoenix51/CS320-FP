@@ -3,14 +3,15 @@ import ReactDom from 'react-dom';
 import Sketchpad from "./Sketchpad";
 import Sketchbook from "./Sketchbook";
 import Create from "./Create.js";
-
+import Landing from "./Landing.js";
+import About from "./About.js";
 const e=React.createElement;
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentView: 'create',
+      currentView: 'about',
       currentSketch: null
     }
   }
@@ -18,11 +19,15 @@ class App extends React.Component {
   render() {
     switch (this.state.currentView) {
       case "sketchBook":
-        return <Sketchbook loadSketch={this.loadSketch}/>
+        return <Sketchbook loadSketch={this.loadSketch} switchView={this.switchView}/>
       case 'sketchPad':
-        return <Sketchpad saveSketch={this.saveSketch}/>
+        return <Sketchpad saveSketch={this.saveSketch} switchView={this.switchView}/>
       case "create":
-        return <Create/>
+        return <Create switchView={this.switchView}/>
+      case "landing":
+        return <Landing/>
+      case "about":
+        return <About/>
       default:
         return <h1>Ooga Booga</h1>
     }
@@ -48,6 +53,15 @@ class App extends React.Component {
     const state = this.state;
     state.currentView = 'sketchBook';
 
+    this.setState(state);
+  }
+
+  switchView = (view) => {
+    //sketchBook and Pad need to go through save and load
+    if (view === 'sketchPad' || view === 'sketchBook')
+      return;
+    const state = this.state;
+    state.currentView = view;
     this.setState(state);
   }
 }
