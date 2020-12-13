@@ -57,8 +57,8 @@ class App extends React.Component {
   }
 
   switchView = (view) => {
-    //sketchBook and Pad need to go through save and load
-    if (view === 'sketchPad' || view === 'sketchBook')
+    //to access sketchpad, must go through load sketch
+    if (view === 'sketchPad')
       return;
     const state = this.state;
     state.currentView = view;

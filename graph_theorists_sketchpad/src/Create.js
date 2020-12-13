@@ -20,10 +20,7 @@ export default class Create extends React.Component {
               <input type="password" id="user-password" name="" placeholder="Enter Password"/>
               <input type="password" id="user-confirm" name="" placeholder="Confirm Password"/>
               <input type="submit" name="" value="Create"/>
-
-
-              {/*<a href="landing.html">Sign in instead</a>*/}
-
+              
             </form>
 
           </div>
