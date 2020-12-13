@@ -44,9 +44,9 @@ export default class About extends React.Component {
     
                 {/* <li><a href="landing.html">Home</a></li>
                 <li><a href="info.html">About</a></li>    */}
-                
-                {/* <button onClick={this.props.switchView.bind(this, 'landing')}>Landing</button> */}
-    
+
+                <button onClick={this.props.switchView.bind(this, 'landing')}>Home</button>
+                <button onClick={this.props.switchView.bind(this, 'about')}>About</button>
             </ul>
     
         </section>

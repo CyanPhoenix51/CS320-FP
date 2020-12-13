@@ -25,9 +25,9 @@ class App extends React.Component {
       case "create":
         return <Create switchView={this.switchView}/>
       case "landing":
-        return <Landing/>
+        return <Landing switchView={this.switchView}/>
       case "about":
-        return <About/>
+        return <About switchView={this.switchView}/>
       default:
         return <h1>Ooga Booga</h1>
     }

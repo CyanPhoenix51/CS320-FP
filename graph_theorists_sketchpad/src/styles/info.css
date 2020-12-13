@@ -27,22 +27,22 @@ section .dir {
 }
 
 /* Gets rid of the dots in Directory */
-section .dir li {
+/* section .dir li {
     list-style: none;
-}
+} */
 
 /* Directory Settings */
-section .dir li a {
+/* section .dir li a {
     text-decoration: none;
     color: #fff;
     margin-right: 30px;
     font-size: 1.5em;
     font-weight: 755;
-}
+} */
 
-section .dir li a:hover {
+/* section .dir li a:hover {
     color: pink;
-}
+} */
 
 /* Info box */
 section .about {
