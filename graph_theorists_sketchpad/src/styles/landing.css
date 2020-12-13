@@ -24,6 +24,18 @@ section .create-pad {
     position: relative;
     padding: 50px 50px 150px 250px;
     box-sizing: border-box;
+    
+}
+.create-graph{
+    opacity: 87%;
+    background-color: #fff;
+    text-decoration: uppercase;
+    font-size: 1.2em;
+    font-weight: 700;
+    padding: 20px 50px;
+    margin-top: 15px;
+    border-radius: 30px;
+    color:skyblue;
 }
 
 /* Welcome! Settings */
@@ -31,10 +43,6 @@ section .create-pad h1 {
     color: skyblue;
     font-size: 3em;
     font-weight: 800;
-}
-
-section .create-pad a:hover {
-    color: pink;
 }
 
 /* Introduction Line */
