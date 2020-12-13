@@ -60,22 +60,28 @@ section .dir {
     left: 110px;
     display: flex;
 }
-
-/* Gets rid of the dots in Directory */
-section .dir li {
-    list-style: none;
-}
-
-/* Directory Settings */
-section .dir li a {
+section .dir button{
+    top: 30px;
+    left: 110px;
+    display: flex;
     text-decoration: none;
     color: #fff;
     margin-right: 30px;
     font-size: 1.5em;
     font-weight: 755;
+    background-color: transparent;
+    border: none;
 }
 
-section .dir li a:hover {
+.home-button:hover {
+    color: pink;
+}
+
+.about-button:hover {
+    color: pink;
+}
+
+.create-graph:hover {
     color: pink;
 }
 
@@ -137,13 +143,17 @@ section .login input[type="submit"]:hover {
     color: #fff;
 }
 
-/* Forgot PW / Create Account */
-section .login a {
+/* Forgot/Create Account Buttons */
+section form button{
+    display: block;
     text-decoration: none;
     font-size: 16px;
     line-height: 20px;
     color: #000;
+    background-color: transparent;
+    border: none;
 }
+
 
 section .login a:hover {
     color: pink;

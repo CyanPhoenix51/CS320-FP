@@ -19,9 +19,8 @@ export default class Landing extends React.Component {
                         <input type="email" id="user-email" name="" placeholder="Enter E-mail" />
                         <input type="password" id="user-password" name="" placeholder="Enter Password" />
                         <input type="submit" name="" value="Login" />
-
-                        {/*<button className="forgot-account" onClick={this.props.switchView.bind(this, '#')}>Forgot Password</button>
-                        <button className="create-account" onClick={this.props.switchView.bind(this, 'create')}>Create Account</button>*/}
+                        <button className="forgot-account" onClick={this.props.switchView.bind(this, '#')}>Forgot Password</button>
+                        <button className="create-account" onClick={this.props.switchView.bind(this, 'create')}>Create Account</button>
                     </form>
                 </div>
 
@@ -29,14 +28,11 @@ export default class Landing extends React.Component {
                     <input type="submit" id="logoutbutton" name="" value="Logout" />
                 </div>
 
-        <ul className="dir">
-
-           {/*<button onClick={this.props.switchView.bind(this, 'landing')}>Home</button>
-            <button onClick={this.props.switchView.bind(this, 'about')}>About</button>*/}
-
-        </ul>
-
-    </section>
+                <ul className="dir">
+                    <button className='home-button' onClick={this.props.switchView.bind(this, 'landing')}>Home</button>
+                    <button className='about-button' onClick={this.props.switchView.bind(this, 'about')}>About</button>
+                </ul>
+            </section>
         )
     }
 }

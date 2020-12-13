@@ -24,9 +24,9 @@ class App extends React.Component {
       case 'sketchPad':
         return <Sketchpad saveSketch={this.saveSketch} switchView={this.switchView}/>
       case "create":
-        return <Create switchView={this.switchView}/>
+        return <Create />
       case "landing":
-        return <Landing loadSketch={this.loadSketch} switchView={this.switchView}/>
+        return <Landing switchView={this.switchView} loadSketch={this.loadSketch}/>
       case "about":
         return <About switchView={this.switchView}/>
       default:
@@ -54,6 +54,15 @@ class App extends React.Component {
     const state = this.state;
     state.currentView = 'sketchBook';
 
+    this.setState(state);
+  }
+
+  switchView = (view) => {
+    //to access sketchpad, must go through load sketch
+    if (view === 'sketchPad')
+      return;
+    const state = this.state;
+    state.currentView = view;
     this.setState(state);
   }
 }
