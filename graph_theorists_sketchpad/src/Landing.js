@@ -38,8 +38,8 @@ export default class Landing extends React.Component {
 
         <ul className="dir">
 
-            {/* <li><a href="landing.html">Home</a></li>
-            <li><a href="about.html">About</a></li> */}
+            {/* <li><a href="landing.html">Home</a></li>*/}
+            <button onClick={this.props.loadSketch.bind(this, 'about')}>About</button>
 
         </ul>
 
