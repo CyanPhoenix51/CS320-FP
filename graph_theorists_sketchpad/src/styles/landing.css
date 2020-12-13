@@ -72,16 +72,8 @@ section .dir button{
     background-color: transparent;
     border: none;
 }
-
-.home-button:hover {
-    color: pink;
-}
-
-.about-button:hover {
-    color: pink;
-}
-
-.create-graph:hover {
+/*All button text turns pink on hover*/
+button:hover {
     color: pink;
 }
 

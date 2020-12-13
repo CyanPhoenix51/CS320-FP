@@ -5,7 +5,6 @@ export default class Landing extends React.Component {
     render(){
         return (
             <section>
-        
                 <div className="create-pad">
                     <h1>Welcome!</h1>
                     <p>A Web Sketchpad that allows graphing anywhere</p>
