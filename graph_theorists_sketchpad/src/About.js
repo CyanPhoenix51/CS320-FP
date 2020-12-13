@@ -32,11 +32,11 @@ export default class About extends React.Component {
                 <p> ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎Ryan Welborn ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎‎ ‎‎Austin Betts ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ 
                     ‎ ‎‎ ‎‎ ‎‎ ‎‎Taylor Vo ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎‎Edward Le ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎  ‎‎Justin Tu</p>
     
-                <img src={Ryan} class="avatar" />
-                <img src={Austin} class="avatar2" /> 
-                <img src={Taylor} class="avatar3" />
-                <img src={Ed} class="avatar4" />
-                <img src={Justin} class="avatar5" />
+                <img src={Ryan} className="avatar" />
+                <img src={Austin} className="avatar2" /> 
+                <img src={Taylor} className="avatar3" />
+                <img src={Ed} className="avatar4" />
+                <img src={Justin} className="avatar5" />
     
             </div>
     
