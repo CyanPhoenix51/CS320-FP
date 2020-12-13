@@ -1,5 +1,5 @@
 import React from 'react';
-import './styles/info.css';
+import './styles/about.css';
 import Justin from "./Pictures/justin.png";
 import Ed from "./Pictures/ed.png";
 import Taylor from "./Pictures/taylor.png";
@@ -10,10 +10,13 @@ import Stick from "./Pictures/meme.png";
 export default class About extends React.Component {
     render(){
         return (
+
             <section>
+
             <div className="about">
     
-                <h1>Our Purpose.</h1>
+                <h4>Our Purpose.</h4>
+
                 <p>Given the task of designing a software system for our class, we have 
                    chose to develop a graphing sketchpad website. </p>
     
@@ -22,7 +25,7 @@ export default class About extends React.Component {
                     created an online sketchpad that allows anyone from anywhere around the world 
                     to start sketching online.</p>
     
-                <img src={Stick} class="meme" />
+                <img src={Stick} class="meme" alt="Stick" />
                 
             </div>
     
@@ -32,23 +35,21 @@ export default class About extends React.Component {
                 <p> ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎Ryan Welborn ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎‎ ‎‎Austin Betts ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ 
                     ‎ ‎‎ ‎‎ ‎‎ ‎‎Taylor Vo ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎‎Edward Le ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎  ‎‎Justin Tu</p>
     
-                <img src={Ryan} class="avatar" />
-                <img src={Austin} class="avatar2" /> 
-                <img src={Taylor} class="avatar3" />
-                <img src={Ed} class="avatar4" />
-                <img src={Justin} class="avatar5" />
+                <img src={Ryan}className="avatar" alt="Ryan" />
+                <img src={Austin} className="avatar2" alt="Austin" /> 
+                <img src={Taylor} className="avatar3" alt="Taylor" />
+                <img src={Ed} className="avatar4" alt="Ed" />
+                <img src={Justin} className="avatar5" alt="Justin" />
     
             </div>
     
-            <ul className="dir">
-    
-                {/* <li><a href="landing.html">Home</a></li>
-                <li><a href="info.html">About</a></li>    */}
+            <ul className="dir2">
 
-                <button onClick={this.props.switchView.bind(this, 'landing')}>Home</button>
-                <button onClick={this.props.switchView.bind(this, 'about')}>About</button>
+            <button className='home-button' onClick={this.props.switchView.bind(this, 'landing')}>Home</button>
+            <button className='about-button' onClick={this.props.switchView.bind(this, 'about')}>About</button>
+                
             </ul>
-    
+
         </section>
         );
     }

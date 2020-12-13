@@ -75,6 +75,10 @@ section .dir li {
     list-style: none;
 }
 
+section .dir:hover {
+    color: pink;
+}
+
 /* Directory Settings */
 section .dir li a {
     text-decoration: none;

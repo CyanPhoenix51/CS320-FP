@@ -23,10 +23,12 @@ section {
 section .create-pad {
     position: relative;
     padding: 50px 50px 150px 250px;
-    box-sizing: border-box;
+    
     
 }
-.create-graph{
+
+/* Create Graph Button */
+section .create-graph{
     opacity: 87%;
     background-color: #fff;
     text-decoration: uppercase;
@@ -36,11 +38,19 @@ section .create-pad {
     margin-top: 15px;
     border-radius: 30px;
     color:skyblue;
+    outline: none;
+    border: none;
+}
+
+section .create-graph:hover {
+    color: pink;
 }
 
 /* Welcome! Settings */
 section .create-pad h1 {
     color: skyblue;
+    margin-left: -90px;
+    margin-bottom: -25px;
     font-size: 3em;
     font-weight: 800;
 }
@@ -60,6 +70,8 @@ section .dir {
     left: 110px;
     display: flex;
 }
+
+/* Home, About Buttons */
 section .dir button{
     top: 30px;
     left: 110px;
@@ -70,10 +82,11 @@ section .dir button{
     font-size: 1.5em;
     font-weight: 755;
     background-color: transparent;
+    outline: none;
     border: none;
 }
-/*All button text turns pink on hover*/
-button:hover {
+
+section .dir button:hover {
     color: pink;
 }
 
@@ -130,7 +143,6 @@ section .login input[type="submit"] {
 }
 
 section .login input[type="submit"]:hover {
-    cursor: pointer;
     background: pink;
     color: #fff;
 }
@@ -143,12 +155,10 @@ section form button{
     line-height: 20px;
     color: #000;
     background-color: transparent;
+    outline: none;
     border: none;
 }
 
-
-section .login a:hover {
+section form button:hover {
     color: pink;
 }
-
-

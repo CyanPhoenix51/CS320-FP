@@ -7,7 +7,7 @@ export default class Create extends React.Component {
 
         <section>
 
-          <div className="main">
+          <div className="account">
 
             <h1>Create Account</h1>
 
@@ -20,7 +20,9 @@ export default class Create extends React.Component {
               <input type="password" id="user-password" name="" placeholder="Enter Password"/>
               <input type="password" id="user-confirm" name="" placeholder="Confirm Password"/>
               <input type="submit" name="" value="Create"/>
-              
+
+              <button className='signIn-button' onClick={this.props.switchView.bind(this, 'landing')}>Sign In Instead</button>
+
             </form>
 
           </div>
@@ -29,4 +31,4 @@ export default class Create extends React.Component {
 
     );
   }
-}
+} 
