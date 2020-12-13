@@ -1,5 +1,6 @@
 import React from 'react';
 import SavedSketch from "./SavedSketch";
+import './styles/sketchbook.css';
 
 export default class Sketchbook extends React.Component {
   render() {
@@ -17,15 +18,57 @@ export default class Sketchbook extends React.Component {
       x.push(JSON.parse(y[1]));
     }
     return (
-        <div>
-          {x.map((sketch) => (
+      <section>
+
+      <div className="book">
+    
+            <h5> Saved Graphs </h5>
+
+            {x.map((sketch) => (
               <div key={sketch.name} onClick={this.props.loadSketch.bind(this, sketch)}>
                 <SavedSketch sketch={sketch}/>
               </div>
-          ))}
-          <button onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
-        </div>
+            ))}
 
+            <ul className="Graph Buttons">
+
+            <button className="create-graph" onClick={this.props.switchView.bind(this, '#')}>Create Graph</button>
+            <button className="delete-graph" onClick={this.props.switchView.bind(this, '#')}>Delete Graph</button>
+      
+            </ul>
+
+      </div>
+
+      <div className='userinfo'>
+
+      <h6> Profile Information </h6>
+
+      <ul className="info">
+
+        <li id="UserID">User: </li>
+        <li id="Name">Name: </li>
+        <li id="Email">E-mail: </li>
+
+      </ul>
+
+      <div className="logout">
+        
+        <input type="submit" id="logoutbutton" name="" value="Logout"></input>
+
+      </div>
+      </div>
+      </section>
     );
   }
 }
+
+/*
+
+{x.map((sketch) => (
+  <div key={sketch.name} onClick={this.props.loadSketch.bind(this, sketch)}>
+    <SavedSketch sketch={sketch}/>
+  </div>
+))}
+<button onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
+
+*/

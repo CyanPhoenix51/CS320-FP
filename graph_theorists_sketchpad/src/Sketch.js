@@ -11,7 +11,7 @@ export default class Sketch extends React.Component{
       this.vertexRadius = 25 / 2;
       this.edgeWidth = 5;
       this.edgeSpacing = 2.25 * this.edgeWidth;
-      this.selectionBorderRadius = 4;
+      this.selectionBorderRadius = 2;
       this.arrowSize = 10;
       this.loopRadius = 25;
       this.padWidth = 750;
