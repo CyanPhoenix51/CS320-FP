@@ -10,7 +10,7 @@ export default class Landing extends React.Component {
 
                 <h1>Welcome!</h1>
                 <p>A Web Sketchpad that allows graphing anywhere</p>
-                {/* <a href="sketchpad.html">Start Graph</a>     */}
+                <button onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
 
         </div>
 

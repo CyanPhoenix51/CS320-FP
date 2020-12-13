@@ -4,6 +4,7 @@ import Sketchpad from "./Sketchpad";
 import Sketchbook from "./Sketchbook";
 import Create from "./Create.js";
 import Landing from "./Landing.js";
+import About from "./About.js";
 
 const e=React.createElement;
 
@@ -25,7 +26,9 @@ class App extends React.Component {
       case "create":
         return <Create/>
       case "landing":
-        return <Landing/>
+        return <Landing loadSketch={this.loadSketch}/>
+      case "about":
+        return <About switchView={this.switchView}/>
       default:
         return <h1>Ooga Booga</h1>
     }

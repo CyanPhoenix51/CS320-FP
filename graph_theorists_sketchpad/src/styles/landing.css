@@ -20,7 +20,7 @@ section {
     align-items: center;
 }
 
-section .main {
+.main {
     position: relative;
     padding: 50px 50px 150px 250px;
     box-sizing: border-box;
@@ -31,23 +31,6 @@ section .main h1 {
     color: skyblue;
     font-size: 3em;
     font-weight: 800;
-}
-
-/* Background of "Start Graph" button */
-section .main a {
-    color: skyblue;
-    position: relative;
-    display: inline-block;
-    resize: both;
-    overflow: auto;
-    padding: 20px 50px;
-    margin-top: 15px;
-    border-radius: 30px;
-    opacity: 87%;
-    background-color: #fff;
-    text-decoration: uppercase;
-    font-size: 1.2em;
-    font-weight: 700;
 }
 
 section .main a:hover {
