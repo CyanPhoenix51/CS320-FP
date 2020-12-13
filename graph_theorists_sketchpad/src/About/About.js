@@ -1,11 +1,11 @@
 import React from 'react';
-import './styles/info.css';
-import Justin from "./Pictures/justin.png";
-import Ed from "./Pictures/ed.png";
-import Taylor from "./Pictures/taylor.png";
-import Ryan from "./Pictures/ryan.png";
-import Austin from "./Pictures/austin.png";
-import Stick from "./Pictures/meme.png";
+import '../styles/info.css';
+import Justin from "../Pictures/justin.png";
+import Ed from "../Pictures/ed.png";
+import Taylor from "../Pictures/taylor.png";
+import Ryan from "../Pictures/ryan.png";
+import Austin from "../Pictures/austin.png";
+import Stick from "../Pictures/meme.png";
 
 export default class About extends React.Component {
     render(){

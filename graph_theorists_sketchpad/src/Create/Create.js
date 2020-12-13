@@ -1,5 +1,5 @@
 import React from 'react';
-import './styles/create.css';
+import '../styles/create.css';
 
 export default class Create extends React.Component {
   render() {
