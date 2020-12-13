@@ -6,7 +6,7 @@ export default class Landing extends React.Component {
         return (
         <section>
         
-        <div className="main">
+        <div className="create-pad">
 
                 <h1>Welcome!</h1>
                 <p>A Web Sketchpad that allows graphing anywhere</p>
@@ -38,8 +38,8 @@ export default class Landing extends React.Component {
 
         <ul className="dir">
 
-            <button onClick={this.props.switchView.bind(this, 'landing')}>Home</button>
-            <button onClick={this.props.switchView.bind(this, 'about')}>About</button>
+           {/*<button onClick={this.props.switchView.bind(this, 'landing')}>Home</button>
+            <button onClick={this.props.switchView.bind(this, 'about')}>About</button>*/}
 
         </ul>
 

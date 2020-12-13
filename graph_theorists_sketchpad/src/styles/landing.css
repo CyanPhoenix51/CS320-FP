@@ -20,25 +20,25 @@ section {
     align-items: center;
 }
 
-.main {
+section .create-pad {
     position: relative;
     padding: 50px 50px 150px 250px;
     box-sizing: border-box;
 }
 
 /* Welcome! Settings */
-section .main h1 {
+section .create-pad h1 {
     color: skyblue;
     font-size: 3em;
     font-weight: 800;
 }
 
-section .main a:hover {
+section .create-pad a:hover {
     color: pink;
 }
 
 /* Introduction Line */
-section .main p {
+section .create-pad p {
     text-decoration: none;
     color: #fff;
     font-size: 1.2em;
