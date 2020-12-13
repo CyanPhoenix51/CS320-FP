@@ -38,8 +38,8 @@ export default class Landing extends React.Component {
 
         <ul className="dir">
 
-            {/* <li><a href="landing.html">Home</a></li>*/}
-            <button onClick={this.props.loadSketch.bind(this, 'about')}>About</button>
+            <button onClick={this.props.switchView.bind(this, 'landing')}>Home</button>
+            <button onClick={this.props.switchView.bind(this, 'about')}>About</button>
 
         </ul>
 

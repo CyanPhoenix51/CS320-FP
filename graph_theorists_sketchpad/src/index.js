@@ -20,13 +20,13 @@ class App extends React.Component {
   render() {
     switch (this.state.currentView) {
       case "sketchBook":
-        return <Sketchbook loadSketch={this.loadSketch}/>
+        return <Sketchbook loadSketch={this.loadSketch} switchView={this.switchView}/>
       case 'sketchPad':
-        return <Sketchpad saveSketch={this.saveSketch}/>
+        return <Sketchpad saveSketch={this.saveSketch} switchView={this.switchView}/>
       case "create":
         return <Create/>
       case "landing":
-        return <Landing loadSketch={this.loadSketch}/>
+        return <Landing loadSketch={this.loadSketch} switchView={this.switchView}/>
       case "about":
         return <About switchView={this.switchView}/>
       default:
