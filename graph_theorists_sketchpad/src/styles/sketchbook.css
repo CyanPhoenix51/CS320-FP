@@ -49,8 +49,6 @@ section .book li {
 /* Box Size */
 section .savedbox {
     color: black;
-    margin-left: -10px;
-    margin-top: 5px;
     width: 550px;
     height: 410px;
     scroll-behavior: auto;
@@ -61,12 +59,13 @@ section .savedbox {
 }
 
 section .savedbox div{
-    flex: content;
+    margin-top: -20px;
 }
 
-section .savedbox input[type=radio]{
+section .savedbox input{
     position: absolute;
-    margin-top: 5px;
+    margin-left: 40px;
+    margin-top: 21px;
 }
 
 /* Graph Buttons */
