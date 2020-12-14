@@ -49,15 +49,6 @@ clearForm () {
   this.setState(emptyState);
 }
 
-daddySubmitter=(event)=> {
-  if (this.handleSubmit(event)) {
-    console.log(true);
-    this.clearForm();
-    this.props.switchAccountView("sketchBook");
-  }
-  console.log(false);
-}
-
  handleSubmit = (event) => {
    const state = this.state;
    event.preventDefault();
@@ -73,6 +64,7 @@ daddySubmitter=(event)=> {
              displayName: state.firstName + " " + state.lastName
            }).then(() => {
              this.canContinue = true;
+             //TODO maybe needs bind?
              this.props.switchAccountView('sketchBook');
              // this.setState(this.state);
            });

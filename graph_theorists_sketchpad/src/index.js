@@ -11,8 +11,7 @@ class App extends React.Component {
     super(props);
     //views: account, about, sketchPad
     this.state = {
-      currentView: 'account',
-      currentSketch: null
+      currentView: 'account'
     }
   }
 
