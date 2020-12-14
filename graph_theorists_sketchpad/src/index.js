@@ -36,6 +36,7 @@ class App extends React.Component {
 
   loadSketch = (sketch) => {
     //change view
+    console.log("INDEX");
     const state = this.state;
     state.currentView = 'sketchPad';
     document.cookie = 'loadSketch=' + JSON.stringify(sketch);
@@ -65,17 +66,6 @@ class App extends React.Component {
     state.currentView = view;
     this.setState(state);
   }
-  handleOptionChange = changeEvent => {
-    this.setState({
-      selectedOption: changeEvent.target.value
-    });
-  };
-  
-  handleFormSubmit = formSubmitEvent => {
-    formSubmitEvent.preventDefault();
-  
-    console.log("You have submitted:", this.state.selectedOption);
-  };
 }
 
 //const domContainer = document.querySelector('#app_container');

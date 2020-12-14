@@ -59,8 +59,10 @@ section .savedbox {
     line-height: 0px;
 }
 
-section .savedbox div{
-    margin-top: 10px;
+section .savedbox div {
+  --is-selected: null;
+  margin-top: 10px;
+  background: var(--is-selected);
 }
 
 section .savedbox input:checked{
