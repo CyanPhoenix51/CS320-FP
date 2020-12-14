@@ -14,7 +14,6 @@ export default class Create extends React.Component {
   constructor(props) { 
     super(props); 
   this.state = emptyState;
-  this.canContinue=false;
    
 }
 
@@ -33,19 +32,14 @@ clearForm () {
    event.preventDefault();
    if (state.password === state.cpassword) {
      auth.createUserWithEmailAndPassword(state.useremail, state.password).then(cred => {
-       return db.collection('users').doc(cred.user.uid).set({
-         sketchpad: "TestingFromReact"
-       }).then(() => {
-         //Once we created the user, now we update the information about the user.
-         if (cred) {
+       //Once we created the user, now we update the information about the user.
+       if (cred) {
            auth.currentUser.updateProfile({
              displayName: state.firstName + " " + state.lastName
            }).then(() => {
-             this.canContinue = true;
              this.props.switchAccountView('sketchBook');
            });
          }
-       })
      }).catch(error => {
        var errorCode = error.code;
        var errorMessage = error.message;

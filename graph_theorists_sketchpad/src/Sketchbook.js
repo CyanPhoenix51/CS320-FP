@@ -20,12 +20,13 @@ export default class Sketchbook extends React.Component {
     //     x.push(JSON.parse(y[1]));
     //   }
     // }
-    // console.log(this.props.user);
-    let x=[];
-    // db.collection('users').where('user','==',this.props.user.uid).get().then(()=>{
-    //   console.log(this.props.user.docs);
-    // });
-    // console.log(x);
+    const uidRef = db.collection(this.props.user.uid);
+    uidRef.get().then((snapshot) => { 
+      snapshot.forEach(doc => { 
+        console.log(doc.id, '=>', doc.data() )
+      })
+    });
+
     return (
         <div>
           {/*{x.map((sketch) => (*/}
