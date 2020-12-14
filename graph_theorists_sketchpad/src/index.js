@@ -50,8 +50,8 @@ class App extends React.Component {
     if (!s.name)
       return;
 
-    // const userRef=db.collection('users').doc(this.state.user.uid);
-    // console.log(userRef);
+    const userRef=db.collection('sketches').doc(this.state.user.uid+s.name);
+    userRef.set(s);
 
     // const name = s.name;
     // document.cookie = name + '=' + sketch;
