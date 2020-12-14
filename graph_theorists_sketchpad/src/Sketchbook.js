@@ -3,8 +3,20 @@ import SavedSketch from "./SavedSketch";
 import { auth, db } from './firebase.js';
 
 export default class Sketchbook extends React.Component {
+  constructor(props){ 
+    super(props); 
+    this.x = [] 
+  }
   signOut () { 
     auth.signOut(); 
+  }
+  componentDidMount() { 
+    const uidRef = db.collection(this.props.user.uid);
+    uidRef.get().then((snapshot) => { 
+      snapshot.forEach(doc => { 
+        this.x.push(doc.data()); 
+      })
+    });
   }
   render() {
     //don't know where these came from, but they gotta go.
@@ -20,20 +32,14 @@ export default class Sketchbook extends React.Component {
     //     x.push(JSON.parse(y[1]));
     //   }
     // }
-    const uidRef = db.collection(this.props.user.uid);
-    uidRef.get().then((snapshot) => { 
-      snapshot.forEach(doc => { 
-        console.log(doc.id, '=>', doc.data() )
-      })
-    });
-
+    console.log(this.x);
     return (
         <div>
-          {/*{x.map((sketch) => (*/}
-          {/*    <div key={sketch.name} onClick={this.props.loadSketch.bind(this, sketch)}>*/}
-          {/*      <SavedSketch sketch={sketch}/>*/}
-          {/*    </div>*/}
-          {/*))}*/}
+          {this.x.map((sketch) => (
+              <div key={sketch.name} onClick={this.props.loadSketch.bind(this, sketch)}>
+               <SavedSketch sketch={sketch}/>
+             </div>
+          ))}
           <button onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
           <button onClick= {this.signOut}> Sign out </button>
         </div>
