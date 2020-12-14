@@ -65,9 +65,10 @@ daddySubmitter=(event)=> {
          if (cred) {
            auth.currentUser.updateProfile({
              displayName: state.firstName + " " + state.lastName
-           }).then(()=>{
-             this.canContinue=true;
-             this.setState(this.state);
+           }).then(() => {
+             this.canContinue = true;
+             this.props.switchView('sketchBook');
+             // this.setState(this.state);
            });
          }
        })
@@ -92,9 +93,9 @@ daddySubmitter=(event)=> {
  }
 
   render() {
-    if(this.canContinue){
-      this.props.switchView('sketchBook');
-    }
+    // if(this.canContinue){
+    //   this.props.switchView(this, 'sketchBook');
+    // }
     return (
         <section>
           <div className="main">
