@@ -23,7 +23,7 @@ class App extends React.Component {
       case 'sketchPad':
         return <Sketchpad saveSketch={this.saveSketch} switchView={this.switchView}/>
       case "create":
-        return <Create switchView={this.switchView.bind(this)}/>
+        return <Create switchView={this.switchView} loadSketch={this.loadSketch}/>
       case "landing":
         return <Landing switchView={this.switchView}/>
       case "about":
