@@ -29,6 +29,7 @@ export default class Sketchbook extends React.Component {
 
             {x.map((sketch) => (
               <div key={sketch.name} onClick={this.props.loadSketch.bind(this, sketch)}>
+                <input type="radio"/>
                 <SavedSketch sketch={sketch}/>
               </div>
             ))}
