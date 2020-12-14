@@ -37,7 +37,6 @@ export default class Landing extends React.Component {
 
                 <h1>Welcome!</h1>
                 <p>A Web Sketchpad that allows graphing anywhere</p>
-                {/* <a href="sketchpad.html">Start Graph</a>*/} 
 
         </div>
 
@@ -51,7 +50,6 @@ export default class Landing extends React.Component {
                 <input type="password" id="user-password" value={this.state.password} onChange = {this.handleChange} name="password" placeholder="Enter Password" />
                 <input type="submit" onClick = {this.login} name="" value="Login" />
 
-                {/* <a href="#">Forgot Password</a> */}
                 <button onClick={this.props.switchAccountView.bind(this, 'create')}>Create Account</button>
 
             </form>
@@ -65,8 +63,6 @@ export default class Landing extends React.Component {
 
         <ul className="dir">
 
-            {/* <li><a href="landing.html">Home</a></li>
-            <li><a href="about.html">About</a></li> */}
 
         </ul>
 

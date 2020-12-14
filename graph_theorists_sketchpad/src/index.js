@@ -52,7 +52,6 @@ class App extends React.Component {
   }
 
   switchView = (view) => {
-    console.log(view);
     //to access sketchpad, must go through load sketch
     if (view === 'sketchPad')
       return;

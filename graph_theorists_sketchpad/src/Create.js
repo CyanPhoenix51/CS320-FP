@@ -18,27 +18,6 @@ export default class Create extends React.Component {
    
 }
 
-/* handleChange (event) {
-  const { id, value } = event.currentTarget;  
-  const state = this.state; 
-  if ( id === "first-name") { 
-    state.firstName = value; 
-  }
-  else if(id=== "last-name") { 
-    state.lastName = value;
-  }
-  else if(id=== "user-email") { 
-    state.useremail = value;
-  }
-  else if(id=== "user-password") { 
-    state.password = value;
-  }
-  else if(id === "user-confirm") { 
-    state.cpassword = value;
-  }
-  this.setState(state);
-}
-*/
 handleChange(e) { 
         this.setState( { 
             [e.target.name] : e.target.value, 
@@ -63,9 +42,7 @@ clearForm () {
              displayName: state.firstName + " " + state.lastName
            }).then(() => {
              this.canContinue = true;
-             //TODO maybe needs bind?
              this.props.switchAccountView('sketchBook');
-             // this.setState(this.state);
            });
          }
        })
@@ -90,9 +67,6 @@ clearForm () {
  }
 
   render() {
-    // if(this.canContinue){
-    //   this.props.switchView(this, 'sketchBook');
-    // }
     return (
         <section>
           <div className="main">
@@ -105,7 +79,6 @@ clearForm () {
               <input type="password" id="user-password" name="password" placeholder="Enter Password" onChange = {event => this.handleChange(event)}/>
               <input type="password" id="user-confirm" name="cpassword" placeholder="Confirm Password" onChange = {event => this.handleChange(event)}/>
               <input type="submit" name="" value="Create" onClick = {this.handleSubmit}/>
-              {/*<a href="landing.html">Sign in instead</a>*/}
             </form>
           </div>
         </section>
