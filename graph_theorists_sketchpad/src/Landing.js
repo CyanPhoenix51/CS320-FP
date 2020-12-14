@@ -1,7 +1,34 @@
 import React from 'react';
+import { auth } from './firebase';
 import './styles/landing.css';
 
 export default class Landing extends React.Component {
+    constructor(props) { 
+        super(props);
+        this.login = this.login.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.state = { 
+            email: '', 
+            password: '',
+        }
+    }
+    
+    login (e) { 
+        e.preventDefault(); 
+        auth.signInWithEmailAndPassword(this.state.email, this.state.password).then((cred) => { 
+            if(cred) { 
+                console.log(cred);
+            }
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+    handleChange(e) { 
+        this.setState( { 
+            [e.target.name] : e.target.value, 
+        })
+    }
+     
     render(){
         return (
         <section>
@@ -20,12 +47,12 @@ export default class Landing extends React.Component {
 
             <form id="signin-form">
 
-                <input type="email" id="user-email" name="" placeholder="Enter E-mail" />
-                <input type="password" id="user-password" name="" placeholder="Enter Password" />
-                <input type="submit" name="" value="Login" />
+                <input type="email" id="user-email" value = {this.state.email} onChange = {this.handleChange} name="email" placeholder="Enter E-mail" />
+                <input type="password" id="user-password" value={this.state.password} onChange = {this.handleChange} name="password" placeholder="Enter Password" />
+                <input type="submit" onClick = {this.login} name="" value="Login" />
 
-                {/* <a href="#">Forgot Password</a>
-                <a href="create.html">Create Account</a> */}
+                {/* <a href="#">Forgot Password</a> */}
+                <button>Create Account</button>
 
             </form>
         </div>

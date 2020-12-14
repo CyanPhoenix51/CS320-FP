@@ -18,7 +18,7 @@ export default class Create extends React.Component {
    
 }
 
-handleChange (event) {
+/* handleChange (event) {
   const { id, value } = event.currentTarget;  
   const state = this.state; 
   if ( id === "first-name") { 
@@ -38,6 +38,12 @@ handleChange (event) {
   }
   this.setState(state);
 }
+*/
+handleChange(e) { 
+        this.setState( { 
+            [e.target.name] : e.target.value, 
+        })
+    }
 
 clearForm () { 
   this.setState(emptyState);
@@ -47,7 +53,7 @@ daddySubmitter=(event)=> {
   if (this.handleSubmit(event)) {
     console.log(true);
     this.clearForm();
-    this.props.switchView("sketchBook");
+    this.props.switchAccountView("sketchBook");
   }
   console.log(false);
 }
@@ -67,7 +73,7 @@ daddySubmitter=(event)=> {
              displayName: state.firstName + " " + state.lastName
            }).then(() => {
              this.canContinue = true;
-             this.props.switchView('sketchBook');
+             this.props.switchAccountView('sketchBook');
              // this.setState(this.state);
            });
          }
@@ -101,12 +107,12 @@ daddySubmitter=(event)=> {
           <div className="main">
             <h1>Create Account</h1>
             <form id="signup-form">
-              <input type="fname" id="first-name" name="" placeholder="Enter First Name" onChange = {event => this.handleChange(event)}/>
-              <input type="lname" id="last-name" name="" placeholder="Enter Last Name" onChange = {event => this.handleChange(event)}/>
+              <input type="fname" id="first-name" name="firstName" placeholder="Enter First Name" onChange = {event => this.handleChange(event)}/>
+              <input type="lname" id="last-name" name="lastName" placeholder="Enter Last Name" onChange = {event => this.handleChange(event)}/>
 
-              <input type="email" id="user-email" name="" placeholder="Enter E-mail" onChange = {event => this.handleChange(event)}/>
-              <input type="password" id="user-password" name="" placeholder="Enter Password" onChange = {event => this.handleChange(event)}/>
-              <input type="password" id="user-confirm" name="" placeholder="Confirm Password" onChange = {event => this.handleChange(event)}/>
+              <input type="email" id="user-email" name="useremail" placeholder="Enter E-mail" onChange = {event => this.handleChange(event)}/>
+              <input type="password" id="user-password" name="password" placeholder="Enter Password" onChange = {event => this.handleChange(event)}/>
+              <input type="password" id="user-confirm" name="cpassword" placeholder="Confirm Password" onChange = {event => this.handleChange(event)}/>
               <input type="submit" name="" value="Create" onClick = {this.handleSubmit}/>
               {/*<a href="landing.html">Sign in instead</a>*/}
             </form>

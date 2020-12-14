@@ -18,7 +18,7 @@ class App extends React.Component {
 
   render() {
     switch (this.state.currentView) {
-      case 'accoung':
+      case 'account':
         return <Account switchView={this.switchView} loadSketch={this.loadSketch}/>
       case 'sketchPad':
         return <Sketchpad saveSketch={this.saveSketch} switchView={this.switchView}/>

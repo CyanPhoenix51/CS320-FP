@@ -9,7 +9,6 @@ export default class Sketchbook extends React.Component {
 
     let sketches = decodeURIComponent(document.cookie);
     sketches = sketches.split(';');
-    console.log(sketches);
     //get rid of not needed parts
     let x = [];
     for (let i = 0; i < sketches.length; i++) {
