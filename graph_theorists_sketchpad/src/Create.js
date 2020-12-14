@@ -57,7 +57,6 @@ clearForm () {
        return db.collection('users').doc(cred.user.uid).set({
          sketchpad: "TestingFromReact"
        }).then(() => {
-         console.log(cred);
          //Once we created the user, now we update the information about the user.
          if (cred) {
            auth.currentUser.updateProfile({

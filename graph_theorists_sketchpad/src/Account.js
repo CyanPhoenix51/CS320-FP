@@ -33,10 +33,7 @@ export default class Account extends React.Component {
   }
 
   render() {
-
     if (this.state.user) {
-      console.log("HERE");
-      this.state.currentView = 'sketchBook';
       return <Sketchbook switchAccountView={this.switchAccountView} loadSketch={this.props.loadSketch}/>
     } else {
       switch (this.state.currentView) {
@@ -51,7 +48,8 @@ export default class Account extends React.Component {
   }
 
   switchAccountView=(view)=> {
-    this.state.currentView = view;
-    this.setState(this.state);
+    const state = this.state;
+    state.currentView = view;
+    this.setState(state);
   }
 }
