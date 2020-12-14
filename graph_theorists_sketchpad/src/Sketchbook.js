@@ -68,13 +68,3 @@ export default class Sketchbook extends React.Component {
   }
 }
 
-/*
-
-{x.map((sketch) => (
-  <div key={sketch.name} onClick={this.props.loadSketch.bind(this, sketch)}>
-    <SavedSketch sketch={sketch}/>
-  </div>
-))}
-<button onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
-
-*/
