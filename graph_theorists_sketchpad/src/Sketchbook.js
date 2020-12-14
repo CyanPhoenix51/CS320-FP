@@ -38,6 +38,7 @@ export default class Sketchbook extends React.Component {
             <ul className="Graph Buttons">
 
             <button className='create-graph' onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
+            <button className='load-graph' onClick={this.props.loadSketch.bind(this, null)}>Load Graph</button>
             <button className='delete-graph' onClick={this.props.switchView.bind(this, '#')}>Delete Graph</button>
       
             </ul>

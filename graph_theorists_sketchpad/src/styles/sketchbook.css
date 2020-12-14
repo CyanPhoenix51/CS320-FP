@@ -65,12 +65,12 @@ section .book button {
     resize: both;
     padding: 20px 50px;
     margin-top: 65px;
-    margin-left: 75px;
+    margin-left: 22px;
     border-radius: 30px;
     opacity: 95%;
     background-color: skyblue;
     text-decoration: uppercase;
-    font-size: 0.80em;
+    font-size: 0.70em;
     font-weight: 800;
     outline: none;
     border: none;
