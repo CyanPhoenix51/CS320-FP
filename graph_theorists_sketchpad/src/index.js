@@ -11,7 +11,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentView: 'about',
+      currentView: 'create',
       currentSketch: null
     }
   }
@@ -23,7 +23,7 @@ class App extends React.Component {
       case 'sketchPad':
         return <Sketchpad saveSketch={this.saveSketch} switchView={this.switchView}/>
       case "create":
-        return <Create switchView={this.switchView}/>
+        return <Create switchView={this.switchView.bind(this)}/>
       case "landing":
         return <Landing switchView={this.switchView}/>
       case "about":
@@ -57,6 +57,7 @@ class App extends React.Component {
   }
 
   switchView = (view) => {
+    console.log(view);
     //to access sketchpad, must go through load sketch
     if (view === 'sketchPad')
       return;
