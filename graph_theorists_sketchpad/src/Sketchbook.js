@@ -1,13 +1,32 @@
 import React from 'react';
 import SavedSketch from "./SavedSketch";
 import './styles/sketchbook.css';
+import { auth, db } from './firebase.js';
 
 export default class Sketchbook extends React.Component {
   constructor(props) {
     super(props);
+    this.state={
+      x: []
+    }
     //holds the keys of all selected divs containing saved sketches
     this.selectedSketchDoc = null;
     this.selectedSketch = null;
+  }
+  
+  signOut () { 
+    auth.signOut(); 
+  }
+
+  componentDidMount() {
+    const uidRef = db.collection(this.props.user.uid);
+    uidRef.get().then((snapshot) => {
+      const state = this.state;
+      snapshot.forEach(doc => {
+        state.x.push(doc.data());
+      })
+      this.setState(state);
+    });
   }
 
   handleSelect=(key, sketch)=> {
@@ -29,21 +48,8 @@ export default class Sketchbook extends React.Component {
       this.props.loadSketch.bind(this, this.selectedSketch);
     }
   }
-
-  render() {
-    //don't know where these came from, but they gotta go.
-    document.cookie = '_ga=;expires=Thu, 18 Dec 2013 12:00:00 UTC';
-    document.cookie = '_ga_PTLBR59D27=;expires=Thu, 18 Dec 2013 12:00:00 UTC';
-    document.cookie = 'loadSketch=;expires=Thu, 18 Dec 2013 12:00:00 UTC';
-
-    let sketches = decodeURIComponent(document.cookie);
-    sketches = sketches.split(';');
-    //get rid of not needed parts
-    let x = [];
-    for (let i = 0; i < sketches.length; i++) {
-      let y = sketches[i].split('=');
-      x.push(JSON.parse(y[1]));
-    }
+  
+   render() {
     return (
         <section>
 
@@ -53,11 +59,13 @@ export default class Sketchbook extends React.Component {
 
             <div className="savedbox">
 
-              {x.map((sketch) => (
-                  <div key={sketch.name} id={sketch.name} onClick={this.handleSelect.bind(this, sketch.name, sketch)}>
-                    <SavedSketch sketch={sketch}/>
-                  </div>
-              ))}
+          {this.state.x.map((sketch) => (
+              <div key={sketch.name} onClick={this.props.loadSketch.bind(this, sketch)}>
+               <SavedSketch sketch={sketch}/>
+             </div>
+          ))}
+          <button onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
+          <button onClick= {this.signOut}> Sign out </button>
 
             </div>
             <ul className="Graph Buttons">
@@ -91,5 +99,3 @@ export default class Sketchbook extends React.Component {
         </section>
     );
   }
-}
-

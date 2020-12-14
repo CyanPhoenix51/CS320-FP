@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 import './styles/about.css';
 import Justin from "./Pictures/justin.png";

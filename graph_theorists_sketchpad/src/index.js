@@ -1,32 +1,29 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import Sketchpad from "./Sketchpad";
-import Sketchbook from "./Sketchbook";
-import Create from "./Create.js";
-import Landing from "./Landing.js";
 import About from "./About.js";
+import Account from "./Account.js";
+import {db} from "./firebase.js";
 
 const e=React.createElement;
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+    //views: account, about, sketchPad
     this.state = {
-      currentView: 'landing',
-      currentSketch: null
+      currentView: 'account',
+      user: null,
+      sketchToLoad: null
     }
   }
 
   render() {
     switch (this.state.currentView) {
-      case "sketchBook":
-        return <Sketchbook loadSketch={this.loadSketch} switchView={this.switchView}/>
+      case 'account':
+        return <Account switchView={this.switchView} loadSketch={this.loadSketch} assignUser={this.assignUser}/>
       case 'sketchPad':
-        return <Sketchpad saveSketch={this.saveSketch} switchView={this.switchView}/>
-      case "create":
-        return <Create switchView={this.switchView} loadSketch={this.loadSketch}/>
-      case "landing":
-        return <Landing switchView={this.switchView} loadSketch={this.loadSketch}/>
+        return <Sketchpad saveSketch={this.saveSketch} switchView={this.switchView} loadSketch={this.state.sketchToLoad}/>
       case "about":
         return <About switchView={this.switchView} loadSketch={this.loadSketch}/>
       default:
@@ -34,12 +31,18 @@ class App extends React.Component {
     }
   }
 
+  assignUser =(user)=> {
+    const state = this.state;
+    state.user = user;
+    this.setState(state);
+  }
+
   loadSketch = (sketch) => {
     //change view
     console.log("INDEX");
     const state = this.state;
     state.currentView = 'sketchPad';
-    document.cookie = 'loadSketch=' + JSON.stringify(sketch);
+    state.sketchToLoad = sketch;
     this.setState(state);
   }
 
@@ -48,12 +51,13 @@ class App extends React.Component {
     const s = JSON.parse(sketch);
     if (!s.name)
       return;
-    const name = s.name;
-    document.cookie = name + '=' + sketch;
+
+    const userRef = db.collection(this.state.user.uid).doc(s.name);
+    userRef.set(s);
 
     //change view
     const state = this.state;
-    state.currentView = 'sketchBook';
+    state.currentView = 'account';
 
     this.setState(state);
   }
