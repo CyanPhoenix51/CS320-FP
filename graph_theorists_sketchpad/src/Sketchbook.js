@@ -4,18 +4,22 @@ import { auth, db } from './firebase.js';
 
 export default class Sketchbook extends React.Component {
   constructor(props){ 
-    super(props); 
-    this.x = [] 
+    super(props);
+    this.state={
+      x: []
+    }
   }
   signOut () { 
     auth.signOut(); 
   }
-  componentDidMount() { 
+  componentDidMount() {
     const uidRef = db.collection(this.props.user.uid);
-    uidRef.get().then((snapshot) => { 
-      snapshot.forEach(doc => { 
-        this.x.push(doc.data()); 
+    uidRef.get().then((snapshot) => {
+      const state = this.state;
+      snapshot.forEach(doc => {
+        state.x.push(doc.data());
       })
+      this.setState(state);
     });
   }
   render() {
@@ -32,10 +36,10 @@ export default class Sketchbook extends React.Component {
     //     x.push(JSON.parse(y[1]));
     //   }
     // }
-    console.log(this.x);
+    console.log(this.state.x);
     return (
         <div>
-          {this.x.map((sketch) => (
+          {this.state.x.map((sketch) => (
               <div key={sketch.name} onClick={this.props.loadSketch.bind(this, sketch)}>
                <SavedSketch sketch={sketch}/>
              </div>
