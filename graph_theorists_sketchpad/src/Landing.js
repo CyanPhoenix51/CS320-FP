@@ -28,6 +28,9 @@ export default class Landing extends React.Component {
             [e.target.name] : e.target.value, 
         })
     }
+    signOut(e) { 
+        auth.signOut(); 
+    }
      
     render(){
         return (
@@ -51,6 +54,7 @@ export default class Landing extends React.Component {
                 <input type="submit" onClick = {this.login} name="" value="Login" />
 
                 <button onClick={this.props.switchAccountView.bind(this, 'create')}>Create Account</button>
+                <button onClick= {this.signOut} > Sign out </button>
 
             </form>
         </div>

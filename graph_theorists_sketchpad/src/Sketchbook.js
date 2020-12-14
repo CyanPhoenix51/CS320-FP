@@ -1,7 +1,11 @@
 import React from 'react';
 import SavedSketch from "./SavedSketch";
+import { auth, db } from './firebase.js';
 
 export default class Sketchbook extends React.Component {
+  signOut () { 
+    auth.signOut(); 
+  }
   render() {
     //don't know where these came from, but they gotta go.
     document.cookie='_ga=;expires=Thu, 18 Dec 2013 12:00:00 UTC';
@@ -24,6 +28,7 @@ export default class Sketchbook extends React.Component {
               </div>
           ))}
           <button onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
+          <button onClick= {this.signOut}> Sign out </button>
         </div>
 
     );
