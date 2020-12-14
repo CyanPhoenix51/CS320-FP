@@ -3,6 +3,7 @@ import ReactDom from 'react-dom';
 import Sketchpad from "./Sketchpad";
 import About from "./About.js";
 import Account from "./Account.js";
+import {db} from "./firebase.js";
 
 const e=React.createElement;
 
@@ -11,14 +12,15 @@ class App extends React.Component {
     super(props);
     //views: account, about, sketchPad
     this.state = {
-      currentView: 'account'
+      currentView: 'account',
+      user: null
     }
   }
 
   render() {
     switch (this.state.currentView) {
       case 'account':
-        return <Account switchView={this.switchView} loadSketch={this.loadSketch}/>
+        return <Account switchView={this.switchView} loadSketch={this.loadSketch} assignUser={this.assignUser}/>
       case 'sketchPad':
         return <Sketchpad saveSketch={this.saveSketch} switchView={this.switchView}/>
       case "about":
@@ -26,6 +28,12 @@ class App extends React.Component {
       default:
         return <h1>Ooga Booga</h1>
     }
+  }
+
+  assignUser =(user)=> {
+    const state = this.state;
+    state.user = user;
+    this.setState(state);
   }
 
   loadSketch = (sketch) => {
@@ -41,8 +49,12 @@ class App extends React.Component {
     const s = JSON.parse(sketch);
     if (!s.name)
       return;
-    const name = s.name;
-    document.cookie = name + '=' + sketch;
+
+    // const userRef=db.collection('users').doc(this.state.user.uid);
+    // console.log(userRef);
+
+    // const name = s.name;
+    // document.cookie = name + '=' + sketch;
 
     //change view
     const state = this.state;

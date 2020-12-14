@@ -33,7 +33,7 @@ clearForm () {
    event.preventDefault();
    if (state.password === state.cpassword) {
      auth.createUserWithEmailAndPassword(state.useremail, state.password).then(cred => {
-       return db.collection('users').doc(cred.user.uid).set({
+       return db.collection(cred.user.uid).add({
          sketchpad: "TestingFromReact"
        }).then(() => {
          //Once we created the user, now we update the information about the user.

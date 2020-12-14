@@ -23,9 +23,11 @@ export default class Account extends React.Component {
       const state = this.state;
       if (user) {
         state.user = user;
+        this.props.assignUser(user);
         this.setState(state);
       } else {
         state.user = null;
+        this.props.assignUser(null);
         this.setState(state);
       }
     });
@@ -34,7 +36,7 @@ export default class Account extends React.Component {
 
   render() {
     if (this.state.user) {
-      return <Sketchbook switchAccountView={this.switchAccountView} loadSketch={this.props.loadSketch}/>
+      return <Sketchbook switchAccountView={this.switchAccountView} loadSketch={this.props.loadSketch} user={this.state.user}/>
     } else {
       switch (this.state.currentView) {
         case 'landing':
