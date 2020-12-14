@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import Sketchpad from "./Sketchpad/Sketchpad";
-import Sketchbook from "./Sketchbook/Sketchbook";
-import Create from "./Create/Create.js";
-import Landing from "./Landing/Landing.js";
-import About from "./About/About.js";
+import Sketchpad from "./Sketchpad";
+import Sketchbook from "./Sketchbook";
+import Create from "./Create.js";
+import Landing from "./Landing.js";
+import About from "./About.js";
 const e=React.createElement;
 
 class App extends React.Component {

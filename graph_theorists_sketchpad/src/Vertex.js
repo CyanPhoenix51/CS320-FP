@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/main.css';
+import './styles/main.css';
 
 //Each vertex that is on the pad
 export default class Vertex extends React.Component {

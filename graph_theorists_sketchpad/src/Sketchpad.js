@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/main.css';
+import './styles/main.css';
 import Sketch from './Sketch';
 
 //The Sketchpad Page
