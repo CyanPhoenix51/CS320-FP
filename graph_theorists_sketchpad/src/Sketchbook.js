@@ -1,15 +1,19 @@
 import React from 'react';
 import SavedSketch from "./SavedSketch";
+import './styles/sketchbook.css';
 import { auth, db } from './firebase.js';
 
 export default class Sketchbook extends React.Component {
-  constructor(props){ 
+  constructor(props) {
     super(props);
     this.state={
       x: []
     }
+    //holds the keys of all selected divs containing saved sketches
+    this.selectedSketchDoc = null;
+    this.selectedSketch = null;
   }
-
+  
   signOut () { 
     auth.signOut(); 
   }
@@ -25,9 +29,36 @@ export default class Sketchbook extends React.Component {
     });
   }
 
-  render() {
+  handleSelect=(key, sketch)=> {
+    //are we selecting or deselecting?
+    if(this.selectedSketchDoc){
+      //deselect selected document
+      this.selectedSketchDoc.style.setProperty('--is-selected', null);
+    }
+    //send signal to this guy
+    this.selectedSketchDoc = document.getElementById(key);
+    this.selectedSketchDoc.style.setProperty('--is-selected', 'pink');
+
+    //the guy we'd actually be loading/deleting
+    this.selectedSketch = sketch;
+  }
+
+  attemptLoadSketch=()=> {
+    if (this.selectedSketch) {
+      this.props.loadSketch.bind(this, this.selectedSketch);
+    }
+  }
+  
+   render() {
     return (
-        <div>
+        <section>
+
+          <div className="book">
+
+            <h5> Saved Graphs </h5>
+
+            <div className="savedbox">
+
           {this.state.x.map((sketch) => (
               <div key={sketch.name} onClick={this.props.loadSketch.bind(this, sketch)}>
                <SavedSketch sketch={sketch}/>
@@ -35,8 +66,36 @@ export default class Sketchbook extends React.Component {
           ))}
           <button onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
           <button onClick= {this.signOut}> Sign out </button>
-        </div>
 
+            </div>
+            <ul className="Graph Buttons">
+
+              <button className='create-graph' onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
+              <button className='load-graph' onClick={this.attemptLoadSketch.bind(this)}>Load Graph</button>
+              <button className='delete-graph' onClick={this.props.switchView.bind(this, '#')}>Delete Graph</button>
+
+            </ul>
+
+          </div>
+
+          <div className='userinfo'>
+
+            <h6> Profile Information </h6>
+
+            <ul className="info">
+
+              <li id="UserID">User:</li>
+              <li id="Name">Name:</li>
+              <li id="Email">E-mail:</li>
+
+            </ul>
+
+            <div className="logout">
+
+              <input type="submit" id="logoutbutton" name="" value="Logout"></input>
+
+            </div>
+          </div>
+        </section>
     );
   }
-}

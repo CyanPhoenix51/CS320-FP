@@ -12,7 +12,7 @@
 section {
     position: relative;
     min-height: 100vh;
-    background-image: url(../Pictures/bg3.jpg);
+    background-image: url(../Pictures/bg2.png);
     background-size: cover;
     background-position: top;
     display: flex;
@@ -20,10 +20,131 @@ section {
     align-items: center;
 }
 
-section .main {
+/* Saved Graphs Background */
+section .book {
     position: relative;
-    padding: 50px 50px 150px 250px;
+    opacity: 87%;
+    background: #fff;
+    height: 600px;
+    width: 600px;
     box-sizing: border-box;
+    margin-left: 220px;
+    border-radius: 12.5px;
 }
 
-section .graph
+/* Saved Graphs */
+section h5 {
+    color: skyblue;
+    margin-left: 200px;
+    margin-top: 17.5px;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+/* Get rid of bullet points  */
+section .book li {
+    list-style: none;
+}
+
+/* Box Size */
+section .savedbox {
+    color: black;
+    width: 550px;
+    height: 440px;
+    margin-left: 15px;
+    scroll-behavior: auto;
+    overflow: auto;
+    position: relative;
+    display: block;
+    line-height: 0px;
+}
+
+section .savedbox div {
+  --is-selected: null;
+  margin-top: 10px;
+  background: var(--is-selected);
+}
+
+section .savedbox input{
+    position: absolute;
+    margin-left: 40px;
+    margin-top: 20px;
+}
+
+/* Graph Buttons */
+section .book button {
+    color: #fff;
+    position: sticky;
+    display: inline-block;
+    resize: both;
+    padding: 20px 50px;
+    margin-top: 43px;
+    margin-left: 15px;
+    border-radius: 30px;
+    opacity: 95%;
+    background-color: skyblue;
+    text-decoration: uppercase;
+    font-size: 0.80em;
+    font-weight: 800;
+    outline: none;
+    border: none;
+}
+
+section .book button:hover {
+    color: pink;
+}
+
+/* User / input info box */
+section .userinfo {
+    position: relative;
+    background: #fff;
+    opacity: 90%;
+    height: 500px;
+    width: 400px;
+    box-sizing: border-box;
+    right: 400px;
+    border-radius: 12.5px;
+}
+
+/* Profile Information */
+section h6 {
+    color: skyblue;
+    margin-left: 97px;
+    margin-top: 15px;
+    font-size: 22px;
+}
+
+/* Get rid of bullet points  */
+section .userinfo li {
+    list-style: none;
+}
+
+/* Button Location */
+section .userinfo .info {
+    margin-top: 5%;
+    margin-left: 7%;
+    line-height: 40px;
+}
+
+/* Logout Button */
+section .logout input {
+    color: #fff;
+    position: relative;
+    display: inline-block;
+    resize: both;
+    border: none;
+    padding: 20px 50px;
+    margin-top: 250px;
+    margin-left: 125px;
+    border-radius: 30px;
+    background-color: skyblue;
+    text-decoration: uppercase;
+    font-size: 0.8em;
+    font-weight: 600;
+    outline: none;
+    border: none;
+}
+
+section .logout input:hover {
+    color: pink;
+}

@@ -25,7 +25,7 @@ class App extends React.Component {
       case 'sketchPad':
         return <Sketchpad saveSketch={this.saveSketch} switchView={this.switchView} loadSketch={this.state.sketchToLoad}/>
       case "about":
-        return <About switchView={this.switchView}/>
+        return <About switchView={this.switchView} loadSketch={this.loadSketch}/>
       default:
         return <h1>Ooga Booga</h1>
     }
@@ -39,6 +39,7 @@ class App extends React.Component {
 
   loadSketch = (sketch) => {
     //change view
+    console.log("INDEX");
     const state = this.state;
     state.currentView = 'sketchPad';
     state.sketchToLoad = sketch;

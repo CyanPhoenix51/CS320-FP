@@ -20,42 +20,43 @@ section {
     align-items: center;
 }
 
-section .main {
+section .create-pad {
     position: relative;
     padding: 50px 50px 150px 250px;
-    box-sizing: border-box;
+    
+    
 }
 
-/* Welcome! Settings */
-section .main h1 {
-    color: skyblue;
-    font-size: 3em;
-    font-weight: 800;
-}
-
-/* Background of "Start Graph" button */
-section .main a {
-    color: skyblue;
-    position: relative;
-    display: inline-block;
-    resize: both;
-    overflow: auto;
-    padding: 20px 50px;
-    margin-top: 15px;
-    border-radius: 30px;
+/* Create Graph Button */
+section .create-graph{
     opacity: 87%;
     background-color: #fff;
     text-decoration: uppercase;
     font-size: 1.2em;
     font-weight: 700;
+    padding: 20px 50px;
+    margin-top: 15px;
+    border-radius: 30px;
+    color:skyblue;
+    outline: none;
+    border: none;
 }
 
-section .main a:hover {
+section .create-graph:hover {
     color: pink;
 }
 
+/* Welcome! Settings */
+section .create-pad h1 {
+    color: skyblue;
+    margin-left: -90px;
+    margin-bottom: -25px;
+    font-size: 3em;
+    font-weight: 800;
+}
+
 /* Introduction Line */
-section .main p {
+section .create-pad p {
     text-decoration: none;
     color: #fff;
     font-size: 1.2em;
@@ -70,21 +71,22 @@ section .dir {
     display: flex;
 }
 
-/* Gets rid of the dots in Directory */
-section .dir li {
-    list-style: none;
-}
-
-/* Directory Settings */
-section .dir li a {
+/* Home, About Buttons */
+section .dir button{
+    top: 30px;
+    left: 110px;
+    display: flex;
     text-decoration: none;
     color: #fff;
     margin-right: 30px;
     font-size: 1.5em;
     font-weight: 755;
+    background-color: transparent;
+    outline: none;
+    border: none;
 }
 
-section .dir li a:hover {
+section .dir button:hover {
     color: pink;
 }
 
@@ -141,21 +143,22 @@ section .login input[type="submit"] {
 }
 
 section .login input[type="submit"]:hover {
-    cursor: pointer;
     background: pink;
     color: #fff;
 }
 
-/* Forgot PW / Create Account */
-section .login a {
+/* Forgot/Create Account Buttons */
+section form button{
+    display: block;
     text-decoration: none;
     font-size: 16px;
     line-height: 20px;
     color: #000;
+    background-color: transparent;
+    outline: none;
+    border: none;
 }
 
-section .login a:hover {
+section form button:hover {
     color: pink;
 }
-
-
