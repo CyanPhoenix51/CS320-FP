@@ -46,14 +46,25 @@ section .book li {
     list-style: none;
 }
 
+/* Box Size */
+section .savedbox {
+    color: black;
+    margin-left: -10px;
+    margin-top: 5px;
+    width: 550px;
+    height: 410px;
+    scroll-behavior: auto;
+    overflow: auto;
+}
+
 /* Graph Buttons */
 section .book button {
     color: #fff;
-    position: relative;
+    position: sticky;
     display: inline-block;
     resize: both;
     padding: 20px 50px;
-    margin-top: 400px;
+    margin-top: 65px;
     margin-left: 75px;
     border-radius: 30px;
     opacity: 95%;

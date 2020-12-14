@@ -23,10 +23,6 @@ export default class Landing extends React.Component {
                     </form>
                 </div>
 
-                <div className="logout">
-                    <input type="submit" id="logoutbutton" name="" value="Logout" />
-                </div>
-
                 <ul className="dir">
                     <button className='home-button' onClick={this.props.switchView.bind(this, 'landing')}>Home</button>
                     <button className='about-button' onClick={this.props.switchView.bind(this, 'about')}>About</button>

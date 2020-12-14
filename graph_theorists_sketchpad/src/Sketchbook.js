@@ -7,6 +7,7 @@ export default class Sketchbook extends React.Component {
     //don't know where these came from, but they gotta go.
     document.cookie='_ga=;expires=Thu, 18 Dec 2013 12:00:00 UTC';
     document.cookie='_ga_PTLBR59D27=;expires=Thu, 18 Dec 2013 12:00:00 UTC';
+    document.cookie = 'loadSketch=;expires=Thu, 18 Dec 2013 12:00:00 UTC';
 
     let sketches = decodeURIComponent(document.cookie);
     sketches = sketches.split(';');
@@ -24,16 +25,19 @@ export default class Sketchbook extends React.Component {
     
             <h5> Saved Graphs </h5>
 
+          <div className="savedbox">
+
             {x.map((sketch) => (
               <div key={sketch.name} onClick={this.props.loadSketch.bind(this, sketch)}>
                 <SavedSketch sketch={sketch}/>
               </div>
             ))}
-
+            
+          </div>
             <ul className="Graph Buttons">
 
-            <button className="create-graph" onClick={this.props.switchView.bind(this, '#')}>Create Graph</button>
-            <button className="delete-graph" onClick={this.props.switchView.bind(this, '#')}>Delete Graph</button>
+            <button className='create-graph' onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
+            <button className='delete-graph' onClick={this.props.switchView.bind(this, '#')}>Delete Graph</button>
       
             </ul>
 
