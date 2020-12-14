@@ -34,13 +34,10 @@ export default class Sketch extends React.Component{
       this.selectedEdges = [];
       this.bridges = [];
 
-      const loadSketch = JSON.parse(this.findLoadSketchCookie());
-      //expire the cookie
-      document.cookie = 'loadSketch=;expires=Thu, 18 Dec 2013 12:00:00 UTC';
-      if (loadSketch) {
+      if (this.props.loadSketch) {
         //gonna need to recreate some stuff
-        this.state = loadSketch;
-        this.loadSketch(loadSketch);
+        this.state = this.props.loadSketch;
+        this.loadSketch(this.props.loadSketch);
       } else {
         this.state = {
           vertices: [],

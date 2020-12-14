@@ -13,7 +13,8 @@ class App extends React.Component {
     //views: account, about, sketchPad
     this.state = {
       currentView: 'account',
-      user: null
+      user: null,
+      sketchToLoad: null
     }
   }
 
@@ -22,7 +23,7 @@ class App extends React.Component {
       case 'account':
         return <Account switchView={this.switchView} loadSketch={this.loadSketch} assignUser={this.assignUser}/>
       case 'sketchPad':
-        return <Sketchpad saveSketch={this.saveSketch} switchView={this.switchView}/>
+        return <Sketchpad saveSketch={this.saveSketch} switchView={this.switchView} loadSketch={this.state.sketchToLoad}/>
       case "about":
         return <About switchView={this.switchView}/>
       default:
@@ -40,7 +41,7 @@ class App extends React.Component {
     //change view
     const state = this.state;
     state.currentView = 'sketchPad';
-    document.cookie = 'loadSketch=' + JSON.stringify(sketch);
+    state.sketchToLoad = sketch;
     this.setState(state);
   }
 

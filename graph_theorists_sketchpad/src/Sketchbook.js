@@ -9,9 +9,11 @@ export default class Sketchbook extends React.Component {
       x: []
     }
   }
+
   signOut () { 
     auth.signOut(); 
   }
+
   componentDidMount() {
     const uidRef = db.collection(this.props.user.uid);
     uidRef.get().then((snapshot) => {
@@ -22,21 +24,8 @@ export default class Sketchbook extends React.Component {
       this.setState(state);
     });
   }
+
   render() {
-    //don't know where these came from, but they gotta go.
-    // document.cookie='_ga=;expires=Thu, 18 Dec 2013 12:00:00 UTC';
-    // document.cookie='_ga_PTLBR59D27=;expires=Thu, 18 Dec 2013 12:00:00 UTC';
-    // let sketches = decodeURIComponent(document.cookie);
-    // sketches = sketches.split(';');
-    // //get rid of not needed parts
-    // let x = [];
-    // if(sketches[0]) {
-    //   for (let i = 0; i < sketches.length; i++) {
-    //     let y = sketches[i].split('=');
-    //     x.push(JSON.parse(y[1]));
-    //   }
-    // }
-    console.log(this.state.x);
     return (
         <div>
           {this.state.x.map((sketch) => (
