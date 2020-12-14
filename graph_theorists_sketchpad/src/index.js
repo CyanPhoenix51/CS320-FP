@@ -45,10 +45,9 @@ class App extends React.Component {
     const name = s.name;
     document.cookie = name + '=' + sketch;
 
-    //TODO: Fix to switch to account
     //change view
     const state = this.state;
-    state.currentView = 'sketchBook';
+    state.currentView = 'account';
 
     this.setState(state);
   }

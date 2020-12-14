@@ -9,7 +9,7 @@ export default class Account extends React.Component {
     super(props);
     //views: landing, sketchBook, create
     this.state = {
-      currentView: 'landing',
+      currentView: 'sketchBook',
       user: {}
     }
   }
@@ -45,16 +45,17 @@ export default class Account extends React.Component {
     }
   }
   
- /*
-    render() { 
-      if(this.state.user) { 
-        return <Sketchbook switchAccountView={this.switchAccountView} loadSketch={this.props.loadSketch}/>;
-      }
-      else { 
-        return <Landing switchAccountView={this.switchAccountView}/>;
-      }
-    }
-    */
+
+    // render() {
+    //   return <Sketchbook />;
+    //   if(this.state.user) {
+    //     console.log("HERE");
+    //
+    //   }
+    //   else {
+    //   return <Landing switchAccountView={this.switchAccountView}/>;
+    // }
+    // }
 
 
   switchAccountView = (view) =>{

@@ -52,7 +52,7 @@ export default class Landing extends React.Component {
                 <input type="submit" onClick = {this.login} name="" value="Login" />
 
                 {/* <a href="#">Forgot Password</a> */}
-                <button>Create Account</button>
+                <button onClick={this.props.switchAccountView.bind(this, 'create')}>Create Account</button>
 
             </form>
         </div>
