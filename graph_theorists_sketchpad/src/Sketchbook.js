@@ -1,20 +1,24 @@
 import React from 'react';
 import SavedSketch from "./SavedSketch";
+import { auth, db } from './firebase.js';
 
 export default class Sketchbook extends React.Component {
+  signOut () { 
+    auth.signOut(); 
+  }
   render() {
     //don't know where these came from, but they gotta go.
     document.cookie='_ga=;expires=Thu, 18 Dec 2013 12:00:00 UTC';
     document.cookie='_ga_PTLBR59D27=;expires=Thu, 18 Dec 2013 12:00:00 UTC';
-
     let sketches = decodeURIComponent(document.cookie);
     sketches = sketches.split(';');
-    console.log(sketches);
     //get rid of not needed parts
     let x = [];
-    for (let i = 0; i < sketches.length; i++) {
-      let y = sketches[i].split('=');
-      x.push(JSON.parse(y[1]));
+    if(sketches[0]) {
+      for (let i = 0; i < sketches.length; i++) {
+        let y = sketches[i].split('=');
+        x.push(JSON.parse(y[1]));
+      }
     }
     return (
         <div>
@@ -24,6 +28,7 @@ export default class Sketchbook extends React.Component {
               </div>
           ))}
           <button onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
+          <button onClick= {this.signOut}> Sign out </button>
         </div>
 
     );

@@ -1,31 +1,26 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import Sketchpad from "./Sketchpad";
-import Sketchbook from "./Sketchbook";
-import Create from "./Create.js";
-import Landing from "./Landing.js";
 import About from "./About.js";
+import Account from "./Account.js";
+
 const e=React.createElement;
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+    //views: account, about, sketchPad
     this.state = {
-      currentView: 'landing',
-      currentSketch: null
+      currentView: 'account'
     }
   }
 
   render() {
     switch (this.state.currentView) {
-      case "sketchBook":
-        return <Sketchbook loadSketch={this.loadSketch} switchView={this.switchView}/>
+      case 'account':
+        return <Account switchView={this.switchView} loadSketch={this.loadSketch}/>
       case 'sketchPad':
         return <Sketchpad saveSketch={this.saveSketch} switchView={this.switchView}/>
-      case "create":
-        return <Create switchView={this.switchView}/>
-      case "landing":
-        return <Landing switchView={this.switchView}/>
       case "about":
         return <About switchView={this.switchView}/>
       default:
@@ -51,7 +46,7 @@ class App extends React.Component {
 
     //change view
     const state = this.state;
-    state.currentView = 'sketchBook';
+    state.currentView = 'account';
 
     this.setState(state);
   }

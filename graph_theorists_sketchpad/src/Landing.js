@@ -1,7 +1,37 @@
 import React from 'react';
+import { auth } from './firebase';
 import './styles/landing.css';
 
 export default class Landing extends React.Component {
+    constructor(props) { 
+        super(props);
+        this.login = this.login.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.state = { 
+            email: '', 
+            password: '',
+        }
+    }
+    
+    login (e) { 
+        e.preventDefault(); 
+        auth.signInWithEmailAndPassword(this.state.email, this.state.password).then((cred) => { 
+            if(cred) { 
+                console.log(cred);
+            }
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+    handleChange(e) { 
+        this.setState( { 
+            [e.target.name] : e.target.value, 
+        })
+    }
+    signOut(e) { 
+        auth.signOut(); 
+    }
+     
     render(){
         return (
         <section>
@@ -10,7 +40,6 @@ export default class Landing extends React.Component {
 
                 <h1>Welcome!</h1>
                 <p>A Web Sketchpad that allows graphing anywhere</p>
-                {/* <a href="sketchpad.html">Start Graph</a>*/}
 
         </div>
 
@@ -20,12 +49,12 @@ export default class Landing extends React.Component {
 
             <form id="signin-form">
 
-                <input type="email" id="user-email" name="" placeholder="Enter E-mail" />
-                <input type="password" id="user-password" name="" placeholder="Enter Password" />
-                <input type="submit" name="" value="Login" />
+                <input type="email" id="user-email" value = {this.state.email} onChange = {this.handleChange} name="email" placeholder="Enter E-mail" />
+                <input type="password" id="user-password" value={this.state.password} onChange = {this.handleChange} name="password" placeholder="Enter Password" />
+                <input type="submit" onClick = {this.login} name="" value="Login" />
 
-                {/* <a href="#">Forgot Password</a>
-                <a href="create.html">Create Account</a> */}
+                <button onClick={this.props.switchAccountView.bind(this, 'create')}>Create Account</button>
+                <button onClick= {this.signOut} > Sign out </button>
 
             </form>
         </div>
@@ -38,8 +67,6 @@ export default class Landing extends React.Component {
 
         <ul className="dir">
 
-            {/* <li><a href="landing.html">Home</a></li>
-            <li><a href="about.html">About</a></li> */}
 
         </ul>
 
