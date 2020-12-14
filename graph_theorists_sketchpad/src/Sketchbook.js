@@ -28,17 +28,19 @@ export default class Sketchbook extends React.Component {
           <div className="savedbox">
 
             {x.map((sketch) => (
-              <div key={sketch.name}>
-                <input type="radio" value={sketch.name} onClick={this.props.loadSketch.bind(this, sketch)}></input>
+              <form onSubmit={this.props.handleFormSubmit}>
+              <div key={sketch.name} onChange={this.handleOptionChange}>
+                <input type="radio" value={sketch.name} /*onClick={this.props.loadSketch.bind(this, sketch)}*/></input>
                 <SavedSketch sketch={sketch}/>
               </div>
+              </form>
             ))}
             
           </div>
             <ul className="Graph Buttons">
 
             <button className='create-graph' onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
-            <button className='load-graph' onClick={this.props.loadSketch.bind(this, null)}>Load Graph</button>
+            <button className='load-graph' onClick={this.props.loadSketch.bind(this.SavedSketch, 'create')}>Load Graph</button>
             <button className='delete-graph' onClick={this.props.switchView.bind(this, '#')}>Delete Graph</button>
       
             </ul>
@@ -67,14 +69,3 @@ export default class Sketchbook extends React.Component {
     );
   }
 }
-
-/*
-
-{x.map((sketch) => (
-  <div key={sketch.name} onClick={this.props.loadSketch.bind(this, sketch)}>
-    <SavedSketch sketch={sketch}/>
-  </div>
-))}
-<button onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
-
-*/

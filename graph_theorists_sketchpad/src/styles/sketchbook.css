@@ -59,10 +59,10 @@ section .savedbox {
 }
 
 section .savedbox div{
-    margin-top: -20px;
+    margin-top: -10px;
 }
 
-section .savedbox input{
+section .savedbox input:checked{
     position: absolute;
     margin-left: 40px;
     margin-top: 21px;
