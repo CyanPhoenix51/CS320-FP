@@ -40,7 +40,7 @@ export default class Account extends React.Component {
     } else {
       switch (this.state.currentView) {
         case 'landing':
-          return <Landing switchAccountView={this.switchAccountView}/>
+          return <Landing switchAccountView={this.switchAccountView} switchView={this.props.switchView}/>
         case 'create':
           return <Create switchAccountView={this.switchAccountView}/>
         default:
