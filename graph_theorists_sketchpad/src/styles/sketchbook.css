@@ -55,6 +55,18 @@ section .savedbox {
     height: 410px;
     scroll-behavior: auto;
     overflow: auto;
+    position: relative;
+    display: block;
+    line-height: 0px;
+}
+
+section .savedbox div{
+    flex: content;
+}
+
+section .savedbox input[type=radio]{
+    position: absolute;
+    margin-top: 5px;
 }
 
 /* Graph Buttons */
