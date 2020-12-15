@@ -29,7 +29,7 @@ export default class About extends React.Component {
                     anyone who has lost their work can still access it back via using our graphing website. Creating
                     a website that allow others to graph to their hearts content at ease is our intended goal.</p>
     
-                <img src={Stick} class="meme" alt="Stick" />
+                <img src={Stick} className="meme" alt="Stick" />
                 
             </div>
     
