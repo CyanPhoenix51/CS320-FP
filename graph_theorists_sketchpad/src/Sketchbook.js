@@ -86,7 +86,7 @@ export default class Sketchbook extends React.Component {
 
             <ul className="info">
 
-              <li id="UserID">UserID: {this.props.user.uid}</li>
+              <li id="UserID">User ID: {this.props.user.uid}</li>
               <li id="Name">Name: {this.props.user.displayName} </li>
               <li id="Email">E-mail: {this.props.user.email}</li>
 

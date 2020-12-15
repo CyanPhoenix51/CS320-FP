@@ -49,7 +49,7 @@ section .book li {
 /* Box Size */
 section .savedbox {
     color: black;
-    width: 550px;
+    width: 560px;
     height: 440px;
     margin-left: 15px;
     scroll-behavior: auto;
@@ -124,6 +124,7 @@ section .userinfo .info {
     margin-top: 5%;
     margin-left: 7%;
     line-height: 40px;
+    font-weight: 0.80em;
 }
 
 /* Logout Button */
