@@ -39,7 +39,6 @@ class App extends React.Component {
 
   loadSketch = (sketch) => {
     //change view
-    console.log("INDEX");
     const state = this.state;
     state.currentView = 'sketchPad';
     state.sketchToLoad = sketch;

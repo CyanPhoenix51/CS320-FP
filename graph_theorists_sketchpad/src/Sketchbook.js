@@ -45,7 +45,7 @@ export default class Sketchbook extends React.Component {
 
   attemptLoadSketch=()=> {
     if (this.selectedSketch) {
-      this.props.loadSketch.bind(this, this.selectedSketch);
+      this.props.loadSketch(this.selectedSketch);
     }
   }
   
