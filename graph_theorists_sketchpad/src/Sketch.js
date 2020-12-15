@@ -215,7 +215,7 @@ export default class Sketch extends React.Component{
           this.colorVertices('green');
           break;
         case 'Digit7':
-          this.colorVertices('blue');
+          this.colorVertices('#87ceeb');
           break;
         case 'Digit8':
           this.colorVertices('purple');
@@ -358,7 +358,7 @@ export default class Sketch extends React.Component{
           selectionColor: this.selectionColor,
           displayVertexData: this.displayingVertexData,
           edges: [],
-          color: 'blue',
+          color: '#87ceeb',
           isHovering: false
         }
         const stateVertex = {
@@ -366,7 +366,7 @@ export default class Sketch extends React.Component{
           x: vertex.x,
           y: vertex.y,
           edges: [],
-          color: 'blue'
+          color: '#87ceeb'
         }
 
         this.vertices.push(vertex);

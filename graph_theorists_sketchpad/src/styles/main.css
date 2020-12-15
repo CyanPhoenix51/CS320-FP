@@ -60,9 +60,8 @@ body{
 
 #pad{
     background-image: url(../Pictures/pad_bg_4.png);
-    width: 1000px;
+    width: 750px;
     height: 500px;
-    margin-left: -124.5px;
     border: 2px solid skyblue;
     z-index: 10;
 }
