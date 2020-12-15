@@ -124,6 +124,7 @@ section .userinfo .info {
     margin-top: 20px;
     margin-left: 25px;
     line-height: 40px;
+    font-weight: bold;
     font-weight: 0.80em;
 }
 

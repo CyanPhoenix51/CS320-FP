@@ -23,7 +23,7 @@ body{
 
 .vertex{
     position: absolute;
-    background: blue;
+    background: skyblue;
     height: 25px;
     width: 25px;
     border-radius: 50%;
@@ -60,9 +60,10 @@ body{
 
 #pad{
     background-image: url(../Pictures/pad_bg_4.png);
-    width: 750px;
+    width: 1000px;
     height: 500px;
-    border: 2px solid black;
+    margin-left: -124.5px;
+    border: 2px solid skyblue;
     z-index: 10;
 }
 
@@ -86,7 +87,7 @@ body{
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
 
-    border-bottom: 10px solid blue;
+    border-bottom: 10px solid skyblue;
 }
 
 .vertexID{
@@ -99,4 +100,194 @@ body{
     margin-top: 12px;
     font-weight: bolder;
     color: white;
+}
+
+#sketchRoot input {
+    margin-left: -123px;
+    outline: none;
+    border: none;
+    font-weight: bold;
+    height: 17px;
+}
+
+#sketchRoot #saveSketch  {
+    background-color: skyblue;
+    height: 15px;
+    width: 100px;
+    margin-left: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+}
+
+#sketchRoot #saveSketch:hover {
+    color: pink;
+}
+
+
+#sketchCommands #clearPad {
+    background-color: skyblue;
+    border-radius: 5px;
+    height: 25px;
+    width: 100px;
+    margin-top: 5px;
+    margin-left: -124px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+}
+
+#sketchCommands #clearPad:hover  {
+    color: pink;
+}
+
+#sketchCommands #deleteSelection {
+    background-color: skyblue;
+    border-radius: 5px;
+    height: 25px;
+    width: 125px;
+    margin-left: 5px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+}
+
+#sketchCommands #deleteSelection:hover  {
+    color: pink;
+}
+
+#sketchCommands #deselectAll {
+    background-color: skyblue;
+    border-radius: 5px;
+    height: 25px;
+    width: 100px;
+    margin-left: 5px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+}
+
+#sketchCommands #deselectAll:hover  {
+    color: pink;
+}
+
+#sketchCommands #generateEdges {
+    background-color: skyblue;
+    border-radius: 5px;
+    height: 25px;
+    width: 125px;
+    margin-left: 5px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+}
+
+#sketchCommands #generateEdges:hover  {
+    color: pink;
+}
+
+#sketchCommands #loopButton {
+    background-color: skyblue;
+    border-radius: 5px;
+    height: 25px;
+    width: 50px;
+    margin-left: 5px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+}
+
+#sketchCommands #loopButton:hover  {
+    color: pink;
+}
+
+#sketchCommands #grabber {
+    background-color: skyblue;
+    border-radius: 5px;
+    height: 25px;
+    width: 75px;
+    margin-left: 5px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+}
+
+#sketchCommands #grabber:hover  {
+    color: pink;
+}
+
+#sketchCommands #idDegree {
+    background-color: skyblue;
+    border-radius: 5px;
+    height: 25px;
+    width: 50px;
+    margin-left: 5px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+}
+
+#sketchCommands #idDegree:hover  {
+    color: pink;
+}
+
+#sketchCommands #veCounts {
+    background-color: skyblue;
+    border-radius: 5px;
+    height: 25px;
+    width: 75px;
+    margin-left: 5px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+}
+
+#sketchCommands #veCounts:hover  {
+    color: pink;
+}
+
+#sketchCommands #resetIDs {
+    background-color: skyblue;
+    border-radius: 5px;
+    height: 25px;
+    width: 100px;
+    margin-left: 5px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+}
+
+#sketchCommands #resetIDs:hover  {
+    color: pink;
+}
+
+#sketchCommands #idBridges {
+    background-color: skyblue;
+    border-radius: 5px;
+    height: 25px;
+    width: 100px;
+    margin-left: 5px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+}
+
+#sketchCommands #idBridges:hover  {
+    color: pink;
+}
+
+#sketchCommands #generateArc{
+    background-color: skyblue;
+    border-radius: 5px;
+    height: 25px;
+    width: 50px;
+    margin-left: 5px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+}
+
+#sketchCommands #generateArc:hover  {
+    color: pink;
 }
