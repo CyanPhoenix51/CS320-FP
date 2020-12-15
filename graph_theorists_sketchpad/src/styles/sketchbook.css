@@ -124,6 +124,7 @@ section .userinfo .info {
     margin-top: 5%;
     margin-left: 7%;
     line-height: 40px;
+    font-weight: 0.80em;
 }
 
 /* Logout Button */
