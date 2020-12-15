@@ -52,15 +52,11 @@ export default class Sketchbook extends React.Component {
    render() {
     return (
         <section>
-
           <div className="book">
-
             <h5> Saved Graphs </h5>
-
             <div className="savedbox">
-
           {this.state.x.map((sketch) => (
-              <div key={sketch.name} onClick={this.props.loadSketch.bind(this, sketch)}>
+              <div key={sketch.name} id={sketch.name} onClick={this.handleSelect.bind(this, sketch.name, sketch)}>
                <SavedSketch sketch={sketch}/>
              </div>
           ))}
@@ -69,7 +65,7 @@ export default class Sketchbook extends React.Component {
             <ul className="Graph Buttons">
 
               <button className='create-graph' onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
-              <button className='load-graph' >Load Graph</button>
+              <button className='load-graph' onClick={this.attemptLoadSketch.bind(this)}>Load Graph</button>
               <button className='delete-graph'>Delete Graph</button>
 
             </ul>
@@ -90,7 +86,7 @@ export default class Sketchbook extends React.Component {
 
             <div className="logout">
 
-              <input type="submit" id="logoutbutton" name="" value="Logout" onClick= {this.signOut}></input>
+              <input type="submit" id="logoutbutton" name="" value="Logout" onClick= {this.signOut}/>
 
             </div>
           </div>
