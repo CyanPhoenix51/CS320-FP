@@ -69,15 +69,12 @@ clearForm () {
               <input type="fname" id="first-name" name="firstName" placeholder="Enter First Name" onChange = {event => this.handleChange(event)}/>
               <input type="lname" id="last-name" name="lastName" placeholder="Enter Last Name" onChange = {event => this.handleChange(event)}/>
 
-              <input type="fname" id="first-name" name="" placeholder="Enter First Name"/>
-              <input type="lname" id="last-name" name="" placeholder="Enter Last Name" />
-
               <input type="email" id="user-email" name="useremail" placeholder="Enter E-mail" onChange = {event => this.handleChange(event)}/>
               <input type="password" id="user-password" name="password" placeholder="Enter Password" onChange = {event => this.handleChange(event)}/>
               <input type="password" id="user-confirm" name="cpassword" placeholder="Confirm Password" onChange = {event => this.handleChange(event)}/>
               <input type="submit" name="" value="Create" onClick = {this.handleSubmit}/>
 
-              <button className='signIn-button' onClick={this.props.switchView.bind(this, 'landing')}>Sign In Instead</button>
+              <button className='signIn-button' onClick={this.props.switchAccountView.bind(this, 'landing')}>Sign In Instead</button>
 
             </form>
           </div>

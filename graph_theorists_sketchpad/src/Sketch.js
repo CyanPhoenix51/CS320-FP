@@ -60,8 +60,8 @@ export default class Sketch extends React.Component{
             <div id='sketchRoot'>
                 <input type='text' placeholder={this.state.name} name='sketchName' onChange={this.renameSketch}
                        onClick={(e)=>this.canReceiveKeyboardInput=false}/>
-                <button id='saveSketch' onClick={this.props.saveSketch.bind(this, JSON.stringify(this.state))}>Save
-                    Sketch
+                <button id='saveSketch' onClick={this.props.saveSketch.bind(this, JSON.stringify(this.state))}>
+                  Save Sketch
                 </button>
                 <div id='pad' onClick={this.drawVertex}>
                     <div id='padData' style={{visibility: this.displayingCounts ? 'visible' : 'hidden'}}>
@@ -226,6 +226,8 @@ export default class Sketch extends React.Component{
         case 'Digit0':
           this.colorVertices('cyan');
           break;
+          default:
+            break;
       }
     }
 
