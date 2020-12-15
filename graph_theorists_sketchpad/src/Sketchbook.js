@@ -48,6 +48,14 @@ export default class Sketchbook extends React.Component {
       this.props.loadSketch(this.selectedSketch);
     }
   }
+
+  deleteSelection=()=> {
+    db.collection(this.props.user.uid).doc(this.selectedSketch.name).delete()
+        .then(() => {
+          this.state.x = this.state.x.filter((sketch) => sketch.name !== this.selectedSketch.name);
+          this.setState(this.state)
+        });
+  }
   
    render() {
     return (
@@ -66,7 +74,7 @@ export default class Sketchbook extends React.Component {
 
               <button className='create-graph' onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
               <button className='load-graph' onClick={this.attemptLoadSketch.bind(this)}>Load Graph</button>
-              <button className='delete-graph'>Delete Graph</button>
+              <button className='delete-graph' onClick={this.deleteSelection.bind(this)}>Delete Graph</button>
 
             </ul>
 
