@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles/create.css';
 import './firebase.js'
-import { auth, db } from './firebase.js';
+import { auth} from './firebase.js';
 
 const emptyState = { 
     firstName: "", 

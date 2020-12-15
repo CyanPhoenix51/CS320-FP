@@ -2,8 +2,7 @@ import React from 'react';
 import Sketchbook from "./Sketchbook";
 import Create from "./Create.js";
 import Landing from "./Landing.js";
-import { auth} from './firebase.js';
-import About from "./About.js"
+import { auth } from './firebase.js';
 
 export default class Account extends React.Component {
   constructor(props) {
