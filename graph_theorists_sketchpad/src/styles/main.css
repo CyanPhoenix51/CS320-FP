@@ -102,7 +102,7 @@ body{
 }
 
 #sketchRoot input {
-    margin-left: -123px;
+    margin-left: 0.5px;
     outline: none;
     border: none;
     font-weight: bold;
@@ -130,8 +130,8 @@ body{
     border-radius: 5px;
     height: 25px;
     width: 100px;
-    margin-top: 5px;
-    margin-left: -124px;
+    margin-top: 10px;
+    margin-left: -120px;
     font-weight: bold;
     outline: none;
     border: none;
