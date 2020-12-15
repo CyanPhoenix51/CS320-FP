@@ -38,17 +38,23 @@ export default class Landing extends React.Component {
         });
     }
     forgot(e) {
-        console.log(this.state.email);
+        e.preventDefault();
         if(this.state.email !== '') { 
             auth.sendPasswordResetEmail(this.state.email).then(() => {
-                console.log(this.state.email);
                 alert("Email Reset Sent to " + this.state.email);
             }).catch((error) => {
-                console.log(error);
+                if(error.code === "auth/user-not-found") { 
+                    alert("Email is not in our database!!");
+                }
+                else if (error.code === "auth/invalid-email") {
+                    alert("Email is not valid!!");
+                }
+                else { 
+                    alert(error)
+                }
             })
         }
         else { 
-            e.preventDefault();
             alert("Please enter correct email");
         }
     
