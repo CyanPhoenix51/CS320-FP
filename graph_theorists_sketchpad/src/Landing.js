@@ -28,49 +28,46 @@ export default class Landing extends React.Component {
             [e.target.name] : e.target.value, 
         })
     }
+    guestSignIn() { 
+        auth.signInAnonymously().then((cred) => { 
+            this.props.switchAccountView.bind(this, 'create');
+            console.log(cred);
+
+        }).catch((error) => { 
+            console.log(error);
+        });
+    }
     signOut(e) { 
         auth.signOut(); 
     }
      
     render(){
         return (
-        <section>
-        
-        <div className="main">
+            <section>
+                <div className="create-pad">
+                    <h1>Welcome!</h1>
+                    <p>A Web Sketchpad that allows graphing anywhere</p>
 
-                <h1>Welcome!</h1>
-                <p>A Web Sketchpad that allows graphing anywhere</p>
+                    {/*TODO: Make it so signs in as guest*/}
+                    <button className='create-graph'onClick={this.guestSignIn}>Create Graph</button> 
+                </div>
 
-        </div>
+                <div className="login">
+                    <h2>Sign In</h2>
 
-        <div className="login">
-
-            <h2>Sign In</h2>
-
-            <form id="signin-form">
-
-                <input type="email" id="user-email" value = {this.state.email} onChange = {this.handleChange} name="email" placeholder="Enter E-mail" />
-                <input type="password" id="user-password" value={this.state.password} onChange = {this.handleChange} name="password" placeholder="Enter Password" />
-                <input type="submit" onClick = {this.login} name="" value="Login" />
-
-                <button onClick={this.props.switchAccountView.bind(this, 'create')}>Create Account</button>
-                <button onClick= {this.signOut} > Sign out </button>
-
-            </form>
-        </div>
-
-        <div className="logout">
-            <input type="submit" id="logoutbutton" name="" value="Logout" />
-
-        </div>
-
-
-        <ul className="dir">
-
-
-        </ul>
-
-    </section>
+                    <form id="signin-form">
+                        <input type="email" id="user-email" value = {this.state.email} onChange = {this.handleChange} name="email" placeholder="Enter E-mail" />
+                        <input type="password" id="user-password" value={this.state.password} onChange = {this.handleChange} name="password" placeholder="Enter Password" />
+                        <input type="submit" onClick = {this.login} name="" value="Login" />
+                        <button className="forgot-account" onClick={this.props.switchView.bind(this, '#')}>Forgot Password</button>
+                        <button className="create-account" onClick={this.props.switchAccountView.bind(this, 'create')}>Create Account</button>
+                    </form>
+                </div>
+                <ul className="dir">
+                    <button className='home-button' onClick={this.props.switchAccountView.bind(this, 'account')}>Home</button>
+                    <button className='about-button' onClick={this.props.switchView.bind(this, 'about')}>About</button>
+                </ul>
+            </section>
         )
     }
 }

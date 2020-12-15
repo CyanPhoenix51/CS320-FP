@@ -2,7 +2,7 @@ import React from 'react';
 import Sketchbook from "./Sketchbook";
 import Create from "./Create.js";
 import Landing from "./Landing.js";
-import { auth, db } from './firebase.js';
+import { auth } from './firebase.js';
 
 export default class Account extends React.Component {
   constructor(props) {
@@ -23,9 +23,11 @@ export default class Account extends React.Component {
       const state = this.state;
       if (user) {
         state.user = user;
+        this.props.assignUser(user);
         this.setState(state);
       } else {
         state.user = null;
+        this.props.assignUser(null);
         this.setState(state);
       }
     });
@@ -34,13 +36,15 @@ export default class Account extends React.Component {
 
   render() {
     if (this.state.user) {
-      return <Sketchbook switchAccountView={this.switchAccountView} loadSketch={this.props.loadSketch}/>
+      return <Sketchbook switchAccountView={this.switchAccountView} loadSketch={this.props.loadSketch} user={this.state.user}/>
     } else {
       switch (this.state.currentView) {
         case 'landing':
-          return <Landing switchAccountView={this.switchAccountView}/>
+          return <Landing switchAccountView={this.switchAccountView} switchView={this.props.switchView}/>
         case 'create':
           return <Create switchAccountView={this.switchAccountView}/>
+        case 'account': 
+          return <Landing switchAccountView={this.switchAccountView} switchView={this.props.switchView}/>
         default:
           return <h1>OOGA BOOGA</h1>
       }

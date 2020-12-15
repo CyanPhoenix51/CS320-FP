@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles/create.css';
 import './firebase.js'
-import { auth, db } from './firebase.js';
+import { auth} from './firebase.js';
 
 const emptyState = { 
     firstName: "", 
@@ -14,7 +14,6 @@ export default class Create extends React.Component {
   constructor(props) { 
     super(props); 
   this.state = emptyState;
-  this.canContinue=false;
    
 }
 
@@ -33,19 +32,14 @@ clearForm () {
    event.preventDefault();
    if (state.password === state.cpassword) {
      auth.createUserWithEmailAndPassword(state.useremail, state.password).then(cred => {
-       return db.collection('users').doc(cred.user.uid).set({
-         sketchpad: "TestingFromReact"
-       }).then(() => {
-         //Once we created the user, now we update the information about the user.
-         if (cred) {
+       //Once we created the user, now we update the information about the user.
+       if (cred) {
            auth.currentUser.updateProfile({
              displayName: state.firstName + " " + state.lastName
            }).then(() => {
-             this.canContinue = true;
              this.props.switchAccountView('sketchBook');
            });
          }
-       })
      }).catch(error => {
        var errorCode = error.code;
        var errorMessage = error.message;
@@ -69,7 +63,7 @@ clearForm () {
   render() {
     return (
         <section>
-          <div className="main">
+          <div className="account">
             <h1>Create Account</h1>
             <form id="signup-form">
               <input type="fname" id="first-name" name="firstName" placeholder="Enter First Name" onChange = {event => this.handleChange(event)}/>
@@ -79,9 +73,12 @@ clearForm () {
               <input type="password" id="user-password" name="password" placeholder="Enter Password" onChange = {event => this.handleChange(event)}/>
               <input type="password" id="user-confirm" name="cpassword" placeholder="Confirm Password" onChange = {event => this.handleChange(event)}/>
               <input type="submit" name="" value="Create" onClick = {this.handleSubmit}/>
+
+              <button className='signIn-button' onClick={this.props.switchAccountView.bind(this, 'landing')}>Sign In Instead</button>
+
             </form>
           </div>
         </section>
     );
   }
-}
+} 

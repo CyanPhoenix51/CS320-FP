@@ -11,7 +11,7 @@ export default class Sketch extends React.Component{
       this.vertexRadius = 25 / 2;
       this.edgeWidth = 5;
       this.edgeSpacing = 2.25 * this.edgeWidth;
-      this.selectionBorderRadius = 4;
+      this.selectionBorderRadius = 2;
       this.arrowSize = 10;
       this.loopRadius = 25;
       this.padWidth = 750;
@@ -34,13 +34,10 @@ export default class Sketch extends React.Component{
       this.selectedEdges = [];
       this.bridges = [];
 
-      const loadSketch = JSON.parse(this.findLoadSketchCookie());
-      //expire the cookie
-      document.cookie = 'loadSketch=;expires=Thu, 18 Dec 2013 12:00:00 UTC';
-      if (loadSketch) {
+      if (this.props.loadSketch) {
         //gonna need to recreate some stuff
-        this.state = loadSketch;
-        this.loadSketch(loadSketch);
+        this.state = this.props.loadSketch;
+        this.loadSketch(this.props.loadSketch);
       } else {
         this.state = {
           vertices: [],
@@ -63,8 +60,8 @@ export default class Sketch extends React.Component{
             <div id='sketchRoot'>
                 <input type='text' placeholder={this.state.name} name='sketchName' onChange={this.renameSketch}
                        onClick={(e)=>this.canReceiveKeyboardInput=false}/>
-                <button id='saveSketch' onClick={this.props.saveSketch.bind(this, JSON.stringify(this.state))}>Save
-                    Sketch
+                <button id='saveSketch' onClick={this.props.saveSketch.bind(this, JSON.stringify(this.state))}>
+                  Save Sketch
                 </button>
                 <div id='pad' onClick={this.drawVertex}>
                     <div id='padData' style={{visibility: this.displayingCounts ? 'visible' : 'hidden'}}>
@@ -229,6 +226,8 @@ export default class Sketch extends React.Component{
         case 'Digit0':
           this.colorVertices('cyan');
           break;
+          default:
+            break;
       }
     }
 
