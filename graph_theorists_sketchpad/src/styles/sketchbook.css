@@ -51,7 +51,7 @@ section .savedbox {
     color: black;
     width: 560px;
     height: 440px;
-    margin-left: 15px;
+    margin-left: 19px;
     scroll-behavior: auto;
     overflow: auto;
     position: relative;
@@ -121,8 +121,8 @@ section .userinfo li {
 
 /* Button Location */
 section .userinfo .info {
-    margin-top: 5%;
-    margin-left: 7%;
+    margin-top: 20px;
+    margin-left: 25px;
     line-height: 40px;
     font-weight: 0.80em;
 }
