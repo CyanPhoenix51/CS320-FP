@@ -64,15 +64,13 @@ export default class Sketchbook extends React.Component {
                <SavedSketch sketch={sketch}/>
              </div>
           ))}
-          <button onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
-          <button onClick= {this.signOut}> Sign out </button>
 
             </div>
             <ul className="Graph Buttons">
 
               <button className='create-graph' onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
-              <button className='load-graph' onClick={this.attemptLoadSketch.bind(this)}>Load Graph</button>
-              <button className='delete-graph' onClick={this.props.switchView.bind(this, '#')}>Delete Graph</button>
+              <button className='load-graph' >Load Graph</button>
+              <button className='delete-graph'>Delete Graph</button>
 
             </ul>
 
@@ -84,15 +82,15 @@ export default class Sketchbook extends React.Component {
 
             <ul className="info">
 
-              <li id="UserID">User:</li>
-              <li id="Name">Name:</li>
-              <li id="Email">E-mail:</li>
+              <li id="UserID">UserID: {this.props.user.uid}</li>
+              <li id="Name">Name: {this.props.user.displayName} </li>
+              <li id="Email">E-mail: {this.props.user.email}</li>
 
             </ul>
 
             <div className="logout">
 
-              <input type="submit" id="logoutbutton" name="" value="Logout"></input>
+              <input type="submit" id="logoutbutton" name="" value="Logout" onClick= {this.signOut}></input>
 
             </div>
           </div>

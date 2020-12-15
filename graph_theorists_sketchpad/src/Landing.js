@@ -38,7 +38,9 @@ export default class Landing extends React.Component {
                 <div className="create-pad">
                     <h1>Welcome!</h1>
                     <p>A Web Sketchpad that allows graphing anywhere</p>
-                    <button className='create-graph' onClick={this.props.loadSketch.bind(this, null)}>Create Graph</button>
+
+                    {/*TODO: Make it so signs in as guest*/}
+                    <button className='create-graph'>Create Graph</button> 
                 </div>
 
                 <div className="login">
