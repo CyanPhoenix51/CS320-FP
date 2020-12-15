@@ -54,9 +54,8 @@ export default class Landing extends React.Component {
                         <button className="create-account" onClick={this.props.switchAccountView.bind(this, 'create')}>Create Account</button>
                     </form>
                 </div>
-
                 <ul className="dir">
-                    <button className='home-button' onClick={this.props.switchView.bind(this, 'landing')}>Home</button>
+                    <button className='home-button' onClick={this.props.switchAccountView.bind(this, 'landing')}>Home</button>
                     <button className='about-button' onClick={this.props.switchView.bind(this, 'about')}>About</button>
                 </ul>
             </section>

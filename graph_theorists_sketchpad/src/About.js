@@ -49,7 +49,7 @@ export default class About extends React.Component {
     
             <ul className="dir2">
 
-            <button className='home-button' onClick={this.props.switchView.bind(this, 'landing')}>Home</button>
+            <button className='home-button' onClick={this.props.switchView.bind(this, 'account')}>Home</button>
             <button className='about-button' onClick={this.props.switchView.bind(this, 'about')}>About</button>
                 
             </ul>

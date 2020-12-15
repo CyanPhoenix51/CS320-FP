@@ -2,7 +2,8 @@ import React from 'react';
 import Sketchbook from "./Sketchbook";
 import Create from "./Create.js";
 import Landing from "./Landing.js";
-import { auth, db } from './firebase.js';
+import { auth} from './firebase.js';
+import About from "./About.js"
 
 export default class Account extends React.Component {
   constructor(props) {
@@ -43,6 +44,8 @@ export default class Account extends React.Component {
           return <Landing switchAccountView={this.switchAccountView} switchView={this.props.switchView}/>
         case 'create':
           return <Create switchAccountView={this.switchAccountView}/>
+        // case "about":
+        // return <About switchView={this.switchView}/>
         default:
           return <h1>OOGA BOOGA</h1>
       }
