@@ -28,6 +28,15 @@ export default class Landing extends React.Component {
             [e.target.name] : e.target.value, 
         })
     }
+    guestSignIn() { 
+        auth.signInAnonymously().then((cred) => { 
+            this.props.switchAccountView.bind(this, 'create');
+            console.log(cred);
+
+        }).catch((error) => { 
+            console.log(error);
+        });
+    }
     signOut(e) { 
         auth.signOut(); 
     }
@@ -40,7 +49,7 @@ export default class Landing extends React.Component {
                     <p>A Web Sketchpad that allows graphing anywhere</p>
 
                     {/*TODO: Make it so signs in as guest*/}
-                    <button className='create-graph'>Create Graph</button> 
+                    <button className='create-graph'onClick={this.guestSignIn}>Create Graph</button> 
                 </div>
 
                 <div className="login">
