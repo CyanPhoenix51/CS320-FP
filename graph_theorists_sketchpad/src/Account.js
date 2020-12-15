@@ -43,8 +43,8 @@ export default class Account extends React.Component {
           return <Landing switchAccountView={this.switchAccountView} switchView={this.props.switchView}/>
         case 'create':
           return <Create switchAccountView={this.switchAccountView}/>
-        // case "about":
-        // return <About switchView={this.switchView}/>
+        case 'account': 
+          return <Landing switchAccountView={this.switchAccountView} switchView={this.props.switchView}/>
         default:
           return <h1>OOGA BOOGA</h1>
       }
