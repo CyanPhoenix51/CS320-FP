@@ -12,7 +12,7 @@ export default class Landing extends React.Component {
             password: '',
         }
     }
-    
+
     login (e) { 
         e.preventDefault(); 
         auth.signInWithEmailAndPassword(this.state.email, this.state.password).then((cred) => { 
@@ -37,6 +37,23 @@ export default class Landing extends React.Component {
             console.log(error);
         });
     }
+    forgot(e) {
+        console.log(this.state.email);
+        if(this.state.email !== '') { 
+            auth.sendPasswordResetEmail(this.state.email).then(() => {
+                console.log(this.state.email);
+                alert("Email Reset Sent to " + this.state.email);
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+        else { 
+            e.preventDefault();
+            alert("Please enter correct email");
+        }
+    
+    }
+
     signOut(e) { 
         auth.signOut(); 
     }
@@ -59,7 +76,7 @@ export default class Landing extends React.Component {
                         <input type="email" id="user-email" value = {this.state.email} onChange = {this.handleChange} name="email" placeholder="Enter E-mail" />
                         <input type="password" id="user-password" value={this.state.password} onChange = {this.handleChange} name="password" placeholder="Enter Password" />
                         <input type="submit" onClick = {this.login} name="" value="Login" />
-                        <button className="forgot-account" onClick={this.props.switchView.bind(this, '#')}>Forgot Password</button>
+                        <button className="forgot-account" onClick={this.forgot.bind(this)}>Forgot Password</button>
                         <button className="create-account" onClick={this.props.switchAccountView.bind(this, 'create')}>Create Account</button>
                     </form>
                 </div>
