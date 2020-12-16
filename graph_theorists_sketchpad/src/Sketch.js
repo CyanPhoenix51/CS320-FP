@@ -465,7 +465,6 @@ export default class Sketch extends React.Component{
 
     generateArc=()=> {
       const state = this.state;
-      const e = state.edges.find((ed) => ed.id === edge.id);
       //arcs can only be loops and edges
       if (this.selectedVertices.length !== 1 && this.selectedVertices.length !== 2)
         return;
@@ -477,12 +476,13 @@ export default class Sketch extends React.Component{
         edge = this.drawEdge(this.selectedVertices[0], this.selectedVertices[1]);
         edge.targetVertex = this.selectedVertices[1];
         //give the state edge a target
-        e.targetVertex = edge.targetVertex.id;
       }
       edge.arrowSize = this.arrowSize;
       edge.isArc = true;
       //make the stateEdge an arc too
+      const e = state.edges.find((ed) => ed.id === edge.id);
       e.isArc = true;
+      e.targetVertex = edge.targetVertex.id;
 
       this.positionEdge(edge);
       this.setState(state);
