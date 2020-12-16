@@ -1,6 +1,6 @@
 # CS320-FP
 Final Project for CS320(Graph)
-
+~~~
 download the src from git or unzip the files
 Open Terminal
 update your node_modules folder with 'npm updates'
@@ -23,3 +23,4 @@ i: vertex data
 g: grab (when one or more vertices are selected)
 s: deselect
 b: bridge
+~~~
